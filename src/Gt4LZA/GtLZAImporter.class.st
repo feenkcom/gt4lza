@@ -32,14 +32,34 @@ GtLZAImporter >> gtAccountsFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
-GtLZAImporter >> gtMetaDataFor: aView [
+GtLZAImporter >> gtMetadataFor: aView [
+	"this is a copy of Dictionary>>#gtItemsFor: that expandsAll by default and only displays the value if it’s not expandable"
+
 	<gtView>
-	^ aView columnedList
+	^ aView columnedTree
 		title: 'Meta data';
 		priority: 5;
-		items: [self metadata associations];
-		column: 'Key' text: #key;
-		column: 'Value' text: #value
+		items: [ self metadata associations sort: (#key collatedBy: #asString) ];
+		children: [ :each | 
+			each value isDictionary
+				ifTrue: [ each value associations sort: (#key collatedBy: #asString) ]
+				ifFalse: [ (each value isCollection and: [ each value isString not ])
+						ifTrue: [ each value collect: [ :x | x -> '' ] ]
+						ifFalse: [ #() ] ] ];
+		column: 'Key' text: [ :assoc | assoc key ];
+		column: 'Value'
+			text: [ :assoc | 
+				(assoc value isDictionary
+					or: [ assoc value isCollection and: [ assoc value isString not ] ])
+					ifTrue: [ '' ]
+					ifFalse: [ assoc value ] ]
+			weight: 3;
+		contextItemLabel: 'Inspect key'
+			action: [ :anElement :aTreeNode | anElement phlow spawnObject: aTreeNode value key ];
+		contextItemLabel: 'Inspect association'
+			action: [ :anElement :aTreeNode | anElement phlow spawnObject: aTreeNode value ];
+		send: [ :assoc | assoc value ];
+		expandUpTo: 1
 ]
 
 { #category : #'as yet unclassified' }
@@ -68,7 +88,8 @@ GtLZAImporter >> import [
 	self assert: directory exists description: 'Import directory must exist'.
 	
 	self importOrganization.
-	self importAccounts
+	self importAccounts.
+	self importNetwork
 ]
 
 { #category : #'as yet unclassified' }
@@ -89,6 +110,19 @@ GtLZAImporter >> importAccounts [
 										email: (anAccount at: 'email');
 										organizationalUnit: (organizationalUnits findNamed: (anAccount at: 'organizationalUnit'));
 										type: aKey) ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAImporter >> importNetwork [
+	| file yaml |
+	file := directory / 'network-config.yaml'.
+	yaml := (YAMLParser parseFile: file) object.
+
+	self metadata at: 'Home region' put: (yaml at: 'homeRegion').
+	
+	self metadata at: 'Default VPC' put: (yaml at: 'defaultVpc').
+	
+	self metadata at: 'VPC Flow Logs' put: (yaml at: 'vpcFlowLogs')
 ]
 
 { #category : #'as yet unclassified' }
