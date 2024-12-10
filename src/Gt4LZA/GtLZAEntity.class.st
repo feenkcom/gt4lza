@@ -16,3 +16,12 @@ GtLZAEntity >> name [
 GtLZAEntity >> name: anObject [
 	name := anObject
 ]
+
+{ #category : #'as yet unclassified' }
+GtLZAEntity >> printOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPut: $(;
+		nextPutAll: self name;
+		nextPut: $)
+]

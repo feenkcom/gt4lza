@@ -17,3 +17,8 @@ GtLZAAccountsGroup >> gtAccountsFor: aView [
 		column: 'OU' text: [ :anAccount | anAccount organizationalUnit name ];
 		column: 'Account type' text: #type
 ]
+
+{ #category : #'as yet unclassified' }
+GtLZAAccountsGroup >> itemType [
+	^ GtLZAAccount
+]

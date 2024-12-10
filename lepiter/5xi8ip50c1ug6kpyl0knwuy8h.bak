@@ -91,13 +91,13 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:38:34.319209+01:00"
+						"dateAndTimeString" : "2024-12-10T20:17:34.96447+01:00"
 					}
 				},
 				"uid" : {
@@ -127,12 +127,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-10T15:56:33.190664+01:00"
+			"dateAndTimeString" : "2024-12-10T15:57:04.849449+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "LZA"
+		"title" : "LZA exploration"
 	},
 	"uid" : {
 		"__type" : "uuid",

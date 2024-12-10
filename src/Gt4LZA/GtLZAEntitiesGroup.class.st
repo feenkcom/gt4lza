@@ -13,3 +13,8 @@ GtLZAEntitiesGroup >> gtEntitiesFor: aView [
 		items: [ self items ];
 		column: 'Name' text: #name
 ]
+
+{ #category : #'as yet unclassified' }
+GtLZAEntitiesGroup >> itemType [
+	^ GtLZAEntity
+]

@@ -19,3 +19,8 @@ GtLZAPoliciesGroup >> gtPoliciesFor: aView [
 					ifTrue: [ BrGlamorousVectorIcons accept ]
 					ifFalse: [ BrGlamorousVectorIcons cancel ] ]
 ]
+
+{ #category : #'as yet unclassified' }
+GtLZAPoliciesGroup >> itemType [
+	^ GtLZAPolicy
+]

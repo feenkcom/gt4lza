@@ -5,16 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-GtLZAOrganizationalUnitsGroup >> findNamed: aString [
-	^ self
-		detect: [ :anItem | anItem name = aString ]
-		ifNone: [ | organizationalUnit |
-			organizationalUnit := GtLZAOrganizationalUnit new name: aString.
-			self add: organizationalUnit.
-			^ organizationalUnit ]
-]
-
-{ #category : #'as yet unclassified' }
 GtLZAOrganizationalUnitsGroup >> gtOrganizationalUnitsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -23,4 +13,9 @@ GtLZAOrganizationalUnitsGroup >> gtOrganizationalUnitsFor: aView [
 		items: [ self items ];
 		column: 'Name' text: #name;
 		column: 'Children' text: [ :anOu | anOu children size ] width: 100
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAOrganizationalUnitsGroup >> itemType [
+	^ GtLZAOrganizationalUnit
 ]
