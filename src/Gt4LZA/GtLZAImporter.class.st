@@ -199,7 +199,12 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 							collect: [ :aRouteTable | 
 								GtLZARouteTable new
 									name: (aRouteTable at: 'name');
-									routes: (aRouteTable at: 'routes') ]).
+									routes: ((aRouteTable at: 'routes')
+											collect: [ :aRoute | 
+												GtLZAGatewayRoute new
+													destinationCidrBlock: (aRoute at: 'destinationCidrBlock');
+													vpc: (vpcs findNamed: (aRoute at: 'attachment' at: 'vpcName'));
+													account: (accounts findNamed: (aRoute at: 'attachment' at: 'account')) ]) ]).
 			routeTables addAll: gatewayRouteTables.
 			transitGateways
 				add: (transitGateway := GtLZATransitGateway new
@@ -239,32 +244,32 @@ GtLZAImporter >> importVpcsFrom: yaml [
 									name: (aRouteTable at: 'name');
 									routes: (aRouteTable at: 'routes') ]).
 			routeTables addAll: vpcRouteTables.
-			vpcs
-				add: (GtLZAVPC new
-						name: (aVpc at: 'name');
-						account: (accounts findNamed: (aVpc at: 'account'));
-						region: (aVpc at: 'region');
-						cidrs: (aVpc at: 'cidrs');
-						internetGateway: (aVpc at: 'internetGateway' ifAbsent: [ false ]);
-						enableDnsHostnames: (aVpc at: 'enableDnsHostnames' ifAbsent: [ false ]);
-						enableDnsSupport: (aVpc at: 'enableDnsSupport' ifAbsent: [ false ]);
-						instanceTenancy: (aVpc at: 'instanceTenancy' ifAbsent: [ false ]);
-						queryLogs: (aVpc at: 'queryLogs' ifAbsent: [ {} ]);
-						routeTables: vpcRouteTables;
-						subnets: (aVpc at: 'subnets');
-						transitGatewayAttachments: (GtLZATransitGatewayAttachmentsGroup
-								withAll: ((aVpc at: 'transitGatewayAttachments')
-										collect: [ :anAttachment | 
-											GtLZATransitGatewayAttachment new
-												name: (anAttachment at: 'name');
-												transitGateway: (transitGateways findNamed: (anAttachment at: 'transitGateway' at: 'name'));
-												routeTableAssociations: ((anAttachment at: 'routeTableAssociations')
-														collect: [ :aName | routeTables findNamed: aName ]);
-												routeTablePropagations: ((anAttachment at: 'routeTablePropagations')
-														collect: [ :aName | routeTables findNamed: aName ]);
-												subnets: (anAttachment at: 'subnets') ]));
-						gatewayEndpoints: (aVpc at: 'gatewayEndpoints');
-						interfaceEndpoints: (aVpc at: 'interfaceEndpoints' ifAbsent: [ nil ])) ]
+			(vpcs findNamed: (aVpc at: 'name'))
+				account: (accounts findNamed: (aVpc at: 'account'));
+				region: (aVpc at: 'region');
+				cidrs: (aVpc at: 'cidrs');
+				internetGateway: (aVpc at: 'internetGateway' ifAbsent: [ false ]);
+				enableDnsHostnames: (aVpc at: 'enableDnsHostnames' ifAbsent: [ false ]);
+				enableDnsSupport: (aVpc at: 'enableDnsSupport' ifAbsent: [ false ]);
+				instanceTenancy: (aVpc at: 'instanceTenancy' ifAbsent: [ false ]);
+				queryLogs: (aVpc at: 'queryLogs' ifAbsent: [ {} ]);
+				routeTables: vpcRouteTables;
+				subnets: (aVpc at: 'subnets');
+				transitGatewayAttachments: (GtLZATransitGatewayAttachmentsGroup
+						withAll: ((aVpc at: 'transitGatewayAttachments')
+								collect: [ :anAttachment | 
+									GtLZATransitGatewayAttachment new
+										name: (anAttachment at: 'name');
+										transitGateway: (transitGateways findNamed: (anAttachment at: 'transitGateway' at: 'name'));
+										routeTableAssociations: (GtLZARouteTablesGroup
+												withAll: ((anAttachment at: 'routeTableAssociations')
+														collect: [ :aName | routeTables findNamed: aName ]));
+										routeTablePropagations: (GtLZARouteTablesGroup
+												withAll: ((anAttachment at: 'routeTablePropagations')
+														collect: [ :aName | routeTables findNamed: aName ]));
+										subnets: (anAttachment at: 'subnets') ]));
+				gatewayEndpoints: (aVpc at: 'gatewayEndpoints');
+				interfaceEndpoints: (aVpc at: 'interfaceEndpoints' ifAbsent: [ nil ]) ]
 ]
 
 { #category : #'as yet unclassified' }

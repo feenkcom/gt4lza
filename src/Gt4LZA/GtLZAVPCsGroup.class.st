@@ -10,3 +10,8 @@ GtLZAVPCsGroup >> gtVpcsFor: aView [
 	^ aView columnedList
 		title: 'VPCs'; priority: 1; items: [self items]; column: 'Name' text: #name; column: 'Account' text: #account; column: 'Region' text: #region
 ]
+
+{ #category : #'as yet unclassified' }
+GtLZAVPCsGroup >> itemType [
+	^ GtLZAVPC
+]
