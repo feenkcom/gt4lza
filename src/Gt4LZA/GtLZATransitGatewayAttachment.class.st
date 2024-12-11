@@ -30,6 +30,16 @@ GtLZATransitGatewayAttachment >> gtRouteTablePropagationsFor: aView [
 		view: #gtRouteTablesFor:
 ]
 
+{ #category : #views }
+GtLZATransitGatewayAttachment >> gtSubnetsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Subnets';
+		priority: 3;
+		object: [ subnets ];
+		view: #gtSubnetsFor:
+]
+
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> routeTableAssociations [
 	^ routeTableAssociations

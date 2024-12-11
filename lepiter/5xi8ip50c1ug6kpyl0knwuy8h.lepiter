@@ -29,14 +29,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-11T10:00:06.621744+01:00"
+						"dateAndTimeString" : "2024-12-11T19:10:39.031026+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "MSbJhUrlDQCGcd0wB2MtZA=="
 				},
-				"code" : "qlzaDirectory := 'lza' asFileReference.\rlzaDirectory ensureDeleteAll.\rIceRepositoryCreator\r\t\tfromUrl: 'git@github.com:awslabs/landing-zone-accelerator-on-aws.git'\r\t\tto: lzaDirectory."
+				"code" : "lzaDirectory := 'lza' asFileReference.\rlzaDirectory ensureDeleteAll.\rIceRepositoryCreator\r\t\tfromUrl: 'git@github.com:awslabs/landing-zone-accelerator-on-aws.git'\r\t\tto: lzaDirectory."
 			},
 			{
 				"__type" : "pharoSnippet",

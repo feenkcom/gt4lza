@@ -9,7 +9,8 @@ Class {
 		'policies',
 		'transitGateways',
 		'routeTables',
-		'vpcs'
+		'vpcs',
+		'subnets'
 	],
 	#category : #'Gt4LZA-Importer'
 }
@@ -136,13 +137,12 @@ GtLZAImporter >> importAccounts [
 				keysAndValuesDo: [ :aKey :aList | 
 					aList
 						do: [ :anAccount | 
-							accounts
-								add: (GtLZAAccount new
-										name: (anAccount at: 'name');
-										description: (anAccount at: 'description');
-										email: (anAccount at: 'email');
-										organizationalUnit: (organizationalUnits findNamed: (anAccount at: 'organizationalUnit'));
-										type: aKey) ] ] ]
+							(accounts findNamed: (anAccount at: 'name'))
+								rawData: anAccount;
+								description: (anAccount at: 'description');
+								email: (anAccount at: 'email');
+								organizationalUnit: (organizationalUnits findNamed: (anAccount at: 'organizationalUnit'));
+								type: aKey ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -171,7 +171,7 @@ GtLZAImporter >> importOrganization [
 			self metadata at: 'Organization enabled' put: (object at: 'enable').
 
 			(object at: 'organizationalUnits')
-				do: [ :anOu | organizationalUnits add: (GtLZAOrganizationalUnit new name: (anOu at: 'name')) ].
+				do: [ :anOu | (organizationalUnits findNamed: (anOu at: 'name')) rawData: anOu ].
 
 			{'serviceControlPolicies'.
 				'taggingPolicies'.
@@ -179,14 +179,13 @@ GtLZAImporter >> importOrganization [
 				do: [ :aPolicyKey | 
 					(object at: aPolicyKey)
 						do: [ :aPolicy | 
-							policies
-								add: (GtLZAPolicy new
-										name: (aPolicy at: 'name');
-										description: (aPolicy at: 'description');
-										policy: self directory / (aPolicy at: 'policy');
-										type: (aPolicy at: 'type' ifAbsent: [ '' ]);
-										organizationalUnits: ((aPolicy at: 'deploymentTargets' at: 'organizationalUnits')
-												collect: [ :aName | organizationalUnits findNamed: aName ])) ] ] ]
+							(policies findNamed: (aPolicy at: 'name'))
+								rawData: aPolicy;
+								description: (aPolicy at: 'description');
+								policy: self directory / (aPolicy at: 'policy');
+								type: (aPolicy at: 'type' ifAbsent: [ '' ]);
+								organizationalUnits: ((aPolicy at: 'deploymentTargets' at: 'organizationalUnits')
+										collect: [ :aName | organizationalUnits findNamed: aName ]) ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -198,6 +197,7 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 					withAll: ((aGateway at: 'routeTables')
 							collect: [ :aRouteTable | 
 								GtLZARouteTable new
+									rawData: aRouteTable;
 									name: (aRouteTable at: 'name');
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
@@ -206,18 +206,17 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 													vpc: (vpcs findNamed: (aRoute at: 'attachment' at: 'vpcName'));
 													account: (accounts findNamed: (aRoute at: 'attachment' at: 'account')) ]) ]).
 			routeTables addAll: gatewayRouteTables.
-			transitGateways
-				add: (transitGateway := GtLZATransitGateway new
-							name: (aGateway at: 'name');
-							account: (accounts findNamed: (aGateway at: 'account'));
-							region: (aGateway at: 'region');
-							asn: (aGateway at: 'asn');
-							dnsSupport: (aGateway at: 'dnsSupport') = 'enable';
-							defaultRouteTableAssociation: (aGateway at: 'defaultRouteTableAssociation') = 'enable';
-							defaultRouteTablePropagation: (aGateway at: 'defaultRouteTablePropagation') = 'enable';
-							autoAcceptSharingAttachments: (aGateway at: 'autoAcceptSharingAttachments') = 'enable';
-							routeTables: gatewayRouteTables).
+			transitGateway := transitGateways findNamed: (aGateway at: 'name').
 			transitGateway
+				rawData: aGateway;
+				account: (accounts findNamed: (aGateway at: 'account'));
+				region: (aGateway at: 'region');
+				asn: (aGateway at: 'asn');
+				dnsSupport: (aGateway at: 'dnsSupport') = 'enable';
+				defaultRouteTableAssociation: (aGateway at: 'defaultRouteTableAssociation') = 'enable';
+				defaultRouteTablePropagation: (aGateway at: 'defaultRouteTablePropagation') = 'enable';
+				autoAcceptSharingAttachments: (aGateway at: 'autoAcceptSharingAttachments') = 'enable';
+				routeTables: gatewayRouteTables;
 				shareTargets: (GtLZAShareTarget new
 						accounts: (GtLZAAccountsGroup
 								withAll: ((aGateway
@@ -234,14 +233,14 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 
 { #category : #'as yet unclassified' }
 GtLZAImporter >> importVpcsFrom: yaml [
-	| vpcRouteTables |
+	| vpcRouteTables vpcNatGateways vpcSubnets |
 	(yaml at: 'vpcs')
 		do: [ :aVpc | 
 			vpcRouteTables := GtLZARouteTablesGroup
 					withAll: ((aVpc at: 'routeTables')
 							collect: [ :aRouteTable | 
-								GtLZARouteTable new
-									name: (aRouteTable at: 'name');
+								(routeTables findNamed: (aRouteTable at: 'name'))
+									rawData: aRouteTable;
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZARoute new
@@ -249,8 +248,27 @@ GtLZAImporter >> importVpcsFrom: yaml [
 													destination: (aRoute at: 'destination' ifAbsent: [ '' ]);
 													type: (aRoute at: 'type');
 													target: (aRoute at: 'target') ]) ]).
+
+			vpcSubnets := GtLZASubnetsGroup
+					withAll: ((aVpc at: 'subnets')
+							collect: [ :aSubnet | 
+								(subnets findNamed: (aSubnet at: 'name'))
+									rawData: aSubnet;
+									availabilityZone: (aSubnet at: 'availabilityZone');
+									ipv4CidrBlock: (aSubnet at: 'ipv4CidrBlock');
+									routeTable: (routeTables findNamed: (aSubnet at: 'routeTable')) ]).
+
+			vpcNatGateways := GtLZANatGatewaysGroup
+					withAll: ((aVpc at: 'natGateways' ifAbsent: [ {} ])
+							collect: [ :aNatGateway | 
+								GtLZANatGateway new
+									rawData: aNatGateway;
+									name: (aNatGateway at: 'name');
+									subnet: (subnets findNamed: (aNatGateway at: 'subnet')) ]).
+
 			routeTables addAll: vpcRouteTables.
 			(vpcs findNamed: (aVpc at: 'name'))
+				rawData: aVpc;
 				account: (accounts findNamed: (aVpc at: 'account'));
 				region: (aVpc at: 'region');
 				cidrs: (aVpc at: 'cidrs');
@@ -260,11 +278,13 @@ GtLZAImporter >> importVpcsFrom: yaml [
 				instanceTenancy: (aVpc at: 'instanceTenancy' ifAbsent: [ false ]);
 				queryLogs: (aVpc at: 'queryLogs' ifAbsent: [ {} ]);
 				routeTables: vpcRouteTables;
-				subnets: (aVpc at: 'subnets');
+				natGateways: vpcNatGateways;
+				subnets: vpcSubnets;
 				transitGatewayAttachments: (GtLZATransitGatewayAttachmentsGroup
 						withAll: ((aVpc at: 'transitGatewayAttachments')
 								collect: [ :anAttachment | 
 									GtLZATransitGatewayAttachment new
+										rawData: anAttachment;
 										name: (anAttachment at: 'name');
 										transitGateway: (transitGateways findNamed: (anAttachment at: 'transitGateway' at: 'name'));
 										routeTableAssociations: (GtLZARouteTablesGroup
@@ -273,7 +293,8 @@ GtLZAImporter >> importVpcsFrom: yaml [
 										routeTablePropagations: (GtLZARouteTablesGroup
 												withAll: ((anAttachment at: 'routeTablePropagations')
 														collect: [ :aName | routeTables findNamed: aName ]));
-										subnets: (anAttachment at: 'subnets') ]));
+										subnets: (GtLZASubnetsGroup
+												withAll: ((anAttachment at: 'subnets') collect: [ :aName | subnets findNamed: aName ])) ]));
 				gatewayEndpoints: (aVpc at: 'gatewayEndpoints');
 				interfaceEndpoints: (aVpc at: 'interfaceEndpoints' ifAbsent: [ nil ]) ]
 ]
@@ -286,6 +307,7 @@ GtLZAImporter >> initialize [
 	transitGateways := GtLZATransitGatewaysGroup new.
 	routeTables := GtLZARouteTablesGroup new.
 	vpcs := GtLZAVPCsGroup new.
+	subnets := GtLZASubnetsGroup new.
 	
 	metadata := Dictionary new
 ]

@@ -14,6 +14,7 @@ GtLZARouteTable >> gtRoutesFor: aView [
 	routes ifNil: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Routes';
+		priority: 1;
 		items: [ routes ];
 		column: 'Name' text: #name;
 		column: 'Type' text: #type;

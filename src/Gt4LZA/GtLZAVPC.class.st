@@ -14,7 +14,8 @@ Class {
 		'subnets',
 		'transitGatewayAttachments',
 		'gatewayEndpoints',
-		'interfaceEndpoints'
+		'interfaceEndpoints',
+		'natGateways'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -80,6 +81,16 @@ GtLZAVPC >> gtRouteTablesFor: aView [
 ]
 
 { #category : #views }
+GtLZAVPC >> gtSubnetsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Subnets';
+		priority: 5;
+		object: [ subnets ];
+		view: #gtSubnetsFor:
+]
+
+{ #category : #views }
 GtLZAVPC >> gtTransitGatewayAttachmentsFor: aView [
 	<gtView>
 	^ aView forward
@@ -117,6 +128,16 @@ GtLZAVPC >> internetGateway [
 { #category : #accessing }
 GtLZAVPC >> internetGateway: anObject [
 	internetGateway := anObject
+]
+
+{ #category : #accessing }
+GtLZAVPC >> natGateways [
+	^ natGateways
+]
+
+{ #category : #accessing }
+GtLZAVPC >> natGateways: anObject [
+	natGateways := anObject
 ]
 
 { #category : #accessing }
