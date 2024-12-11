@@ -237,7 +237,13 @@ GtLZAImporter >> importVpcsFrom: yaml [
 							collect: [ :aRouteTable | 
 								GtLZARouteTable new
 									name: (aRouteTable at: 'name');
-									routes: (aRouteTable at: 'routes') ]).
+									routes: ((aRouteTable at: 'routes')
+											collect: [ :aRoute | 
+												GtLZARoute new
+													name: (aRoute at: 'name');
+													destination: (aRoute at: 'destination' ifAbsent: [ '' ]);
+													type: (aRoute at: 'type');
+													target: (aRoute at: 'target') ]) ]).
 			routeTables addAll: vpcRouteTables.
 			vpcs
 				add: (GtLZAVPC new

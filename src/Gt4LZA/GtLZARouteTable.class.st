@@ -8,6 +8,19 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
+{ #category : #views }
+GtLZARouteTable >> gtRoutesFor: aView [
+	<gtView>
+	routes ifNil: [ ^ aView empty ].
+	^ aView columnedList
+		title: 'Routes';
+		items: [ routes ];
+		column: 'Name' text: #name;
+		column: 'Type' text: #type;
+		column: 'Target' text: #target;
+		column: 'Destination' text: #destination
+]
+
 { #category : #accessing }
 GtLZARouteTable >> parent [
 	^ parent

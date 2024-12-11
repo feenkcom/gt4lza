@@ -69,6 +69,26 @@ GtLZAVPC >> gatewayEndpoints: anObject [
 	gatewayEndpoints := anObject
 ]
 
+{ #category : #views }
+GtLZAVPC >> gtRouteTablesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Route tables';
+		priority: 1;
+		object: [ routeTables ];
+		view: #gtRouteTablesFor:
+]
+
+{ #category : #views }
+GtLZAVPC >> gtTransitGatewayAttachmentsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Transit gateway attachments';
+		priority: 2;
+		object: [ transitGatewayAttachments ];
+		view: #gtTransitGatewayAttachmentsFor:
+]
+
 { #category : #accessing }
 GtLZAVPC >> instanceTenancy [
 	^ instanceTenancy
