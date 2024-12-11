@@ -10,6 +10,26 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
+{ #category : #views }
+GtLZATransitGatewayAttachment >> gtRouteTableAssociationsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Route table associations';
+		priority: 1;
+		object: [ routeTableAssociations ];
+		view: #gtRouteTablesFor:
+]
+
+{ #category : #views }
+GtLZATransitGatewayAttachment >> gtRouteTablePropagationsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Route table propagations';
+		priority: 2;
+		object: [ routeTablePropagations ];
+		view: #gtRouteTablesFor:
+]
+
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> routeTableAssociations [
 	^ routeTableAssociations
