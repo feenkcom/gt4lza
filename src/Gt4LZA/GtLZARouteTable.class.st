@@ -12,7 +12,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 GtLZARouteTable >> addSubnet: aSubnet [
-	self halt.
 	subnets add: aSubnet
 ]
 
