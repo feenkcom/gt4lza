@@ -15,7 +15,8 @@ Class {
 		'transitGatewayAttachments',
 		'gatewayEndpoints',
 		'interfaceEndpoints',
-		'natGateways'
+		'natGateways',
+		'gatewayRoutes'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -27,7 +28,13 @@ GtLZAVPC >> account [
 
 { #category : #accessing }
 GtLZAVPC >> account: anObject [
-	account := anObject
+	account := anObject.
+	account addManagedEntity: self
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAVPC >> addGatewayRoute: aRoute [
+	gatewayRoutes add: aRoute
 ]
 
 { #category : #accessing }
@@ -70,6 +77,16 @@ GtLZAVPC >> gatewayEndpoints: anObject [
 	gatewayEndpoints := anObject
 ]
 
+{ #category : #accessing }
+GtLZAVPC >> gatewayRoutes [
+	^ gatewayRoutes
+]
+
+{ #category : #accessing }
+GtLZAVPC >> gatewayRoutes: anObject [
+	gatewayRoutes := anObject
+]
+
 { #category : #views }
 GtLZAVPC >> gtRouteTablesFor: aView [
 	<gtView>
@@ -98,6 +115,13 @@ GtLZAVPC >> gtTransitGatewayAttachmentsFor: aView [
 		priority: 2;
 		object: [ transitGatewayAttachments ];
 		view: #gtTransitGatewayAttachmentsFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAVPC >> initialize [
+	super initialize.
+
+	gatewayRoutes := GtLZAGatewayRoutesGroup new
 ]
 
 { #category : #accessing }
@@ -178,6 +202,11 @@ GtLZAVPC >> subnets [
 { #category : #accessing }
 GtLZAVPC >> subnets: anObject [
 	subnets := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAVPC >> subnetsByAvailabilityZone [
+	^ subnets groupedBy: #availabilityZone
 ]
 
 { #category : #accessing }

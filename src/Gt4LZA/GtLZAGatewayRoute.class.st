@@ -16,7 +16,8 @@ GtLZAGatewayRoute >> account [
 
 { #category : #accessing }
 GtLZAGatewayRoute >> account: anObject [
-	account := anObject
+	account := anObject.
+	account addManagedEntity: self
 ]
 
 { #category : #accessing }
@@ -29,6 +30,27 @@ GtLZAGatewayRoute >> destinationCidrBlock: anObject [
 	destinationCidrBlock := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAGatewayRoute >> name [
+	^ self asString
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAGatewayRoute >> printOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPut: $(;
+		nextPutAll: self vpc asString;
+		nextPutAll: ', ';
+		nextPutAll: self destinationCidrBlock;
+		nextPut: $)
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAGatewayRoute >> subnetsByAvailabilityZone [
+	^ {} asDictionary
+]
+
 { #category : #accessing }
 GtLZAGatewayRoute >> vpc [
 	^ vpc
@@ -36,5 +58,6 @@ GtLZAGatewayRoute >> vpc [
 
 { #category : #accessing }
 GtLZAGatewayRoute >> vpc: anObject [
-	vpc := anObject
+	vpc := anObject.
+	vpc addGatewayRoute: self
 ]

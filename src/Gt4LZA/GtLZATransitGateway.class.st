@@ -11,7 +11,8 @@ Class {
 		'defaultRouteTableAssociation',
 		'defaultRouteTablePropagation',
 		'autoAcceptSharingAttachments',
-		'routeTables'
+		'routeTables',
+		'attachments'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -23,7 +24,13 @@ GtLZATransitGateway >> account [
 
 { #category : #accessing }
 GtLZATransitGateway >> account: anObject [
-	account := anObject
+	account := anObject.
+	account addManagedEntity: self
+]
+
+{ #category : #'as yet unclassified' }
+GtLZATransitGateway >> addAttachment: anAttachment [
+	attachments add: anAttachment
 ]
 
 { #category : #accessing }
@@ -34,6 +41,16 @@ GtLZATransitGateway >> asn [
 { #category : #accessing }
 GtLZATransitGateway >> asn: anObject [
 	asn := anObject
+]
+
+{ #category : #accessing }
+GtLZATransitGateway >> attachments [
+	^ attachments
+]
+
+{ #category : #accessing }
+GtLZATransitGateway >> attachments: anObject [
+	attachments := anObject
 ]
 
 { #category : #accessing }
@@ -76,6 +93,13 @@ GtLZATransitGateway >> dnsSupport: anObject [
 	dnsSupport := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZATransitGateway >> initialize [
+	super initialize.
+	
+	attachments := GtLZATransitGatewayAttachmentsGroup new
+]
+
 { #category : #accessing }
 GtLZATransitGateway >> region [
 	^ region
@@ -106,6 +130,11 @@ GtLZATransitGateway >> shareTargets [
 { #category : #accessing }
 GtLZATransitGateway >> shareTargets: anObject [
 	shareTargets := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtLZATransitGateway >> subnetsByAvailabilityZone [
+	^ {} asDictionary
 ]
 
 { #category : #accessing }

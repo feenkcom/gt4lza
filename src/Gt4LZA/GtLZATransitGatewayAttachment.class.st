@@ -47,7 +47,9 @@ GtLZATransitGatewayAttachment >> routeTableAssociations [
 
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> routeTableAssociations: anObject [
-	routeTableAssociations := anObject
+	routeTableAssociations := anObject.
+	routeTableAssociations
+		do: [ :aRouteTable | aRouteTable addTransitGatewayAttachment: self ]
 ]
 
 { #category : #accessing }
@@ -57,7 +59,9 @@ GtLZATransitGatewayAttachment >> routeTablePropagations [
 
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> routeTablePropagations: anObject [
-	routeTablePropagations := anObject
+	routeTablePropagations := anObject.
+	routeTablePropagations
+		do: [ :aRouteTable | aRouteTable addTransitGatewayAttachment: self ]
 ]
 
 { #category : #accessing }
@@ -67,7 +71,8 @@ GtLZATransitGatewayAttachment >> subnets [
 
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> subnets: anObject [
-	subnets := anObject
+	subnets := anObject.
+	subnets do: [ :aSubnet | aSubnet addTransitGatewayAttachment: self ]
 ]
 
 { #category : #accessing }
@@ -77,5 +82,6 @@ GtLZATransitGatewayAttachment >> transitGateway [
 
 { #category : #accessing }
 GtLZATransitGatewayAttachment >> transitGateway: anObject [
-	transitGateway := anObject
+	transitGateway := anObject.
+	transitGateway addAttachment: self
 ]

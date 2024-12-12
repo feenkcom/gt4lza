@@ -3,10 +3,23 @@ Class {
 	#superclass : #GtLZAEntity,
 	#instVars : [
 		'routes',
-		'parent'
+		'parent',
+		'subnets',
+		'transitGatewayAttachments'
 	],
 	#category : #'Gt4LZA-Model'
 }
+
+{ #category : #'as yet unclassified' }
+GtLZARouteTable >> addSubnet: aSubnet [
+	self halt.
+	subnets add: aSubnet
+]
+
+{ #category : #'as yet unclassified' }
+GtLZARouteTable >> addTransitGatewayAttachment: anAttachment [
+	transitGatewayAttachments add: anAttachment
+]
 
 { #category : #views }
 GtLZARouteTable >> gtRoutesFor: aView [
@@ -20,6 +33,14 @@ GtLZARouteTable >> gtRoutesFor: aView [
 		column: 'Type' text: #type;
 		column: 'Target' text: #target;
 		column: 'Destination' text: #destination
+]
+
+{ #category : #'as yet unclassified' }
+GtLZARouteTable >> initialize [
+	super initialize.
+	
+	subnets := GtLZASubnetsGroup new.
+	transitGatewayAttachments := GtLZATransitGatewayAttachmentsGroup new
 ]
 
 { #category : #accessing }
@@ -40,4 +61,24 @@ GtLZARouteTable >> routes [
 { #category : #accessing }
 GtLZARouteTable >> routes: anObject [
 	routes := anObject
+]
+
+{ #category : #accessing }
+GtLZARouteTable >> subnets [
+	^ subnets
+]
+
+{ #category : #accessing }
+GtLZARouteTable >> subnets: anObject [
+	subnets := anObject
+]
+
+{ #category : #accessing }
+GtLZARouteTable >> transitGatewayAttachments [
+	^ transitGatewayAttachments
+]
+
+{ #category : #accessing }
+GtLZARouteTable >> transitGatewayAttachments: anObject [
+	transitGatewayAttachments := anObject
 ]

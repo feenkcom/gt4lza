@@ -67,6 +67,64 @@ GtLZAImporter >> gtMetadataFor: aView [
 ]
 
 { #category : #'as yet unclassified' }
+GtLZAImporter >> gtNetworkGraphFor: aView [
+	<gtView>
+	^ aView mondrian
+		title: 'Network graph';
+		priority: 10;
+		painting: [ :m | 
+			m nodes
+				stencil: [ :anAccount | 
+					| childrenContainer |
+					childrenContainer := BrHorizontalPane new
+							fitContent;
+							alignCenter;
+							padding: (BlInsets all: 5).
+					childrenContainer graph beChildrenContainer: #default.
+					BrVerticalPane new
+						fitContent;
+						alignCenter;
+						addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: anAccount name);
+						addChild: childrenContainer ];
+				with: accounts;
+				forEach: [ :anAccount | 
+					m nodes
+						labelled: #name;
+						with: (anAccount managedEntitiesOfType: GtLZAVPC);
+						forEach: [ :aVpc | 
+							m nodes
+								labelled: #key;
+								with: aVpc subnetsByAvailabilityZone associations;
+								forEach: [ :anAssociation | 
+									m nodes
+										labelled: #name;
+										with: anAssociation value.
+									m layout vertical ].
+							m layout vertical ].
+					m nodes
+						labelled: #name;
+						with: (anAccount managedEntitiesOfType: GtLZATransitGateway)
+							forEach: [ :aTransitGateway | 
+								m nodes
+									labelled: #name;
+									with: aTransitGateway routeTables.
+								m layout vertical ].
+					m layout vertical ].
+
+			m edges
+				connect: (transitGateways
+						flatCollect: [ :aTransitGateway | 
+							aTransitGateway attachments
+								flatCollect: [ :anAttachment | 
+									anAttachment routeTableAssociations
+										collect: [ :anAssociation | anAssociation -> anAttachment subnets ] ] ])
+				from: #key
+				toAll: #value ]
+]
+
+{ #category : #'as yet unclassified' }
 GtLZAImporter >> gtOrganizationalUnitsFor: aView [
 	<gtView>
 	^ aView forward
@@ -196,9 +254,8 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 			gatewayRouteTables := GtLZARouteTablesGroup
 					withAll: ((aGateway at: 'routeTables')
 							collect: [ :aRouteTable | 
-								GtLZARouteTable new
+								(routeTables findNamed: (aRouteTable at: 'name'))
 									rawData: aRouteTable;
-									name: (aRouteTable at: 'name');
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZAGatewayRoute new

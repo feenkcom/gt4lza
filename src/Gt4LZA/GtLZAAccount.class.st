@@ -5,10 +5,16 @@ Class {
 		'description',
 		'email',
 		'organizationalUnit',
-		'type'
+		'type',
+		'managedEntities'
 	],
 	#category : #'Gt4LZA-Model'
 }
+
+{ #category : #'as yet unclassified' }
+GtLZAAccount >> addManagedEntity: anEntity [
+	managedEntities add: anEntity
+]
 
 { #category : #accessing }
 GtLZAAccount >> description [
@@ -28,6 +34,38 @@ GtLZAAccount >> email [
 { #category : #accessing }
 GtLZAAccount >> email: anObject [
 	email := anObject
+]
+
+{ #category : #views }
+GtLZAAccount >> gtManagedEntitiesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Managed entities';
+		priority: 1;
+		object: [ managedEntities ];
+		view: #gtEntitiesFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAAccount >> initialize [
+	super initialize.
+	
+	managedEntities := GtLZAEntitiesGroup new
+]
+
+{ #category : #accessing }
+GtLZAAccount >> managedEntities [
+	^ managedEntities
+]
+
+{ #category : #accessing }
+GtLZAAccount >> managedEntities: anObject [
+	managedEntities := anObject
+]
+
+{ #category : #accessing }
+GtLZAAccount >> managedEntitiesOfType: aClass [
+	^ managedEntities select: [ :anEntity | anEntity isKindOf: aClass ]
 ]
 
 { #category : #accessing }
