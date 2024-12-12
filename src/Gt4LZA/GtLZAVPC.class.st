@@ -164,6 +164,33 @@ GtLZAVPC >> natGateways: anObject [
 	natGateways := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAVPC >> paintOn: m [
+	m nodes
+		stencil: [ :anAccount | 
+					| childrenContainer |
+					childrenContainer := BrHorizontalPane new
+							fitContent;
+							alignCenter;
+							padding: (BlInsets all: 5).
+					childrenContainer graph beChildrenContainer: #default.
+					BrVerticalPane new
+						fitContent;
+						margin: (BlInsets all: 5);
+						border: (BlBorder paint: Color lightBlue width: 2);
+						addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: 'Availability Zone ', anAccount name);
+						addChild: childrenContainer ];
+		with: self subnetsByAvailabilityZone associations;
+		forEach: [ :anAssociation | 
+			m nodes
+				labelled: #name;
+				with: anAssociation value.
+			m layout vertical ].
+	m layout vertical
+]
+
 { #category : #accessing }
 GtLZAVPC >> queryLogs [
 	^ queryLogs

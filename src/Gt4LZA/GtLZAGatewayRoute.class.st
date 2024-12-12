@@ -46,11 +46,6 @@ GtLZAGatewayRoute >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #'as yet unclassified' }
-GtLZAGatewayRoute >> subnetsByAvailabilityZone [
-	^ {} asDictionary
-]
-
 { #category : #accessing }
 GtLZAGatewayRoute >> vpc [
 	^ vpc

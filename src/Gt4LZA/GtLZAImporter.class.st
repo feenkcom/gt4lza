@@ -83,35 +83,15 @@ GtLZAImporter >> gtNetworkGraphFor: aView [
 					childrenContainer graph beChildrenContainer: #default.
 					BrVerticalPane new
 						fitContent;
-						alignCenter;
+						border: (BlBorder paint: Color black width: 1);
 						addChild: (BrLabel new
 								aptitude: BrGlamorousLabelAptitude;
 								text: anAccount name);
 						addChild: childrenContainer ];
-				with: accounts;
+				with: (accounts
+						select: [ :anAccount | (anAccount managedEntitiesOfType: GtLZAVPC) isNotEmpty ]);
 				forEach: [ :anAccount | 
-					m nodes
-						labelled: #name;
-						with: (anAccount managedEntitiesOfType: GtLZAVPC);
-						forEach: [ :aVpc | 
-							m nodes
-								labelled: #key;
-								with: aVpc subnetsByAvailabilityZone associations;
-								forEach: [ :anAssociation | 
-									m nodes
-										labelled: #name;
-										with: anAssociation value.
-									m layout vertical ].
-							m layout vertical ].
-					m nodes
-						labelled: #name;
-						with: (anAccount managedEntitiesOfType: GtLZATransitGateway)
-							forEach: [ :aTransitGateway | 
-								m nodes
-									labelled: #name;
-									with: aTransitGateway routeTables.
-								m layout vertical ].
-					m layout vertical ].
+					anAccount paintOn: m ].
 
 			m edges
 				connect: (transitGateways

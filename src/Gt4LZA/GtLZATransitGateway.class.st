@@ -100,6 +100,28 @@ GtLZATransitGateway >> initialize [
 	attachments := GtLZATransitGatewayAttachmentsGroup new
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZATransitGateway >> paintOn: m [
+	m nodes
+		stencil: [ :anAccount | 
+			| childrenContainer |
+			childrenContainer := BrHorizontalPane new
+					fitContent;
+					alignCenter;
+					padding: (BlInsets all: 5).
+			childrenContainer graph beChildrenContainer: #default.
+			BrVerticalPane new
+				fitContent;
+				margin: (BlInsets all: 5);
+				border: (BlBorder paint: Color purple lighter width: 1);
+				addChild: (BrLabel new
+						aptitude: BrGlamorousLabelAptitude;
+						text: anAccount name);
+				addChild: childrenContainer ];
+		with: self routeTables.
+	m layout vertical
+]
+
 { #category : #accessing }
 GtLZATransitGateway >> region [
 	^ region
@@ -130,11 +152,6 @@ GtLZATransitGateway >> shareTargets [
 { #category : #accessing }
 GtLZATransitGateway >> shareTargets: anObject [
 	shareTargets := anObject
-]
-
-{ #category : #'as yet unclassified' }
-GtLZATransitGateway >> subnetsByAvailabilityZone [
-	^ {} asDictionary
 ]
 
 { #category : #accessing }

@@ -79,6 +79,47 @@ GtLZAAccount >> organizationalUnit: anObject [
 	organizationalUnit addChild: self
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAAccount >> paintOn: m [
+	m nodes
+		stencil: [ :anAccount | 
+			| childrenContainer |
+			childrenContainer := BrHorizontalPane new
+					fitContent;
+					alignCenter;
+					padding: (BlInsets all: 5).
+			childrenContainer graph beChildrenContainer: #default.
+			BrVerticalPane new
+				fitContent;
+				margin: (BlInsets all: 5);
+				border: (BlBorder paint: Color green darker width: 1);
+				addChild: (BrLabel new
+						aptitude: BrGlamorousLabelAptitude;
+						text: anAccount name);
+				addChild: childrenContainer ];
+		with: (self managedEntitiesOfType: GtLZAVPC);
+		forEach: [ :aVpc | aVpc paintOn: m ].
+	m nodes
+		stencil: [ :anAccount | 
+			| childrenContainer |
+			childrenContainer := BrHorizontalPane new
+					fitContent;
+					alignCenter;
+					padding: (BlInsets all: 5).
+			childrenContainer graph beChildrenContainer: #default.
+			BrVerticalPane new
+				fitContent;
+				margin: (BlInsets all: 5);
+				border: (BlBorder paint: Color purple lighter darker width: 1);
+				addChild: (BrLabel new
+						aptitude: BrGlamorousLabelAptitude;
+						text: anAccount name);
+				addChild: childrenContainer ];
+		with: (self managedEntitiesOfType: GtLZATransitGateway)
+			forEach: [ :aTransitGateway | aTransitGateway paintOn: m ].
+	m layout vertical
+]
+
 { #category : #accessing }
 GtLZAAccount >> type [
 	^ type
