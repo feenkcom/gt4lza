@@ -10,7 +10,11 @@ Class {
 		'transitGateways',
 		'routeTables',
 		'vpcs',
-		'subnets'
+		'subnets',
+		'model',
+		'currentFile',
+		'files',
+		'directories'
 	],
 	#category : #'Gt4LZA-Importer'
 }
@@ -22,10 +26,63 @@ GtLZAImporter >> directory [
 
 { #category : #accessing }
 GtLZAImporter >> directory: anObject [
-	directory := anObject
+	directory := anObject.
+	model rootFolder: directory
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #importing }
+GtLZAImporter >> ensureFileNamed: aFileReference [
+	| filename |
+	filename := aFileReference pathString.
+	DiskStore activeClass isCaseSensitive
+		ifFalse: [ filename := filename asUppercase ].
+	^ files
+		at: filename
+		ifAbsentPut: [ | file |
+			file := FAMIXFile new.
+			file name: aFileReference basename.
+			aFileReference exists
+				ifTrue: [ | encoding anchor |
+					encoding := [ aFileReference
+							binaryReadStreamDo: [ :in | (ZnCharacterEncoder detectEncoding: in upToEnd) identifier ] ]
+							on: Error
+							do: [ :ex | ex return: 'utf-8' ].
+					anchor := FAMIXIndexedFileEntityAnchor
+							file: file
+							startPos: 1
+							endPos: (aFileReference
+									readStreamEncoded: encoding
+									do: [ :stream | stream contents size ])
+							model: model.
+					file sourceAnchor: anchor ]
+				ifFalse: [ file isStub: true ].
+			(self ensureFolderNamed: aFileReference parent)
+				ifNotNil: [ :folder | folder addChildFileSystemEntity: file ].
+			model add: file.
+			file ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureFolderNamed: aFileReference [
+	^ directories
+		at: aFileReference pathString
+		ifAbsentPut: [ | folder |
+			folder := FAMIXFolder new.
+			aFileReference = model rootFolder
+				ifTrue: [ folder name: '.' ]
+				ifFalse: [ folder name: aFileReference basename.
+					(self ensureFolderNamed: aFileReference parent)
+						ifNotNil: [ :outer | outer addChildFileSystemEntity: folder ] ].
+			model add: folder.
+			folder ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> finishImport [
+	currentFile := nil
+]
+
+{ #category : #views }
 GtLZAImporter >> gtAccountsFor: aView [
 	<gtView>
 	^ aView forward
@@ -35,7 +92,7 @@ GtLZAImporter >> gtAccountsFor: aView [
 		view: #gtAccountsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtMetadataFor: aView [
 	"this is a copy of Dictionary>>#gtItemsFor: that expandsAll by default and only displays the value if it’s not expandable"
 
@@ -66,7 +123,16 @@ GtLZAImporter >> gtMetadataFor: aView [
 		expandUpTo: 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
+GtLZAImporter >> gtModelFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Model';
+		object: [ model ];
+		view: #gtNavigationFor:
+]
+
+{ #category : #views }
 GtLZAImporter >> gtNetworkGraphFor: aView [
 	<gtView>
 	^ aView mondrian
@@ -104,7 +170,7 @@ GtLZAImporter >> gtNetworkGraphFor: aView [
 				toAll: #value ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtOrganizationalUnitsFor: aView [
 	<gtView>
 	^ aView forward
@@ -114,7 +180,7 @@ GtLZAImporter >> gtOrganizationalUnitsFor: aView [
 		view: #gtOrganizationalUnitsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtPoliciesFor: aView [
 	<gtView>
 	^ aView forward
@@ -124,7 +190,7 @@ GtLZAImporter >> gtPoliciesFor: aView [
 		view: #gtPoliciesFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtRouteTablesFor: aView [
 	<gtView>
 	^ aView forward
@@ -134,7 +200,7 @@ GtLZAImporter >> gtRouteTablesFor: aView [
 		view: #gtRouteTablesFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtTransitGatewaysFor: aView [
 	<gtView>
 	^ aView forward
@@ -144,7 +210,7 @@ GtLZAImporter >> gtTransitGatewaysFor: aView [
 		view: #gtTransitGatewaysFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAImporter >> gtVpcsFor: aView [
 	<gtView>
 	^ aView forward
@@ -154,28 +220,33 @@ GtLZAImporter >> gtVpcsFor: aView [
 		view: #gtVpcsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #importing }
 GtLZAImporter >> import [
 	self assert: directory isNotNil description: 'Import directory must be set'.
 	self assert: directory exists description: 'Import directory must exist'.
 	
 	self importOrganization.
 	self importAccounts.
-	self importNetwork
+	self importNetwork.
+	
+	self finishImport
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #importing }
 GtLZAImporter >> importAccounts [
-	| file yaml |
+	| file ast |
 	file := directory / 'accounts-config.yaml'.
 
 	file
-		ifExists: [ yaml := YAMLParser parseFile: file.
-			yaml object
+		ifExists: [ currentFile := self ensureFileNamed: file.
+			ast := YAMLParser parseFile: file.
+			ast object
 				keysAndValuesDo: [ :aKey :aList | 
 					aList
 						do: [ :anAccount | 
 							(accounts findNamed: (anAccount at: 'name'))
+								mooseModel: model;
+								sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAccount));
 								rawData: anAccount;
 								description: (anAccount at: 'description');
 								email: (anAccount at: 'email');
@@ -183,41 +254,49 @@ GtLZAImporter >> importAccounts [
 								type: aKey ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #importing }
 GtLZAImporter >> importNetwork [
-	| file yaml |
+	| file ast |
 	file := directory / 'network-config.yaml'.
-	yaml := (YAMLParser parseFile: file) object.
+	currentFile := self ensureFileNamed: file.
+	ast := YAMLParser parseFile: file.
 
-	self metadata at: 'Home region' put: (yaml at: 'homeRegion').
+	self metadata at: 'Home region' put: (ast object at: 'homeRegion').
 
-	self metadata at: 'Default VPC' put: (yaml at: 'defaultVpc').
+	self metadata at: 'Default VPC' put: (ast object at: 'defaultVpc').
 
-	self metadata at: 'VPC Flow Logs' put: (yaml at: 'vpcFlowLogs').
-	
-	self importTransitGatewaysFrom: yaml.
-	self importVpcsFrom: yaml
+	self metadata at: 'VPC Flow Logs' put: (ast object at: 'vpcFlowLogs').
+
+	self importTransitGatewaysFrom: ast.
+	self importVpcsFrom: ast
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #importing }
 GtLZAImporter >> importOrganization [
-	| file object |
+	| file ast |
 	file := directory / 'organization-config.yaml'.
 
 	file
-		ifExists: [ object := (YAMLParser parseFile: file) object.
-			self metadata at: 'Organization enabled' put: (object at: 'enable').
+		ifExists: [ currentFile := self ensureFileNamed: file.
+			ast := YAMLParser parseFile: file.
+			self metadata at: 'Organization enabled' put: (ast object at: 'enable').
 
-			(object at: 'organizationalUnits')
-				do: [ :anOu | (organizationalUnits findNamed: (anOu at: 'name')) rawData: anOu ].
+			(ast object at: 'organizationalUnits')
+				do: [ :anOu | 
+					(organizationalUnits findNamed: (anOu at: 'name'))
+						mooseModel: model;
+						sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anOu));
+						rawData: anOu ].
 
 			{'serviceControlPolicies'.
 				'taggingPolicies'.
 				'backupPolicies'}
 				do: [ :aPolicyKey | 
-					(object at: aPolicyKey)
+					(ast object at: aPolicyKey)
 						do: [ :aPolicy | 
 							(policies findNamed: (aPolicy at: 'name'))
+								mooseModel: model;
+								sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aPolicy));
 								rawData: aPolicy;
 								description: (aPolicy at: 'description');
 								policy: self directory / (aPolicy at: 'policy');
@@ -226,25 +305,31 @@ GtLZAImporter >> importOrganization [
 										collect: [ :aName | organizationalUnits findNamed: aName ]) ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLZAImporter >> importTransitGatewaysFrom: yaml [
+{ #category : #importing }
+GtLZAImporter >> importTransitGatewaysFrom: ast [
 	| transitGateway gatewayRouteTables |
-	(yaml at: 'transitGateways')
+	(ast object at: 'transitGateways')
 		do: [ :aGateway | 
 			gatewayRouteTables := GtLZARouteTablesGroup
 					withAll: ((aGateway at: 'routeTables')
 							collect: [ :aRouteTable | 
 								(routeTables findNamed: (aRouteTable at: 'name'))
+									mooseModel: model;
+									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRouteTable));
 									rawData: aRouteTable;
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZAGatewayRoute new
+													mooseModel: model;
+													sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRoute));
 													destinationCidrBlock: (aRoute at: 'destinationCidrBlock');
 													vpc: (vpcs findNamed: (aRoute at: 'attachment' at: 'vpcName'));
 													account: (accounts findNamed: (aRoute at: 'attachment' at: 'account')) ]) ]).
 			routeTables addAll: gatewayRouteTables.
 			transitGateway := transitGateways findNamed: (aGateway at: 'name').
 			transitGateway
+				mooseModel: model;
+				sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aGateway));
 				rawData: aGateway;
 				account: (accounts findNamed: (aGateway at: 'account'));
 				region: (aGateway at: 'region');
@@ -268,20 +353,24 @@ GtLZAImporter >> importTransitGatewaysFrom: yaml [
 										collect: [ :aName | (organizationalUnits findNamed: aName) addChild: transitGateway ]))) ]
 ]
 
-{ #category : #'as yet unclassified' }
-GtLZAImporter >> importVpcsFrom: yaml [
+{ #category : #importing }
+GtLZAImporter >> importVpcsFrom: ast [
 	| vpcRouteTables vpcNatGateways vpcSubnets |
-	(yaml at: 'vpcs')
+	(ast object at: 'vpcs')
 		do: [ :aVpc | 
 			vpcRouteTables := GtLZARouteTablesGroup
 					withAll: ((aVpc at: 'routeTables')
 							collect: [ :aRouteTable | 
 								(routeTables findNamed: (aRouteTable at: 'name'))
+									mooseModel: model;
+									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRouteTable));
 									rawData: aRouteTable;
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZARoute new
 													name: (aRoute at: 'name');
+													mooseModel: model;
+													sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRoute));
 													destination: (aRoute at: 'destination' ifAbsent: [ '' ]);
 													type: (aRoute at: 'type');
 													target: (aRoute at: 'target') ]) ]).
@@ -290,6 +379,8 @@ GtLZAImporter >> importVpcsFrom: yaml [
 					withAll: ((aVpc at: 'subnets')
 							collect: [ :aSubnet | 
 								(subnets findNamed: (aSubnet at: 'name'))
+									mooseModel: model;
+									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aSubnet));
 									rawData: aSubnet;
 									availabilityZone: (aSubnet at: 'availabilityZone');
 									ipv4CidrBlock: (aSubnet at: 'ipv4CidrBlock');
@@ -299,12 +390,16 @@ GtLZAImporter >> importVpcsFrom: yaml [
 					withAll: ((aVpc at: 'natGateways' ifAbsent: [ {} ])
 							collect: [ :aNatGateway | 
 								GtLZANatGateway new
+									mooseModel: model;
+									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aNatGateway));
 									rawData: aNatGateway;
 									name: (aNatGateway at: 'name');
 									subnet: (subnets findNamed: (aNatGateway at: 'subnet')) ]).
 
 			routeTables addAll: vpcRouteTables.
 			(vpcs findNamed: (aVpc at: 'name'))
+				mooseModel: model;
+				sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aVpc));
 				rawData: aVpc;
 				account: (accounts findNamed: (aVpc at: 'account'));
 				region: (aVpc at: 'region');
@@ -321,6 +416,8 @@ GtLZAImporter >> importVpcsFrom: yaml [
 						withAll: ((aVpc at: 'transitGatewayAttachments')
 								collect: [ :anAttachment | 
 									GtLZATransitGatewayAttachment new
+										mooseModel: model;
+										sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAttachment));
 										rawData: anAttachment;
 										name: (anAttachment at: 'name');
 										transitGateway: (transitGateways findNamed: (anAttachment at: 'transitGateway' at: 'name'));
@@ -336,8 +433,13 @@ GtLZAImporter >> importVpcsFrom: yaml [
 				interfaceEndpoints: (aVpc at: 'interfaceEndpoints' ifAbsent: [ nil ]) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAImporter >> initialize [
+	super initialize.
+	model := MooseModel new.
+	model sourceLanguage: GtLZASourceLanguage new.
+	directories := Dictionary new.
+	files := Dictionary new.
 	accounts := GtLZAAccountsGroup new.
 	organizationalUnits := GtLZAOrganizationalUnitsGroup new.
 	policies := GtLZAPoliciesGroup new.
@@ -345,11 +447,21 @@ GtLZAImporter >> initialize [
 	routeTables := GtLZARouteTablesGroup new.
 	vpcs := GtLZAVPCsGroup new.
 	subnets := GtLZASubnetsGroup new.
-	
+
 	metadata := Dictionary new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAImporter >> metadata [
 	^ metadata
+]
+
+{ #category : #importing }
+GtLZAImporter >> sourceAnchorFor: aNode [
+	aNode ifNil: [ ^ nil ].
+	^ FAMIXIndexedFileEntityAnchor
+		file: currentFile
+		startPos: aNode startPosition
+		endPos: aNode stopPosition
+		model: model
 ]

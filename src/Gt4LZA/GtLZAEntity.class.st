@@ -1,8 +1,7 @@
 Class {
 	#name : #GtLZAEntity,
-	#superclass : #Object,
+	#superclass : #FAMIXNamedEntity,
 	#instVars : [
-		'name',
 		'rawData'
 	],
 	#category : #'Gt4LZA-Model'
@@ -21,17 +20,7 @@ GtLZAEntity >> gtRawDataFor: aView [
 { #category : #'as yet unclassified' }
 GtLZAEntity >> initialize [
 	super initialize.
-	rawData := {} asDictionary
-]
-
-{ #category : #accessing }
-GtLZAEntity >> name [
-	^ name
-]
-
-{ #category : #accessing }
-GtLZAEntity >> name: anObject [
-	name := anObject
+	rawData := Dictionary new
 ]
 
 { #category : #'as yet unclassified' }

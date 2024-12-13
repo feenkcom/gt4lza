@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLZAGatewayRoute,
-	#superclass : #Object,
+	#superclass : #FAMIXSourcedEntity,
 	#instVars : [
 		'destinationCidrBlock',
 		'vpc',

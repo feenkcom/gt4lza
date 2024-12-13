@@ -29,5 +29,6 @@ GtLZAOrganizationalUnit >> gtChildrenFor: aView [
 
 { #category : #'as yet unclassified' }
 GtLZAOrganizationalUnit >> initialize [
+	super initialize.
 	children := GtLZAEntitiesGroup new
 ]
