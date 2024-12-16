@@ -30,12 +30,12 @@ GtLZAGatewayRoute >> destinationCidrBlock: anObject [
 	destinationCidrBlock := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAGatewayRoute >> name [
 	^ self asString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLZAGatewayRoute >> printOn: aStream [
 	aStream
 		nextPutAll: self class name;

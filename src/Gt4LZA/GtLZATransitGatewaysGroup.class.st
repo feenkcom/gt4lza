@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZATransitGatewaysGroup >> gtTransitGatewaysFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -17,7 +17,7 @@ GtLZATransitGatewaysGroup >> gtTransitGatewaysFor: aView [
 		column: 'ASN' text: #asn
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZATransitGatewaysGroup >> itemType [
 	^ GtLZATransitGateway
 ]

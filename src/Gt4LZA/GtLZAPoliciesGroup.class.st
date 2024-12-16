@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAPoliciesGroup >> gtPoliciesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -20,7 +20,7 @@ GtLZAPoliciesGroup >> gtPoliciesFor: aView [
 					ifFalse: [ BrGlamorousVectorIcons cancel ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAPoliciesGroup >> itemType [
 	^ GtLZAPolicy
 ]

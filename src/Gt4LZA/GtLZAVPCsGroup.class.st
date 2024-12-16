@@ -4,14 +4,14 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAVPCsGroup >> gtVpcsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'VPCs'; priority: 1; items: [self items]; column: 'Name' text: #name; column: 'Account' text: #account; column: 'Region' text: #region
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAVPCsGroup >> itemType [
 	^ GtLZAVPC
 ]

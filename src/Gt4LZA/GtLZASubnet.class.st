@@ -10,7 +10,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZASubnet >> addTransitGatewayAttachment: anAttachment [ 
 	transitGatewayAttachments add: anAttachment
 ]
@@ -25,7 +25,7 @@ GtLZASubnet >> availabilityZone: anObject [
 	availabilityZone := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZASubnet >> initialize [
 	super initialize.
 	

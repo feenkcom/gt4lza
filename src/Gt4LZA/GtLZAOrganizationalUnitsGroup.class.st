@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAOrganizationalUnitsGroup >> gtOrganizationalUnitsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -15,7 +15,7 @@ GtLZAOrganizationalUnitsGroup >> gtOrganizationalUnitsFor: aView [
 		column: 'Children' text: [ :anOu | anOu children size ] width: 100
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAOrganizationalUnitsGroup >> itemType [
 	^ GtLZAOrganizationalUnit
 ]

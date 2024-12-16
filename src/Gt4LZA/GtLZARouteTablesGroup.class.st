@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZARouteTablesGroup >> gtRouteTablesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -15,7 +15,7 @@ GtLZARouteTablesGroup >> gtRouteTablesFor: aView [
 		column: '# of routes' text: [ :aRouteTable | aRouteTable routes size ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZARouteTablesGroup >> itemType [
 	^ GtLZARouteTable
 ]

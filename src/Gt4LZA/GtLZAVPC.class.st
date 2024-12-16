@@ -32,7 +32,7 @@ GtLZAVPC >> account: anObject [
 	account addManagedEntity: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZAVPC >> addGatewayRoute: aRoute [
 	gatewayRoutes add: aRoute
 ]
@@ -117,7 +117,7 @@ GtLZAVPC >> gtTransitGatewayAttachmentsFor: aView [
 		view: #gtTransitGatewayAttachmentsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAVPC >> initialize [
 	super initialize.
 
@@ -164,7 +164,7 @@ GtLZAVPC >> natGateways: anObject [
 	natGateways := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAVPC >> paintOn: m [
 	m nodes
 		stencil: [ :anAccount | 
@@ -231,7 +231,7 @@ GtLZAVPC >> subnets: anObject [
 	subnets := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAVPC >> subnetsByAvailabilityZone [
 	^ subnets groupedBy: #availabilityZone
 ]

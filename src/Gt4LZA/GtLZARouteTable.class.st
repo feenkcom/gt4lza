@@ -10,12 +10,12 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZARouteTable >> addSubnet: aSubnet [
 	subnets add: aSubnet
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZARouteTable >> addTransitGatewayAttachment: anAttachment [
 	transitGatewayAttachments add: anAttachment
 ]
@@ -34,7 +34,7 @@ GtLZARouteTable >> gtRoutesFor: aView [
 		column: 'Destination' text: #destination
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZARouteTable >> initialize [
 	super initialize.
 	

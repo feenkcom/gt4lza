@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAAccountsGroup >> gtAccountsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -18,7 +18,7 @@ GtLZAAccountsGroup >> gtAccountsFor: aView [
 		column: 'Account type' text: #type
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAAccountsGroup >> itemType [
 	^ GtLZAAccount
 ]

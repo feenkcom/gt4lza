@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEntitiesGroup >> gtEntitiesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -14,7 +14,7 @@ GtLZAEntitiesGroup >> gtEntitiesFor: aView [
 		column: 'Name' text: #name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEntitiesGroup >> itemType [
 	^ GtLZAEntity
 ]

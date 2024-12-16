@@ -7,7 +7,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEntity >> gtRawDataFor: aView [
 	<gtView>
 	^ aView forward
@@ -17,13 +17,13 @@ GtLZAEntity >> gtRawDataFor: aView [
 		view: #gtTreeFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAEntity >> initialize [
 	super initialize.
 	rawData := Dictionary new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLZAEntity >> printOn: aStream [
 	aStream
 		nextPutAll: self class name;

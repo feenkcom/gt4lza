@@ -20,12 +20,12 @@ GtLZAPolicy >> description: anObject [
 	description := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 GtLZAPolicy >> exists [
 	^ self policy exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAPolicy >> gtPolicyFor: aView [
 	<gtView>
 	self exists ifFalse: [^ aView empty].

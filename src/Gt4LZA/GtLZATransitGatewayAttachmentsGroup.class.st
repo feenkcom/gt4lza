@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZATransitGatewayAttachmentsGroup >> gtTransitGatewayAttachmentsFor: aView [
 	<gtView>
 	^ aView columnedList

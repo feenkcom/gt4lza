@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZASubnetsGroup >> gtSubnetsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -17,7 +17,7 @@ GtLZASubnetsGroup >> gtSubnetsFor: aView [
 		column: 'Route table' text: #routeTable
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZASubnetsGroup >> itemType [
 	^ GtLZASubnet
 ]

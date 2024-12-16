@@ -28,7 +28,7 @@ GtLZATransitGateway >> account: anObject [
 	account addManagedEntity: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZATransitGateway >> addAttachment: anAttachment [
 	attachments add: anAttachment
 ]
@@ -93,14 +93,14 @@ GtLZATransitGateway >> dnsSupport: anObject [
 	dnsSupport := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZATransitGateway >> initialize [
 	super initialize.
 	
 	attachments := GtLZATransitGatewayAttachmentsGroup new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZATransitGateway >> paintOn: m [
 	m nodes
 		stencil: [ :anAccount | 

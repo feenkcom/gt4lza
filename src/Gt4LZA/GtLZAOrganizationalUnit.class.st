@@ -7,17 +7,17 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZAOrganizationalUnit >> addChild: anEntity [
 	children add: anEntity
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAOrganizationalUnit >> children [
 	^ children
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt-extension' }
 GtLZAOrganizationalUnit >> gtChildrenFor: aView [
 	<gtView>
 	^ aView forward
@@ -27,7 +27,7 @@ GtLZAOrganizationalUnit >> gtChildrenFor: aView [
 		view: #gtEntitiesFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAOrganizationalUnit >> initialize [
 	super initialize.
 	children := GtLZAEntitiesGroup new

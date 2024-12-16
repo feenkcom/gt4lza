@@ -1,6 +1,6 @@
 Class {
 	#name : #GtLZAShareTarget,
-	#superclass : #Object,
+	#superclass : #FAMIXSourcedEntity,
 	#instVars : [
 		'accounts',
 		'organizationalUnits'
@@ -18,7 +18,7 @@ GtLZAShareTarget >> accounts: anObject [
 	accounts := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAShareTarget >> gtAccountsFor: aView [
 	<gtView>
 	^ aView forward
@@ -28,7 +28,7 @@ GtLZAShareTarget >> gtAccountsFor: aView [
 		view: #gtAccountsFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAShareTarget >> gtOrganizationalUnitsFor: aView [
 	<gtView>
 	^ aView forward

@@ -31,6 +31,17 @@ GtLZAImporter >> directory: anObject [
 ]
 
 { #category : #importing }
+GtLZAImporter >> ensureAccountNamed: accountName [
+	^ accounts
+		detect: [ :anItem | anItem name = accountName ]
+		ifNone: [ | item |
+			item := GtLZAAccount new name: accountName.
+			item mooseModel: model.
+			accounts add: item.
+			item ]
+]
+
+{ #category : #importing }
 GtLZAImporter >> ensureFileNamed: aFileReference [
 	| filename |
 	filename := aFileReference pathString.
@@ -75,6 +86,72 @@ GtLZAImporter >> ensureFolderNamed: aFileReference [
 						ifNotNil: [ :outer | outer addChildFileSystemEntity: folder ] ].
 			model add: folder.
 			folder ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureOrganizationalUnitNamed: aName [
+	^ organizationalUnits
+		detect: [ :anItem | anItem name = aName ]
+		ifNone: [ | item |
+			item := GtLZAOrganizationalUnit new name: aName.
+			item mooseModel: model.
+			organizationalUnits add: item.
+			item ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensurePolicyNamed: policyName [
+	^ policies
+		detect: [ :anItem | anItem name = policyName ]
+		ifNone: [ | item |
+			item := GtLZAPolicy new name: policyName.
+			item mooseModel: model.
+			policies add: item.
+			item ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureRouteTableNamed: routeTableName [
+	^ routeTables
+		detect: [ :anItem | anItem name = routeTableName ]
+		ifNone: [ | item |
+			item := GtLZARouteTable new name: routeTableName.
+			item mooseModel: model.
+			routeTables add: item.
+			item ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureSubnetNamed: subnetName [
+	^ subnets
+		detect: [ :anItem | anItem name = subnetName ]
+		ifNone: [ | item |
+			item := GtLZASubnet new name: subnetName.
+			item mooseModel: model.
+			subnets add: item.
+			item ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureTransitGatewayNamed: transitGatewayName [
+	^ transitGateways
+		detect: [ :anItem | anItem name = transitGatewayName ]
+		ifNone: [ | item |
+			item := GtLZATransitGateway new name: transitGatewayName.
+			item mooseModel: model.
+			transitGateways add: item.
+			item ]
+]
+
+{ #category : #importing }
+GtLZAImporter >> ensureVpcNamed: vpcName [
+	^ vpcs
+		detect: [ :anItem | anItem name = vpcName ]
+		ifNone: [ | item |
+			item := GtLZAVPC new name: vpcName.
+			item mooseModel: model.
+			vpcs add: item.
+			item ]
 ]
 
 { #category : #importing }
@@ -244,13 +321,12 @@ GtLZAImporter >> importAccounts [
 				keysAndValuesDo: [ :aKey :aList | 
 					aList
 						do: [ :anAccount | 
-							(accounts findNamed: (anAccount at: 'name'))
-								mooseModel: model;
+							(self ensureAccountNamed: (anAccount at: 'name'))
 								sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAccount));
 								rawData: anAccount;
 								description: (anAccount at: 'description');
 								email: (anAccount at: 'email');
-								organizationalUnit: (organizationalUnits findNamed: (anAccount at: 'organizationalUnit'));
+								organizationalUnit: (self ensureOrganizationalUnitNamed: (anAccount at: 'organizationalUnit'));
 								type: aKey ] ] ]
 ]
 
@@ -283,8 +359,7 @@ GtLZAImporter >> importOrganization [
 
 			(ast object at: 'organizationalUnits')
 				do: [ :anOu | 
-					(organizationalUnits findNamed: (anOu at: 'name'))
-						mooseModel: model;
+					(self ensureOrganizationalUnitNamed: (anOu at: 'name'))
 						sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anOu));
 						rawData: anOu ].
 
@@ -294,15 +369,14 @@ GtLZAImporter >> importOrganization [
 				do: [ :aPolicyKey | 
 					(ast object at: aPolicyKey)
 						do: [ :aPolicy | 
-							(policies findNamed: (aPolicy at: 'name'))
-								mooseModel: model;
+							(self ensurePolicyNamed: (aPolicy at: 'name'))
 								sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aPolicy));
 								rawData: aPolicy;
 								description: (aPolicy at: 'description');
 								policy: self directory / (aPolicy at: 'policy');
 								type: (aPolicy at: 'type' ifAbsent: [ '' ]);
 								organizationalUnits: ((aPolicy at: 'deploymentTargets' at: 'organizationalUnits')
-										collect: [ :aName | organizationalUnits findNamed: aName ]) ] ] ]
+										collect: [ :aName | self ensureOrganizationalUnitNamed: aName ]) ] ] ]
 ]
 
 { #category : #importing }
@@ -313,25 +387,22 @@ GtLZAImporter >> importTransitGatewaysFrom: ast [
 			gatewayRouteTables := GtLZARouteTablesGroup
 					withAll: ((aGateway at: 'routeTables')
 							collect: [ :aRouteTable | 
-								(routeTables findNamed: (aRouteTable at: 'name'))
-									mooseModel: model;
+								(self ensureRouteTableNamed: (aRouteTable at: 'name'))
 									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRouteTable));
 									rawData: aRouteTable;
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZAGatewayRoute new
-													mooseModel: model;
 													sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRoute));
 													destinationCidrBlock: (aRoute at: 'destinationCidrBlock');
-													vpc: (vpcs findNamed: (aRoute at: 'attachment' at: 'vpcName'));
-													account: (accounts findNamed: (aRoute at: 'attachment' at: 'account')) ]) ]).
+													vpc: (self ensureVpcNamed: (aRoute at: 'attachment' at: 'vpcName'));
+													account: (self ensureAccountNamed: (aRoute at: 'attachment' at: 'account')) ]) ]).
 			routeTables addAll: gatewayRouteTables.
-			transitGateway := transitGateways findNamed: (aGateway at: 'name').
+			transitGateway := self ensureTransitGatewayNamed: (aGateway at: 'name').
 			transitGateway
-				mooseModel: model;
 				sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aGateway));
 				rawData: aGateway;
-				account: (accounts findNamed: (aGateway at: 'account'));
+				account: (self ensureAccountNamed: (aGateway at: 'account'));
 				region: (aGateway at: 'region');
 				asn: (aGateway at: 'asn');
 				dnsSupport: (aGateway at: 'dnsSupport') = 'enable';
@@ -340,68 +411,54 @@ GtLZAImporter >> importTransitGatewaysFrom: ast [
 				autoAcceptSharingAttachments: (aGateway at: 'autoAcceptSharingAttachments') = 'enable';
 				routeTables: gatewayRouteTables;
 				shareTargets: (GtLZAShareTarget new
+						mooseModel: model;
 						accounts: (GtLZAAccountsGroup
 								withAll: ((aGateway
 										at: 'shareTargets'
 										at: 'accounts'
-										ifAbsent: [ {} ]) collect: [ :aName | accounts findNamed: aName ]));
+										ifAbsent: [ {} ]) collect: [ :aName | self ensureAccountNamed: aName ]));
 						organizationalUnits: (GtLZAOrganizationalUnitsGroup
 								withAll: ((aGateway
 										at: 'shareTargets'
 										at: 'organizationalUnits'
 										ifAbsent: [ {} ])
-										collect: [ :aName | (organizationalUnits findNamed: aName) addChild: transitGateway ]))) ]
+										collect: [ :aName | (self ensureOrganizationalUnitNamed: aName) addChild: transitGateway ]))) ]
 ]
 
 { #category : #importing }
 GtLZAImporter >> importVpcsFrom: ast [
-	| vpcRouteTables vpcNatGateways vpcSubnets |
+	| vpcRouteTables vpcNatGateways |
 	(ast object at: 'vpcs')
 		do: [ :aVpc | 
 			vpcRouteTables := GtLZARouteTablesGroup
 					withAll: ((aVpc at: 'routeTables')
 							collect: [ :aRouteTable | 
-								(routeTables findNamed: (aRouteTable at: 'name'))
-									mooseModel: model;
+								(self ensureRouteTableNamed: (aRouteTable at: 'name'))
 									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRouteTable));
 									rawData: aRouteTable;
 									routes: ((aRouteTable at: 'routes')
 											collect: [ :aRoute | 
 												GtLZARoute new
 													name: (aRoute at: 'name');
-													mooseModel: model;
 													sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aRoute));
 													destination: (aRoute at: 'destination' ifAbsent: [ '' ]);
 													type: (aRoute at: 'type');
 													target: (aRoute at: 'target') ]) ]).
 
-			vpcSubnets := GtLZASubnetsGroup
-					withAll: ((aVpc at: 'subnets')
-							collect: [ :aSubnet | 
-								(subnets findNamed: (aSubnet at: 'name'))
-									mooseModel: model;
-									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aSubnet));
-									rawData: aSubnet;
-									availabilityZone: (aSubnet at: 'availabilityZone');
-									ipv4CidrBlock: (aSubnet at: 'ipv4CidrBlock');
-									routeTable: (routeTables findNamed: (aSubnet at: 'routeTable')) ]).
-
 			vpcNatGateways := GtLZANatGatewaysGroup
 					withAll: ((aVpc at: 'natGateways' ifAbsent: [ {} ])
 							collect: [ :aNatGateway | 
 								GtLZANatGateway new
-									mooseModel: model;
 									sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aNatGateway));
 									rawData: aNatGateway;
 									name: (aNatGateway at: 'name');
-									subnet: (subnets findNamed: (aNatGateway at: 'subnet')) ]).
+									subnet: (self ensureSubnetNamed: (aNatGateway at: 'subnet')) ]).
 
 			routeTables addAll: vpcRouteTables.
-			(vpcs findNamed: (aVpc at: 'name'))
-				mooseModel: model;
+			(self ensureVpcNamed: (aVpc at: 'name'))
 				sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aVpc));
 				rawData: aVpc;
-				account: (accounts findNamed: (aVpc at: 'account'));
+				account: (self ensureAccountNamed: (aVpc at: 'account'));
 				region: (aVpc at: 'region');
 				cidrs: (aVpc at: 'cidrs');
 				internetGateway: (aVpc at: 'internetGateway' ifAbsent: [ false ]);
@@ -411,24 +468,34 @@ GtLZAImporter >> importVpcsFrom: ast [
 				queryLogs: (aVpc at: 'queryLogs' ifAbsent: [ {} ]);
 				routeTables: vpcRouteTables;
 				natGateways: vpcNatGateways;
-				subnets: vpcSubnets;
+				subnets: (GtLZASubnetsGroup
+						withAll: ((aVpc at: 'subnets')
+								collect: [ :aSubnet | 
+									| subnetName |
+									subnetName := aSubnet at: 'name'.
+									(self ensureSubnetNamed: subnetName)
+										sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: aSubnet));
+										rawData: aSubnet;
+										availabilityZone: (aSubnet at: 'availabilityZone');
+										ipv4CidrBlock: (aSubnet at: 'ipv4CidrBlock');
+										routeTable: (self ensureRouteTableNamed: (aSubnet at: 'routeTable')) ]));
 				transitGatewayAttachments: (GtLZATransitGatewayAttachmentsGroup
 						withAll: ((aVpc at: 'transitGatewayAttachments')
 								collect: [ :anAttachment | 
 									GtLZATransitGatewayAttachment new
-										mooseModel: model;
 										sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAttachment));
 										rawData: anAttachment;
 										name: (anAttachment at: 'name');
-										transitGateway: (transitGateways findNamed: (anAttachment at: 'transitGateway' at: 'name'));
+										transitGateway: (self ensureTransitGatewayNamed: (anAttachment at: 'transitGateway' at: 'name'));
 										routeTableAssociations: (GtLZARouteTablesGroup
 												withAll: ((anAttachment at: 'routeTableAssociations')
-														collect: [ :aName | routeTables findNamed: aName ]));
+														collect: [ :aName | self ensureRouteTableNamed: aName ]));
 										routeTablePropagations: (GtLZARouteTablesGroup
 												withAll: ((anAttachment at: 'routeTablePropagations')
-														collect: [ :aName | routeTables findNamed: aName ]));
+														collect: [ :aName | self ensureRouteTableNamed: aName ]));
 										subnets: (GtLZASubnetsGroup
-												withAll: ((anAttachment at: 'subnets') collect: [ :aName | subnets findNamed: aName ])) ]));
+												withAll: ((anAttachment at: 'subnets')
+														collect: [ :aName | self ensureSubnetNamed: aName ])) ]));
 				gatewayEndpoints: (aVpc at: 'gatewayEndpoints');
 				interfaceEndpoints: (aVpc at: 'interfaceEndpoints' ifAbsent: [ nil ]) ]
 ]

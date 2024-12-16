@@ -11,7 +11,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 GtLZAAccount >> addManagedEntity: anEntity [
 	managedEntities add: anEntity
 ]
@@ -46,7 +46,7 @@ GtLZAAccount >> gtManagedEntitiesFor: aView [
 		view: #gtEntitiesFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAAccount >> initialize [
 	super initialize.
 	
@@ -79,7 +79,7 @@ GtLZAAccount >> organizationalUnit: anObject [
 	organizationalUnit addChild: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAAccount >> paintOn: m [
 	m nodes
 		stencil: [ :anAccount | 

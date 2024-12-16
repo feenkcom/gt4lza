@@ -4,7 +4,7 @@ Class {
 	#category : #'Gt4LZA-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZASourceLanguage >> gtParserClass [
 	^ YAMLParser
 ]
