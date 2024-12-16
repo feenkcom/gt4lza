@@ -4,17 +4,15 @@ Class {
 	#instVars : [
 		'description',
 		'email',
-		'organizationalUnit',
 		'type',
-		'managedEntities'
+		'managedEntities',
+		'organizationalUnitAssociation',
+		'gatewayRouteAssociations',
+		'transitGatewayAssociations',
+		'vpcAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
-
-{ #category : #adding }
-GtLZAAccount >> addManagedEntity: anEntity [
-	managedEntities add: anEntity
-]
 
 { #category : #accessing }
 GtLZAAccount >> description [
@@ -36,47 +34,73 @@ GtLZAAccount >> email: anObject [
 	email := anObject
 ]
 
+{ #category : #accessing }
+GtLZAAccount >> gatewayRouteAssociations [
+	<MSEProperty: #gatewayRouteAssociations type: #GtLZAAccountGatewayRouteAssociation opposite: #account>
+	^ gatewayRouteAssociations
+]
+
+{ #category : #accessing }
+GtLZAAccount >> gatewayRoutes [
+	^ gatewayRouteAssociations collect: #gatewayRoute
+]
+
 { #category : #views }
 GtLZAAccount >> gtManagedEntitiesFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Managed entities';
 		priority: 1;
-		object: [ managedEntities ];
+		object: [ self managedEntities ];
 		view: #gtEntitiesFor:
 ]
 
 { #category : #initialization }
 GtLZAAccount >> initialize [
 	super initialize.
-	
-	managedEntities := GtLZAEntitiesGroup new
+	gatewayRouteAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #accountAssociation:
+			selector: #gatewayRouteAssociations.
+	transitGatewayAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #accountAssociation:
+			selector: #transitGatewayAssociations.
+	vpcAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #accountAssociation:
+			selector: #vpcAssociations
 ]
 
 { #category : #accessing }
 GtLZAAccount >> managedEntities [
-	^ managedEntities
-]
-
-{ #category : #accessing }
-GtLZAAccount >> managedEntities: anObject [
-	managedEntities := anObject
+	^ GtLZAEntitiesGroup new
+		addAll: self gatewayRoutes;
+		addAll: self transitGateways;
+		addAll: self vpcs;
+		yourself
 ]
 
 { #category : #accessing }
 GtLZAAccount >> managedEntitiesOfType: aClass [
-	^ managedEntities select: [ :anEntity | anEntity isKindOf: aClass ]
+	^ self managedEntities select: [ :anEntity | anEntity isKindOf: aClass ]
 ]
 
 { #category : #accessing }
 GtLZAAccount >> organizationalUnit [
-	^ organizationalUnit
+	^ organizationalUnitAssociation
+		ifNotNil: [ organizationalUnitAssociation organizationalUnit ]
 ]
 
 { #category : #accessing }
-GtLZAAccount >> organizationalUnit: anObject [
-	organizationalUnit := anObject.
-	organizationalUnit addChild: self
+GtLZAAccount >> organizationalUnitAssociation [
+	<MSEProperty: #organizationalUnitAssociation type: #GtLZAAccountOrganizationalUnitAssociation opposite: #account>
+	^ organizationalUnitAssociation
+]
+
+{ #category : #accessing }
+GtLZAAccount >> organizationalUnitAssociation: anObject [
+	organizationalUnitAssociation := anObject
 ]
 
 { #category : #accessing }
@@ -121,6 +145,17 @@ GtLZAAccount >> paintOn: m [
 ]
 
 { #category : #accessing }
+GtLZAAccount >> transitGatewayAssociations [
+	<MSEProperty: #transitGatewayAssociations type: #GtLZAAccountTransitGatewayAssociation opposite: #account>
+	^ transitGatewayAssociations
+]
+
+{ #category : #accessing }
+GtLZAAccount >> transitGateways [
+	^ transitGatewayAssociations collect: #transitGateway
+]
+
+{ #category : #accessing }
 GtLZAAccount >> type [
 	^ type
 ]
@@ -128,4 +163,15 @@ GtLZAAccount >> type [
 { #category : #accessing }
 GtLZAAccount >> type: anObject [
 	type := anObject
+]
+
+{ #category : #accessing }
+GtLZAAccount >> vpcAssociations [
+	<MSEProperty: #vpcAssociations type: #GtLZAAccountVPCAssociation opposite: #account>
+	^ vpcAssociations
+]
+
+{ #category : #accessing }
+GtLZAAccount >> vpcs [
+	^ vpcAssociations collect: #vpc
 ]

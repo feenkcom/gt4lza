@@ -2,10 +2,18 @@ Class {
 	#name : #GtLZAOrganizationalUnit,
 	#superclass : #GtLZAEntity,
 	#instVars : [
-		'children'
+		'children',
+		'accountAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
+
+{ #category : #'as yet unclassified' }
+GtLZAOrganizationalUnit >> accountAssociations [
+	<MSEProperty: #accountAssociations type: #GtLZAAccountOrganizationalUnitAssociation opposite: #organizationalUnit>
+	<multivalued>
+	^ accountAssociations
+]
 
 { #category : #adding }
 GtLZAOrganizationalUnit >> addChild: anEntity [
@@ -14,7 +22,10 @@ GtLZAOrganizationalUnit >> addChild: anEntity [
 
 { #category : #accessing }
 GtLZAOrganizationalUnit >> children [
-	^ children
+	^ GtLZAEntitiesGroup new
+		addAll: children;
+		addAll: (accountAssociations collect: #account);
+		yourself
 ]
 
 { #category : #'gt-extension' }
@@ -23,12 +34,16 @@ GtLZAOrganizationalUnit >> gtChildrenFor: aView [
 	^ aView forward
 		title: 'Children';
 		priority: 1;
-		object: [ children ];
+		object: [ self children ];
 		view: #gtEntitiesFor:
 ]
 
 { #category : #initialization }
 GtLZAOrganizationalUnit >> initialize [
 	super initialize.
-	children := GtLZAEntitiesGroup new
+	children := GtLZAEntitiesGroup new.
+	accountAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #organizationalUnit:
+			selector: #accountAssociations
 ]

@@ -2,7 +2,6 @@ Class {
 	#name : #GtLZAVPC,
 	#superclass : #GtLZAEntity,
 	#instVars : [
-		'account',
 		'region',
 		'cidrs',
 		'internetGateway',
@@ -16,20 +15,26 @@ Class {
 		'gatewayEndpoints',
 		'interfaceEndpoints',
 		'natGateways',
-		'gatewayRoutes'
+		'gatewayRoutes',
+		'accountAssociation'
 	],
 	#category : #'Gt4LZA-Model'
 }
 
 { #category : #accessing }
 GtLZAVPC >> account [
-	^ account
+	^ accountAssociation ifNotNil: [ accountAssociation account ]
 ]
 
 { #category : #accessing }
-GtLZAVPC >> account: anObject [
-	account := anObject.
-	account addManagedEntity: self
+GtLZAVPC >> accountAssociation [
+	<MSEProperty: #accountAssociation type: #GtLZAAccountVPCAssociation opposite: #vpc>
+	^ accountAssociation
+]
+
+{ #category : #accessing }
+GtLZAVPC >> accountAssociation: anObject [
+	accountAssociation := anObject
 ]
 
 { #category : #adding }

@@ -4,20 +4,25 @@ Class {
 	#instVars : [
 		'destinationCidrBlock',
 		'vpc',
-		'account'
+		'accountAssociation'
 	],
 	#category : #'Gt4LZA-Model'
 }
 
 { #category : #accessing }
 GtLZAGatewayRoute >> account [
-	^ account
+	^ accountAssociation ifNotNil: [ accountAssociation account ]
 ]
 
 { #category : #accessing }
-GtLZAGatewayRoute >> account: anObject [
-	account := anObject.
-	account addManagedEntity: self
+GtLZAGatewayRoute >> accountAssociation [
+	<MSEProperty: #accountAssociation type: #GtLZAAccountGatewayRouteAssociation opposite: #gatewayRoute>
+	^ accountAssociation
+]
+
+{ #category : #accessing }
+GtLZAGatewayRoute >> accountAssociation: anObject [
+	accountAssociation := anObject
 ]
 
 { #category : #accessing }

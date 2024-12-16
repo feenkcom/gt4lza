@@ -2,7 +2,6 @@ Class {
 	#name : #GtLZATransitGateway,
 	#superclass : #GtLZAEntity,
 	#instVars : [
-		'account',
 		'region',
 		'shareTargets',
 		'asn',
@@ -12,20 +11,26 @@ Class {
 		'defaultRouteTablePropagation',
 		'autoAcceptSharingAttachments',
 		'routeTables',
-		'attachments'
+		'attachments',
+		'accountAssociation'
 	],
 	#category : #'Gt4LZA-Model'
 }
 
 { #category : #accessing }
 GtLZATransitGateway >> account [
-	^ account
+	^ accountAssociation ifNil: [ accountAssociation account ]
 ]
 
 { #category : #accessing }
-GtLZATransitGateway >> account: anObject [
-	account := anObject.
-	account addManagedEntity: self
+GtLZATransitGateway >> accountAssociation [
+	<MSEProperty: #accountAssociation type: #GtLZAAccountTransitGatewayAssociation opposite: #transitGateway>
+	^ accountAssociation
+]
+
+{ #category : #accessing }
+GtLZATransitGateway >> accountAssociation: anObject [
+	accountAssociation := anObject
 ]
 
 { #category : #adding }
