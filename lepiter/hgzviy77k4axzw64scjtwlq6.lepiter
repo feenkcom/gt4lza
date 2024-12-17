@@ -5,6 +5,77 @@
 		"__type" : "snippets",
 		"items" : [
 			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T22:11:08.608453+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T22:26:33.237667+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "/BsNed/lDQCi6+aNA6oxvg=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "Start by [[Setting up the AWS CLI]]. Once you log in in a terminal, you can inspect the account through the CLI using the following script:"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:31.463995+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:58.465256+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KzZXN9blDQCgp2HuASOltw=="
+				},
+				"code" : "GtAwsAmazonWebServices default\r\tdefaultRegion: 'eu-central-1';\r\tdefaultProfile: 'testing'"
+			},
+			{
 				"__type" : "pharoSnippet",
 				"children" : {
 					"__type" : "snippets",
@@ -71,40 +142,6 @@
 					"uidString" : "N2U6X47lDQCU7QGkCasyCA=="
 				},
 				"code" : "cloudformation := services serviceNamed: 'CloudFormation'.\r\rcloudformation performOperation: 'ListStacks'"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T11:08:31.463995+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T11:08:58.465256+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "KzZXN9blDQCgp2HuASOltw=="
-				},
-				"code" : "GtAwsAmazonWebServices default\r\tdefaultRegion: 'eu-central-1';\r\tdefaultProfile: 'testing'"
 			}
 		]
 	},
@@ -127,12 +164,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-13T20:49:55.012958+01:00"
+			"dateAndTimeString" : "2024-12-17T22:27:46.228243+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "LZA AWS exploration"
+		"title" : "Exploring a deployed AWS stack"
 	},
 	"uid" : {
 		"__type" : "uuid",

@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T22:11:08.608453+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:08.724788+01:00"
 					}
 				},
 				"editEmail" : {
@@ -29,20 +29,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T22:26:33.237667+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:08.729449+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "/BsNed/lDQCi6+aNA6oxvg=="
+					"uidString" : "peOPtd/lDQColQBzA6oxvg=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "Start by [[Setting up the AWS CLI]]. Once you log in in a terminal, you can inspect the account through the CLI using the following script:"
+				"string" : "[[LZA exploration]]"
 			},
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -55,7 +55,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T11:08:31.463995+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:12.779215+01:00"
 					}
 				},
 				"editEmail" : {
@@ -66,17 +66,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-17T11:08:58.465256+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:12.783008+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "KzZXN9blDQCgp2HuASOltw=="
+					"uidString" : "xzHxtd/lDQCorOHwA6oxvg=="
 				},
-				"code" : "GtAwsAmazonWebServices default\r\tdefaultRegion: 'eu-central-1';\r\tdefaultProfile: 'testing'"
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "[[Exploring a deployed AWS stack]]"
 			},
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -89,7 +92,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-13T20:50:00.773893+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:15.188986+01:00"
 					}
 				},
 				"editEmail" : {
@@ -100,17 +103,20 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-13T21:29:11.433496+01:00"
+						"dateAndTimeString" : "2024-12-17T22:28:15.192602+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "IVmK343lDQCUzfIVCasyCA=="
+					"uidString" : "8KAjtt/lDQCozxZ+A6oxvg=="
 				},
-				"code" : "services := GtAwsServicesImporter onBotocore\r\t\tzone: 'eu-central-1';\r\t\tprofile: 'testing';\r\t\timport"
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "[[Setting up the AWS CLI]]"
 			},
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
@@ -123,7 +129,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-13T21:25:43.019055+01:00"
+						"dateAndTimeString" : "2024-12-17T22:27:53.326467+01:00"
 					}
 				},
 				"editEmail" : {
@@ -134,14 +140,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-13T21:28:19.252839+01:00"
+						"dateAndTimeString" : "2024-12-17T22:27:53.326467+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "N2U6X47lDQCU7QGkCasyCA=="
+					"uidString" : "mOPvtN/lDQColOSFA6oxvg=="
 				},
-				"code" : "cloudformation := services serviceNamed: 'CloudFormation'.\r\rcloudformation performOperation: 'ListStacks'"
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : ""
 			}
 		]
 	},
@@ -153,7 +162,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-13T20:49:55.012958+01:00"
+			"dateAndTimeString" : "2024-12-17T22:28:01.630762+01:00"
 		}
 	},
 	"editEmail" : {
@@ -164,15 +173,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-13T20:49:55.012958+01:00"
+			"dateAndTimeString" : "2024-12-17T22:29:08.784095+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "LZA AWS exploration"
+		"title" : "Glamorous Toolkit 4 AWS Landing Zone Accelerator"
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "fe5e58de-8de5-0d00-94cb-deaa09ab3208"
+		"uuid" : "649cefb4-dfe5-0d00-a893-55d003aa31be"
 	}
 }
