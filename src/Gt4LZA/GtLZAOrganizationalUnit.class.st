@@ -2,8 +2,9 @@ Class {
 	#name : #GtLZAOrganizationalUnit,
 	#superclass : #GtLZAEntity,
 	#instVars : [
-		'children',
-		'accountAssociations'
+		'accountAssociations',
+		'policyAssociations',
+		'transitGatewayAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -15,16 +16,12 @@ GtLZAOrganizationalUnit >> accountAssociations [
 	^ accountAssociations
 ]
 
-{ #category : #adding }
-GtLZAOrganizationalUnit >> addChild: anEntity [
-	children add: anEntity
-]
-
 { #category : #accessing }
 GtLZAOrganizationalUnit >> children [
 	^ GtLZAEntitiesGroup new
-		addAll: children;
 		addAll: (accountAssociations collect: #account);
+		addAll: (policyAssociations collect: #policy);
+		addAll: (transitGatewayAssociations collect: #transitGateway);
 		yourself
 ]
 
@@ -41,9 +38,30 @@ GtLZAOrganizationalUnit >> gtChildrenFor: aView [
 { #category : #initialization }
 GtLZAOrganizationalUnit >> initialize [
 	super initialize.
-	children := GtLZAEntitiesGroup new.
 	accountAssociations := FMNullMultivalueLink
 			on: self
 			opposite: #organizationalUnit:
-			selector: #accountAssociations
+			selector: #accountAssociations.
+	policyAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #organizationalUnit:
+			selector: #policyAssociations.
+	transitGatewayAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #organizationalUnit:
+			selector: #transitGatewayAssociations
+]
+
+{ #category : #accessing }
+GtLZAOrganizationalUnit >> policyAssociations [
+	<MSEProperty: #policyAssociations type: #GtLZAOrganizationalUnitPolicyAssociation opposite: #organizationalUnit>
+	<multivalued>
+	^ policyAssociations
+]
+
+{ #category : #accessing }
+GtLZAOrganizationalUnit >> transitGatewayAssociations [
+	<MSEProperty: #transitGatewayAssociations type: #GtLZAOrganizationalUnitTransitGatewayAssociation opposite: #organizationalUnit>
+	<multivalued>
+	^ transitGatewayAssociations
 ]

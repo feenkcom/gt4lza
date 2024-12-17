@@ -15,8 +15,8 @@ Class {
 		'gatewayEndpoints',
 		'interfaceEndpoints',
 		'natGateways',
-		'gatewayRoutes',
-		'accountAssociation'
+		'accountAssociation',
+		'gatewayRouteAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -35,11 +35,6 @@ GtLZAVPC >> accountAssociation [
 { #category : #accessing }
 GtLZAVPC >> accountAssociation: anObject [
 	accountAssociation := anObject
-]
-
-{ #category : #adding }
-GtLZAVPC >> addGatewayRoute: aRoute [
-	gatewayRoutes add: aRoute
 ]
 
 { #category : #accessing }
@@ -83,13 +78,15 @@ GtLZAVPC >> gatewayEndpoints: anObject [
 ]
 
 { #category : #accessing }
-GtLZAVPC >> gatewayRoutes [
-	^ gatewayRoutes
+GtLZAVPC >> gatewayRouteAssociations [
+	<MSEProperty: #gatewayRouteAssociations type: #GtLZAGatewayRouteVPCAssociation opposite: #vpc>
+	^ gatewayRouteAssociations
 ]
 
 { #category : #accessing }
-GtLZAVPC >> gatewayRoutes: anObject [
-	gatewayRoutes := anObject
+GtLZAVPC >> gatewayRoutes [
+	^ GtLZAGatewayRoutesGroup
+		withAll: (gatewayRouteAssociations collect: #gatewayRoute)
 ]
 
 { #category : #views }
@@ -125,8 +122,10 @@ GtLZAVPC >> gtTransitGatewayAttachmentsFor: aView [
 { #category : #initialization }
 GtLZAVPC >> initialize [
 	super initialize.
-
-	gatewayRoutes := GtLZAGatewayRoutesGroup new
+	gatewayRouteAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #vpc:
+			selector: #gatewayRouteAssociations
 ]
 
 { #category : #accessing }

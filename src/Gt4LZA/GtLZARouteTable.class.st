@@ -5,7 +5,8 @@ Class {
 		'routes',
 		'parent',
 		'subnets',
-		'transitGatewayAttachments'
+		'transitGatewayAttachments',
+		'gatewayRouteAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -20,6 +21,16 @@ GtLZARouteTable >> addTransitGatewayAttachment: anAttachment [
 	transitGatewayAttachments add: anAttachment
 ]
 
+{ #category : #accessing }
+GtLZARouteTable >> gatewayRouteAssociations [
+	^ gatewayRouteAssociations
+]
+
+{ #category : #accessing }
+GtLZARouteTable >> gatewayRouteAssociations: anObject [
+	gatewayRouteAssociations := anObject
+]
+
 { #category : #views }
 GtLZARouteTable >> gtRoutesFor: aView [
 	<gtView>
@@ -27,7 +38,7 @@ GtLZARouteTable >> gtRoutesFor: aView [
 	^ aView columnedList
 		title: 'Routes';
 		priority: 1;
-		items: [ routes ];
+		items: [ self routes ];
 		column: 'Name' text: #name;
 		column: 'Type' text: #type;
 		column: 'Target' text: #target;
@@ -37,7 +48,10 @@ GtLZARouteTable >> gtRoutesFor: aView [
 { #category : #initialization }
 GtLZARouteTable >> initialize [
 	super initialize.
-	
+	gatewayRouteAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #routeTable:
+			selector: #gatewayRouteAssociations.
 	subnets := GtLZASubnetsGroup new.
 	transitGatewayAttachments := GtLZATransitGatewayAttachmentsGroup new
 ]
@@ -54,7 +68,7 @@ GtLZARouteTable >> parent: anObject [
 
 { #category : #accessing }
 GtLZARouteTable >> routes [
-	^ routes
+	^ gatewayRouteAssociations collect: #gatewayRoute
 ]
 
 { #category : #accessing }

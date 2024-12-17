@@ -5,7 +5,7 @@ Class {
 		'description',
 		'policy',
 		'type',
-		'organizationalUnits'
+		'organizationalUnitAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -37,16 +37,26 @@ GtLZAPolicy >> gtPolicyFor: aView [
 		view: #gtJsonFor:
 ]
 
-{ #category : #accessing }
-GtLZAPolicy >> organizationalUnits [
-	^ organizationalUnits
+{ #category : #initialization }
+GtLZAPolicy >> initialize [
+	super initialize.
+	organizationalUnitAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #policy:
+			selector: #organizationalUnitAssociations
 ]
 
 { #category : #accessing }
-GtLZAPolicy >> organizationalUnits: anObject [
-	organizationalUnits := anObject.
+GtLZAPolicy >> organizationalUnitAssociations [
+	<MSEProperty: #organizationalUnitAssociations type: #GtLZAOrganizationalUnitPolicyAssociation opposite: #policy>
+	<multivalued>
+	^ organizationalUnitAssociations
+]
 
-	organizationalUnits do: [ :aUnit | aUnit addChild: self ]
+{ #category : #accessing }
+GtLZAPolicy >> organizationalUnits [
+	^ GtLZAOrganizationalUnitsGroup
+		withAll: (organizationalUnitAssociations collect: [ :each | each organizationalUnit ])
 ]
 
 { #category : #accessing }

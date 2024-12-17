@@ -16,7 +16,7 @@ GtLZATransitGatewayAttachment >> gtRouteTableAssociationsFor: aView [
 	^ aView forward
 		title: 'Route table associations';
 		priority: 1;
-		object: [ routeTableAssociations ];
+		object: [ self routeTableAssociations ];
 		view: #gtRouteTablesFor:
 ]
 
@@ -26,7 +26,7 @@ GtLZATransitGatewayAttachment >> gtRouteTablePropagationsFor: aView [
 	^ aView forward
 		title: 'Route table propagations';
 		priority: 2;
-		object: [ routeTablePropagations ];
+		object: [ self routeTablePropagations ];
 		view: #gtRouteTablesFor:
 ]
 
@@ -36,7 +36,7 @@ GtLZATransitGatewayAttachment >> gtSubnetsFor: aView [
 	^ aView forward
 		title: 'Subnets';
 		priority: 3;
-		object: [ subnets ];
+		object: [ self subnets ];
 		view: #gtSubnetsFor:
 ]
 

@@ -5,7 +5,6 @@ Class {
 		'description',
 		'email',
 		'type',
-		'managedEntities',
 		'organizationalUnitAssociation',
 		'gatewayRouteAssociations',
 		'transitGatewayAssociations',

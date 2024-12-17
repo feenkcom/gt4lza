@@ -3,8 +3,8 @@ Class {
 	#superclass : #FAMIXSourcedEntity,
 	#instVars : [
 		'destinationCidrBlock',
-		'vpc',
-		'accountAssociation'
+		'accountAssociation',
+		'vpcAssociation'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -53,11 +53,16 @@ GtLZAGatewayRoute >> printOn: aStream [
 
 { #category : #accessing }
 GtLZAGatewayRoute >> vpc [
-	^ vpc
+	^ vpcAssociation ifNotNil: [ vpcAssociation vpc ]
 ]
 
 { #category : #accessing }
-GtLZAGatewayRoute >> vpc: anObject [
-	vpc := anObject.
-	vpc addGatewayRoute: self
+GtLZAGatewayRoute >> vpcAssociation [
+	<MSEProperty: #vpcAssociation type: #GtLZAGatewayRouteVPCAssociation opposite: #gatewayRoute>
+	^ vpcAssociation
+]
+
+{ #category : #accessing }
+GtLZAGatewayRoute >> vpcAssociation: anObject [
+	vpcAssociation := anObject
 ]

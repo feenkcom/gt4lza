@@ -12,7 +12,8 @@ Class {
 		'autoAcceptSharingAttachments',
 		'routeTables',
 		'attachments',
-		'accountAssociation'
+		'accountAssociation',
+		'organizationalUnitAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -101,8 +102,18 @@ GtLZATransitGateway >> dnsSupport: anObject [
 { #category : #initialization }
 GtLZATransitGateway >> initialize [
 	super initialize.
-	
+	organizationalUnitAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #transitGateway:
+			selector: #organizationalUnitAssociations.
 	attachments := GtLZATransitGatewayAttachmentsGroup new
+]
+
+{ #category : #accessing }
+GtLZATransitGateway >> organizationalUnitAssociations [
+	<MSEProperty: #organizationalUnitAssociations type: #GtLZAOrganizationalUnitTransitGatewayAssociation opposite: #transitGateway>
+	<multivalued>
+	^ organizationalUnitAssociations
 ]
 
 { #category : #accessing }

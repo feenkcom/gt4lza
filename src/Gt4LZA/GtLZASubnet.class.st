@@ -5,7 +5,8 @@ Class {
 		'availabilityZone',
 		'ipv4CidrBlock',
 		'routeTable',
-		'transitGatewayAttachments'
+		'transitGatewayAttachments',
+		'natGatewayAssociations'
 	],
 	#category : #'Gt4LZA-Model'
 }
@@ -28,7 +29,10 @@ GtLZASubnet >> availabilityZone: anObject [
 { #category : #initialization }
 GtLZASubnet >> initialize [
 	super initialize.
-	
+	natGatewayAssociations := FMNullMultivalueLink
+			on: self
+			opposite: #subnet:
+			selector: #natGatewayAssociations.
 	transitGatewayAttachments := GtLZATransitGatewayAttachmentsGroup new
 ]
 
@@ -40,6 +44,18 @@ GtLZASubnet >> ipv4CidrBlock [
 { #category : #accessing }
 GtLZASubnet >> ipv4CidrBlock: anObject [
 	ipv4CidrBlock := anObject
+]
+
+{ #category : #accessing }
+GtLZASubnet >> natGatewayAssociations [
+	<MSEProperty: #natGatewayAssociations type: #GtLZANatGatewaySubnetAssociation opposite: #subnet>
+	<multivalued>
+	^ natGatewayAssociations
+]
+
+{ #category : #accessing }
+GtLZASubnet >> natGatewayAssociations: anObject [
+	natGatewayAssociations value: anObject
 ]
 
 { #category : #accessing }
