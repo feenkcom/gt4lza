@@ -160,6 +160,27 @@ GtLZAImporter >> finishImport [
 ]
 
 { #category : #views }
+GtLZAImporter >> gtAccountsConfigFor: aView [
+	<gtView>
+	| file |
+	file := model allFiles
+			detect: [ :each | each fileReference basename = 'accounts-config.yaml' ]
+			ifNone: [ ^ aView empty ].
+	^ aView explicit
+		title: 'accounts-config.yaml';
+		stencil: [ | editor strategy |
+			editor := BrEditor new.
+			editor editor text: file sourceText asRopedText.
+			editor aptitude: BrGlamorousCodeEditorAptitude.
+			editor editor styler: (model sourceLanguage gtStylerFor: file).
+			strategy := GtLZAConfigCompletionStrategy forAccountsConfig
+					model: model;
+					yourself.
+			(GtCompletionController on: editor strategy: strategy) install.
+			editor ]
+]
+
+{ #category : #views }
 GtLZAImporter >> gtAccountsFor: aView [
 	<gtView>
 	^ aView forward
@@ -210,6 +231,27 @@ GtLZAImporter >> gtModelFor: aView [
 ]
 
 { #category : #views }
+GtLZAImporter >> gtNetworkConfigFor: aView [
+	<gtView>
+	| file |
+	file := model allFiles
+			detect: [ :each | each fileReference basename = 'network-config.yaml' ]
+			ifNone: [ ^ aView empty ].
+	^ aView explicit
+		title: 'network-config.yaml';
+		stencil: [ | editor strategy |
+			editor := BrEditor new.
+			editor editor text: file sourceText asRopedText.
+			editor aptitude: BrGlamorousCodeEditorAptitude.
+			editor editor styler: (model sourceLanguage gtStylerFor: file).
+			strategy := GtLZAConfigCompletionStrategy forNetworkConfig
+					model: model;
+					yourself.
+			(GtCompletionController on: editor strategy: strategy) install.
+			editor ]
+]
+
+{ #category : #views }
 GtLZAImporter >> gtNetworkGraphFor: aView [
 	<gtView>
 	^ aView mondrian
@@ -245,6 +287,27 @@ GtLZAImporter >> gtNetworkGraphFor: aView [
 										collect: [ :anAssociation | anAssociation -> anAttachment subnets ] ] ])
 				from: #key
 				toAll: #value ]
+]
+
+{ #category : #views }
+GtLZAImporter >> gtOrganizationConfigFor: aView [
+	<gtView>
+	| file |
+	file := model allFiles
+			detect: [ :each | each fileReference basename = 'organization-config.yaml' ]
+			ifNone: [ ^ aView empty ].
+	^ aView explicit
+		title: 'organization-config.yaml';
+		stencil: [ | editor strategy |
+			editor := BrEditor new.
+			editor editor text: file sourceText asRopedText.
+			editor aptitude: BrGlamorousCodeEditorAptitude.
+			editor editor styler: (model sourceLanguage gtStylerFor: file).
+			strategy := GtLZAConfigCompletionStrategy forOrganizationConfig
+					model: model;
+					yourself.
+			(GtCompletionController on: editor strategy: strategy) install.
+			editor ]
 ]
 
 { #category : #views }
@@ -621,6 +684,16 @@ GtLZAImporter >> initialize [
 { #category : #accessing }
 GtLZAImporter >> metadata [
 	^ metadata
+]
+
+{ #category : #accessing }
+GtLZAImporter >> model [
+	^ model
+]
+
+{ #category : #accessing }
+GtLZAImporter >> model: anObject [
+	model := anObject
 ]
 
 { #category : #importing }

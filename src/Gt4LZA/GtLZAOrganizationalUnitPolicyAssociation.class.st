@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLZAOrganizationalUnitPolicyAssociation >> from [
+	^ self policy
+]
+
+{ #category : #accessing }
 GtLZAOrganizationalUnitPolicyAssociation >> organizationalUnit [
 	<MSEProperty: #organizationalUnit type: #GtLZAOrganizationalUnit opposite: #policyAssociations>
 	^ organizationalUnit
@@ -36,4 +41,9 @@ GtLZAOrganizationalUnitPolicyAssociation >> policy: anObject [
 			update: #organizationalUnitAssociations
 			from: self policy
 			to: anObject
+]
+
+{ #category : #accessing }
+GtLZAOrganizationalUnitPolicyAssociation >> to [
+	^ self organizationalUnit
 ]
