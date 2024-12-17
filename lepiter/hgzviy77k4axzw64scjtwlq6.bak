@@ -29,14 +29,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-13T21:28:56.715653+01:00"
+						"dateAndTimeString" : "2024-12-13T21:29:11.433496+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "IVmK343lDQCUzfIVCasyCA=="
 				},
-				"code" : "services := GtAwsServicesImporter onBotocore zoneimport"
+				"code" : "services := GtAwsServicesImporter onBotocore\r\t\tzone: 'eu-central-1';\r\t\tprofile: 'testing';\r\t\timport"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -71,6 +71,40 @@
 					"uidString" : "N2U6X47lDQCU7QGkCasyCA=="
 				},
 				"code" : "cloudformation := services serviceNamed: 'CloudFormation'.\r\rcloudformation performOperation: 'ListStacks'"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:31.463995+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:34.569405+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KzZXN9blDQCgp2HuASOltw=="
+				},
+				"code" : "G"
 			}
 		]
 	},

@@ -71,6 +71,40 @@
 					"uidString" : "N2U6X47lDQCU7QGkCasyCA=="
 				},
 				"code" : "cloudformation := services serviceNamed: 'CloudFormation'.\r\rcloudformation performOperation: 'ListStacks'"
+			},
+			{
+				"__type" : "pharoSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [ ]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:31.463995+01:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2024-12-17T11:08:58.465256+01:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "KzZXN9blDQCgp2HuASOltw=="
+				},
+				"code" : "GtAwsAmazonWebServices default\r\tdefaultRegion: 'eu-central-1';\r\tdefaultProfile: 'testing'"
 			}
 		]
 	},
