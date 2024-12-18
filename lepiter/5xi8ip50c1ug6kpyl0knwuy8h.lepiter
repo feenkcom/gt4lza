@@ -29,14 +29,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-11T19:10:39.031026+01:00"
+						"dateAndTimeString" : "2024-12-18T09:41:53.138425+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "MSbJhUrlDQCGcd0wB2MtZA=="
 				},
-				"code" : "lzaDirectory := 'lza' asFileReference.\rlzaDirectory ensureDeleteAll.\rIceRepositoryCreator\r\t\tfromUrl: 'git@github.com:awslabs/landing-zone-accelerator-on-aws.git'\r\t\tto: lzaDirectory."
+				"code" : "lzaDirectory := 'lza' asFileReference.\rlzaDirectory ensureDeleteAll.\rIceRepositoryCreator\r\t\tfromUrl: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'\r\t\tto: lzaDirectory."
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -57,20 +57,20 @@
 				},
 				"editEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"editTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:38:32.12006+01:00"
+						"dateAndTimeString" : "2024-12-18T09:42:12.24977+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "f7cei0rlDQCHHf5UB2MtZA=="
 				},
-				"code" : "healthcareConfig := lzaDirectory / 'reference/sample-configurations/lza-sample-config-healthcare'"
+				"code" : "healthcareConfig := lzaDirectory / 'config'"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -97,7 +97,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T20:58:49.015022+01:00"
+						"dateAndTimeString" : "2024-12-18T09:42:15.222743+01:00"
 					}
 				},
 				"uid" : {
