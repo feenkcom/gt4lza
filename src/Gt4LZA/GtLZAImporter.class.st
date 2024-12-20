@@ -173,7 +173,8 @@ GtLZAImporter >> gtAccountsConfigFor: aView [
 			editor editor text: file sourceText asRopedText.
 			editor aptitude: BrGlamorousCodeEditorAptitude.
 			editor editor styler: (model sourceLanguage gtStylerFor: file).
-			strategy := GtLZAConfigCompletionStrategy forAccountsConfig
+			strategy := (GtLZAConfigCompletionStrategy
+					forFileType: file fileReference basename)
 					model: model;
 					yourself.
 			(GtCompletionController on: editor strategy: strategy) install.
@@ -244,7 +245,8 @@ GtLZAImporter >> gtNetworkConfigFor: aView [
 			editor editor text: file sourceText asRopedText.
 			editor aptitude: BrGlamorousCodeEditorAptitude.
 			editor editor styler: (model sourceLanguage gtStylerFor: file).
-			strategy := GtLZAConfigCompletionStrategy forNetworkConfig
+			strategy := (GtLZAConfigCompletionStrategy
+					forFileType: file fileReference basename)
 					model: model;
 					yourself.
 			(GtCompletionController on: editor strategy: strategy) install.
@@ -303,7 +305,8 @@ GtLZAImporter >> gtOrganizationConfigFor: aView [
 			editor editor text: file sourceText asRopedText.
 			editor aptitude: BrGlamorousCodeEditorAptitude.
 			editor editor styler: (model sourceLanguage gtStylerFor: file).
-			strategy := GtLZAConfigCompletionStrategy forOrganizationConfig
+			strategy := (GtLZAConfigCompletionStrategy
+					forFileType: file fileReference basename)
 					model: model;
 					yourself.
 			(GtCompletionController on: editor strategy: strategy) install.

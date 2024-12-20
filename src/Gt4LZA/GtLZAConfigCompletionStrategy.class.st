@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'model'
 	],
+	#classInstVars : [
+		'fileCompleters'
+	],
 	#category : #'Gt4LZA-Completion'
 }
 
@@ -26,6 +29,21 @@ GtLZAConfigCompletionStrategy class >> forAccountsConfig [
 ]
 
 { #category : #'instance creation' }
+GtLZAConfigCompletionStrategy class >> forFileType: aString [
+	| completer selector |
+	completer := (fileCompleters ifNil: [ fileCompleters := Dictionary new ])
+			at: aString
+			ifAbsentPut: [ self loadCompleterForFileType: aString ].
+	completer = GtYAMLEmptyCompleter instance
+		ifTrue: [ selector := ('for' , (aString allButLast: (12 min: aString size)) capitalized
+					, 'Config') asSymbol.
+			(self respondsTo: selector) ifTrue: [ ^ self perform: selector ] ].
+	^ self new
+		completer: completer;
+		yourself
+]
+
+{ #category : #'instance creation' }
 GtLZAConfigCompletionStrategy class >> forNetworkConfig [
 	^ self new
 		loadCompleterFrom: self networkConfig;
@@ -37,6 +55,22 @@ GtLZAConfigCompletionStrategy class >> forOrganizationConfig [
 	^ self new
 		loadCompleterFrom: self organizationConfig;
 		yourself
+]
+
+{ #category : #private }
+GtLZAConfigCompletionStrategy class >> loadCompleterForFileType: aString [
+	(aString endsWith: '-config.yaml') ifFalse: [ ^ GtYAMLEmptyCompleter instance ].
+	^ [ | type json jsonObject schema |
+	type := aString allButLast: 12.
+	json := ZnClient new
+			url: 'https://raw.githubusercontent.com/awslabs/landing-zone-accelerator-on-aws/refs/heads/main/source/packages/%40aws-accelerator/config/lib/schemas/'
+					, type , '-config.json';
+			get.
+	jsonObject := NeoJSONObject fromString: json.
+	schema := NeoJSONSchema new json: jsonObject.
+	GtYAMLCompleter forJSONSchema: (schema resolveSubSchema: schema raw) ]
+		on: Error
+		do: [ :ex | ex return: GtYAMLEmptyCompleter instance ]
 ]
 
 { #category : #private }
