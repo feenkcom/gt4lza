@@ -445,9 +445,7 @@ GtLZAImporter >> importOrganization [
 						sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anOu));
 						rawData: anOu ].
 
-			{'serviceControlPolicies'.
-				'taggingPolicies'.
-				'backupPolicies'}
+			#('serviceControlPolicies' 'taggingPolicies' 'backupPolicies')
 				do: [ :aPolicyKey | 
 					(ast object at: aPolicyKey)
 						do: [ :aPolicy | 
