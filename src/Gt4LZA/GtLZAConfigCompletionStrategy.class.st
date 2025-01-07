@@ -254,8 +254,8 @@ GtLZAConfigCompletionStrategy >> potentialValuesOf: aString forLookup: nameStrin
 	stream := super potentialValuesOf: aString forLookup: nameString.
 	model
 		ifNotNil: [ nameString = '<organizationalUnit>'
-				ifTrue: [ stream := (((model allLZAOrganizationalUnits collect: #name) asArray
-							asAsyncStream select: [ :each | each beginsWith: aString ]) merge: stream)
+				ifTrue: [ stream := ((model allOrganizationalUnitNames asSortedCollection asAsyncStream
+							select: [ :each | each beginsWith: aString ]) merge: stream)
 							withoutDuplicates ] ].
 	^ stream
 ]

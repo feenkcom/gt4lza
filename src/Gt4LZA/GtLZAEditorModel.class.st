@@ -22,6 +22,12 @@ GtLZAEditorModel >> addEntity: anObject [
 		ifAbsentPut: [ OrderedCollection new: 1 ]) add: anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAEditorModel >> allOrganizationalUnitNames [
+	^ (entities at: GtLZAEditorOrganizationalUnit ifAbsent: [ Dictionary new ])
+		keys
+]
+
 { #category : #accessing }
 GtLZAEditorModel >> directory [
 	^ directory
