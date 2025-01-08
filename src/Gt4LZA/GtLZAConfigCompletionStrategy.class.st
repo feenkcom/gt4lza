@@ -86,7 +86,7 @@ centralNetworkServices:
         - 
           shareTargets: 
             accounts: 
-              - 
+              - <account>?
             organizationalUnits: 
               - <organizationalUnit>?
   networkFirewall: 
@@ -94,14 +94,14 @@ centralNetworkServices:
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     rules: 
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
   route53Resolver: 
@@ -111,91 +111,91 @@ centralNetworkServices:
           - 
             shareTargets: 
               accounts: 
-                - 
+                - <account>?
               organizationalUnits: 
                 - <organizationalUnit>?
     firewallRuleGroups: 
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     queryLogs: 
       shareTargets: 
         accounts: 
-          - 
+          - <account>?
         organizationalUnits: 
           - <organizationalUnit>?
     rules: 
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
 certificates: 
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
         - <organizationalUnit>?
 customerGateways: 
   - 
-    account: 
+    account: <account>?
 defaultVpc: 
   excludeAccounts: 
-    - 
+    - <account>?
 dhcpOptions: 
   - 
     accounts: 
-      - 
+      - <account>?
 directConnectGateways: 
   - 
-    account: 
+    account: <account>?
     transitGatewayAssociations: 
       - 
-        account: 
+        account: <account>?
 elbAccountIds: 
   - 
     region: 
 prefixLists: 
   - 
     accounts: 
-      - 
+      - <account>?
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
         - <organizationalUnit>?
 transitGateways: 
   - 
-    account: 
+    account: <account>?
     shareTargets: 
       accounts: 
-        - 
+        - <account>?
       organizationalUnits: 
         - <organizationalUnit>?
 vpcPeering: 
   - 
     vpcs: 
-      - 
+      - <vpc>?
 vpcTemplates: 
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
@@ -208,7 +208,7 @@ vpcTemplates:
         - 
           shareTargets: 
             accounts: 
-              - 
+              - <account>?
             organizationalUnits: 
               - <organizationalUnit>?
           subnets: 
@@ -224,14 +224,14 @@ vpcTemplates:
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     targetGroups: 
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     transitGatewayAttachments: 
@@ -240,7 +240,7 @@ vpcTemplates:
           - 
 vpcs: 
   - 
-    account: 
+    account: <account>?
     interfaceEndpoints: 
       subnets: 
         - 
@@ -249,7 +249,7 @@ vpcs:
         - 
           shareTargets: 
             accounts: 
-              - 
+              - <account>?
             organizationalUnits: 
               - <organizationalUnit>?
           subnets: 
@@ -262,14 +262,14 @@ vpcs:
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     targetGroups: 
       - 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
     transitGatewayAttachments: 
@@ -283,30 +283,30 @@ vpcs:
             - 
               shareTargets: 
                 accounts: 
-                  - 
+                  - <account>?
                 organizationalUnits: 
                   - <organizationalUnit>?
           subnets: 
             - 
-          vpc: 
+          vpc: <vpc>?
       firewallRuleGroups: 
         - 
           shareTargets: 
             accounts: 
-              - 
+              - <account>?
             organizationalUnits: 
               - <organizationalUnit>?
       queryLogs: 
         shareTargets: 
           accounts: 
-            - 
+            - <account>?
           organizationalUnits: 
             - <organizationalUnit>?
       rules: 
         - 
           shareTargets: 
             accounts: 
-              - 
+              - <account>?
             organizationalUnits: 
               - <organizationalUnit>?
 '
@@ -319,9 +319,9 @@ backupPolicies:
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
@@ -330,9 +330,9 @@ chatbotPolicies:
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
@@ -341,9 +341,9 @@ serviceControlPolicies:
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
@@ -352,9 +352,9 @@ taggingPolicies:
   - 
     deploymentTargets: 
       accounts: 
-        - 
+        - <account>?
       excludedAccounts: 
-        - 
+        - <account>?
       excludedRegions: 
         - 
       organizationalUnits: 
@@ -378,8 +378,16 @@ GtLZAConfigCompletionStrategy >> potentialValuesOf: aString forLookup: nameStrin
 	stream := super potentialValuesOf: aString forLookup: nameString.
 	model
 		ifNotNil: [ nameString = '<organizationalUnit>'
-				ifTrue: [ stream := ((model allOrganizationalUnitNames asSortedCollection asAsyncStream
-							select: [ :each | each beginsWith: aString ]) merge: stream)
-							withoutDuplicates ] ].
+				ifTrue: [ ^ ((model allOrganizationalUnitNames asSortedCollection asAsyncStream
+						select: [ :each | each beginsWith: aString ]) merge: stream)
+						withoutDuplicates ].
+			nameString = '<account>'
+				ifTrue: [ ^ ((model allAccountNames asSortedCollection asAsyncStream
+						select: [ :each | each beginsWith: aString ]) merge: stream)
+						withoutDuplicates ].
+			nameString = '<vpc>'
+				ifTrue: [ ^ ((model allVPCNames asSortedCollection asAsyncStream
+						select: [ :each | each beginsWith: aString ]) merge: stream)
+						withoutDuplicates ] ].
 	^ stream
 ]

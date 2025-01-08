@@ -24,10 +24,22 @@ GtLZAEditorModel >> addEntity: anObject [
 ]
 
 { #category : #accessing }
+GtLZAEditorModel >> allAccountNames [
+	self ensureAccountsConfigLoaded.
+	^ (entities at: GtLZAEditorAccount ifAbsent: [ Dictionary new ]) keys
+]
+
+{ #category : #accessing }
 GtLZAEditorModel >> allOrganizationalUnitNames [
 	self ensureOrganizationConfigLoaded.
 	^ (entities at: GtLZAEditorOrganizationalUnit ifAbsent: [ Dictionary new ])
 		keys
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> allVPCNames [
+	self ensureNetworkConfigLoaded.
+	^ (entities at: GtLZAEditorVPC ifAbsent: [ Dictionary new ]) keys
 ]
 
 { #category : #accessing }
@@ -38,6 +50,18 @@ GtLZAEditorModel >> directory [
 { #category : #accessing }
 GtLZAEditorModel >> directory: anObject [
 	directory := anObject
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> ensureAccountsConfigLoaded [
+	(self entityNamed: 'accounts-config.yaml' ofType: GtLZAEditorFile)
+		ifNil: [ self loadAccountsConfig ]
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> ensureNetworkConfigLoaded [
+	(self entityNamed: 'network-config.yaml' ofType: GtLZAEditorFile)
+		ifNil: [ self loadNetworkConfig ]
 ]
 
 { #category : #accessing }
