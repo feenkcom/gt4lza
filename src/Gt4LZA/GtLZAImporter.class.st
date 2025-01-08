@@ -382,30 +382,31 @@ GtLZAImporter >> importAccounts [
 
 	file
 		ifExists: [ currentFile := self ensureFileNamed: file.
-			ast := YAMLParser parseFile: file.
+			ast := YAMLParser parseFileWithErrors: file.
 			ast object
 				keysAndValuesDo: [ :aKey :aList | 
 					aList
-						do: [ :anAccount | 
-							| account |
-							account := self ensureAccountNamed: (anAccount at: 'name').
-							currentFile addEntity: account.
-							account
-								sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAccount));
-								gtInspectButtonPosition: (ast nodeForObject: (anAccount at: 'name')) stopPosition;
-								rawData: anAccount;
-								description: (anAccount at: 'description');
-								email: (anAccount at: 'email');
-								type: aKey.
-							currentFile
-								addEntity: (GtLZAAccountOrganizationalUnitAssociation new
-										account: account;
-										organizationalUnit: (self ensureOrganizationalUnitNamed: (anAccount at: 'organizationalUnit'));
-										sourceAnchor: (self
-												sourceAnchorFor: ((ast nodeForObject: anAccount)
-														nodeForObject: (anAccount at: 'organizationalUnit')));
-										mooseModel: model;
-										yourself) ] ] ]
+						ifNotNil: [ aList
+								do: [ :anAccount | 
+									| account |
+									account := self ensureAccountNamed: (anAccount at: 'name').
+									currentFile addEntity: account.
+									account
+										sourceAnchor: (self sourceAnchorFor: (ast nodeForObject: anAccount));
+										gtInspectButtonPosition: (ast nodeForObject: (anAccount at: 'name')) stopPosition;
+										rawData: anAccount;
+										description: (anAccount at: 'description');
+										email: (anAccount at: 'email');
+										type: aKey.
+									currentFile
+										addEntity: (GtLZAAccountOrganizationalUnitAssociation new
+												account: account;
+												organizationalUnit: (self ensureOrganizationalUnitNamed: (anAccount at: 'organizationalUnit'));
+												sourceAnchor: (self
+														sourceAnchorFor: ((ast nodeForObject: anAccount)
+																nodeForObject: (anAccount at: 'organizationalUnit')));
+												mooseModel: model;
+												yourself) ] ] ] ]
 ]
 
 { #category : #importing }
@@ -413,7 +414,7 @@ GtLZAImporter >> importNetwork [
 	| file ast |
 	file := directory / 'network-config.yaml'.
 	currentFile := self ensureFileNamed: file.
-	ast := YAMLParser parseFile: file.
+	ast := YAMLParser parseFileWithErrors: file.
 
 	self metadata at: 'Home region' put: (ast object at: 'homeRegion').
 
@@ -432,7 +433,7 @@ GtLZAImporter >> importOrganization [
 
 	file
 		ifExists: [ currentFile := self ensureFileNamed: file.
-			ast := YAMLParser parseFile: file.
+			ast := YAMLParser parseFileWithErrors: file.
 			self metadata at: 'Organization enabled' put: (ast object at: 'enable').
 
 			(ast object at: 'organizationalUnits')

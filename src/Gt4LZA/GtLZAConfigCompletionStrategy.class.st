@@ -13,10 +13,11 @@ Class {
 { #category : #private }
 GtLZAConfigCompletionStrategy class >> accountsConfig [
 	^ '
-<account>:
-  - name: <accountName>?
-    description: 
-    email: 
+mandatoryAccounts: 
+  - 
+    organizationalUnit: <organizationalUnit>?
+workloadAccounts: 
+  - 
     organizationalUnit: <organizationalUnit>?
 '
 ]
@@ -30,17 +31,19 @@ GtLZAConfigCompletionStrategy class >> forAccountsConfig [
 
 { #category : #'instance creation' }
 GtLZAConfigCompletionStrategy class >> forFileType: aString [
-	| completer selector |
+	| completer strategy |
+	strategy := aString = 'accounts-config.yaml'
+			ifTrue: [ self forAccountsConfig ]
+			ifFalse: [ aString = 'organization-config.yaml'
+					ifTrue: [ self forOrganizationConfig ]
+					ifFalse: [ aString = 'network-config.yaml'
+							ifTrue: [ self forNetworkConfig ]
+							ifFalse: [ self new ] ] ].
 	completer := (fileCompleters ifNil: [ fileCompleters := Dictionary new ])
 			at: aString
 			ifAbsentPut: [ self loadCompleterForFileType: aString ].
-	completer = GtYAMLEmptyCompleter instance
-		ifTrue: [ selector := ('for' , (aString allButLast: (12 min: aString size)) capitalized
-					, 'Config') asSymbol.
-			(self respondsTo: selector) ifTrue: [ ^ self perform: selector ] ].
-	^ self new
-		completer: completer;
-		yourself
+	strategy completer: (strategy completer merge: completer).
+	^ strategy
 ]
 
 { #category : #'instance creation' }
@@ -76,164 +79,285 @@ GtLZAConfigCompletionStrategy class >> loadCompleterForFileType: aString [
 { #category : #private }
 GtLZAConfigCompletionStrategy class >> networkConfig [
 	^ '
-homeRegion: <homeRegion>
-defaultVpc:
-  delete: true,false
-  excludeAccounts: - <accountName>?
-transitGateways:
-  - name: <transitGateway>?
-    account: <accountName>?
-    region: 
-    shareTargets:
-      organizationalUnits:
-        - <organizationalUnit>?
-    asn: 
-    dnsSupport: enable,disable
-    vpnEcmpSupport: enable,disable
-    defaultRouteTableAssociation: enable,disable
-    defaultRouteTablePropagation: enable,disable
-    autoAcceptSharingAttachments: enable,disable
-    routeTables:
-      - name: <routeTable>
-        routes: - 
-centralNetworkServices:
-  delegatedAdminAccount: <accountName>?
-  networkFirewall:
-    firewalls:
-      - name: <firewallName>
-        firewallPolicy: <firewallPolicy>?
-        subnets:
-          - <subnetName>?
-        vpc: <vpcName>?
-        loggingConfiguration:
-          - destination: 
-            type: 
-    policies:
-      - name: <policyName>
-        regions:
-          - 
-        firewallPolicy:
-          statelessDefaultActions: -
-          statelessFragmentDefaultActions: -
-          statefulRuleGroups:
-            - name: 
-        shareTargets:
-          organizationalUnits:
-            - <organizationalUnit>?
-    rules:
-      - name: 
-        regions:
-          - 
-        capacity: 
-        type: 
-        ruleGroup:
-          rulesSource:
-            statefulRules:
-              - action: 
-                header:
-                  destination: 
-                  destinationPort: 
-                  direction: 
-                  protocol: 
-                  source: 
-                  sourcePort: 
-                ruleOptions:
-                  - keyword: 
-                    settings: -
-  route53Resolver:
-    endpoints: -
-    queryLogs:
-      name: 
-      destinations:
+centralNetworkServices: 
+  ipams: 
+    - 
+      pools: 
         - 
-      shareTargets:
-        organizationalUnits:
-          - <organizationalUnit>?
-    firewallRuleGroups:
-      - name: 
-        regions:
-          - 
-        rules:
-          - name: 
-            action: 
-            managedDomainList: 
-            priority: 
-            blockResponse: 
-        shareTargets:
-          organizationalUnits:
+          shareTargets: 
+            accounts: 
+              - 
+            organizationalUnits: 
+              - <organizationalUnit>?
+  networkFirewall: 
+    policies: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
             - <organizationalUnit>?
-endpointPolicies:
-  - name: 
-    document: 
-vpcs:
-  - name: <vpcName>
-    account: <accountName>?
+    rules: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+  route53Resolver: 
+    endpoints: 
+      - 
+        rules: 
+          - 
+            shareTargets: 
+              accounts: 
+                - 
+              organizationalUnits: 
+                - <organizationalUnit>?
+    firewallRuleGroups: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+    queryLogs: 
+      shareTargets: 
+        accounts: 
+          - 
+        organizationalUnits: 
+          - <organizationalUnit>?
+    rules: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+certificates: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        - <organizationalUnit>?
+customerGateways: 
+  - 
+    account: 
+defaultVpc: 
+  excludeAccounts: 
+    - 
+dhcpOptions: 
+  - 
+    accounts: 
+      - 
+directConnectGateways: 
+  - 
+    account: 
+    transitGatewayAssociations: 
+      - 
+        account: 
+elbAccountIds: 
+  - 
     region: 
-    cidrs:
+prefixLists: 
+  - 
+    accounts: 
       - 
-    internetGateway: true,false
-    enableDnsHostnames: true,false
-    enableDnsSupport: true,false
-    instanceTenancy: 
-    queryLogs:
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        - <organizationalUnit>?
+transitGateways: 
+  - 
+    account: 
+    shareTargets: 
+      accounts: 
+        - 
+      organizationalUnits: 
+        - <organizationalUnit>?
+vpcPeering: 
+  - 
+    vpcs: 
       - 
-    routeTables:
-      - name: <routeTableName>
-        routes: -
-    subnets:
-      - name: <subnetName>
-        availabilityZone: 
-        routeTable: <routeTableName>?
-        ipv4CidrBlock: 
-    transitGatewayAttachments:
-      - name: <transitGatewayAttachmentName>
-        transitGateway:
-          name: <transitGatewayName>
-          account: <accountName>?
-        routeTableAssociations:
-          - <routeTableAssociationName>
-        routeTablePropagations:
-          - <routeTablePropagationName>
-        subnets:
-          - <subnetName>?
-    gatewayEndpoints:
-      defaultPolicy: 
-      endpoints:
-        - service: 
-    interfaceEndpoints:
-      central: true,false
-      defaultPolicy: 
-      subnets:
-        - <subnetName>?
-      endpoints:
-        - service: 
-vpcFlowLogs:
-  trafficType: 
-  maxAggregationInterval: 
-  destinations:
-    - 
-  destinationsConfig:
-    cloudWatchLogs:
-      retentionInDays: 
-  defaultFormat: true,false
-  customFields:
-    - 
+vpcTemplates: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        - <organizationalUnit>?
+    interfaceEndpoints: 
+      subnets: 
+        - 
+    loadBalancers: 
+      applicationLoadBalancers: 
+        - 
+          shareTargets: 
+            accounts: 
+              - 
+            organizationalUnits: 
+              - <organizationalUnit>?
+          subnets: 
+            - 
+      networkLoadBalancers: 
+        - 
+          subnets: 
+            - 
+    natGateways: 
+      - 
+        subnet: 
+    subnets: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+    targetGroups: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+    transitGatewayAttachments: 
+      - 
+        subnets: 
+          - 
+vpcs: 
+  - 
+    account: 
+    interfaceEndpoints: 
+      subnets: 
+        - 
+    loadBalancers: 
+      applicationLoadBalancers: 
+        - 
+          shareTargets: 
+            accounts: 
+              - 
+            organizationalUnits: 
+              - <organizationalUnit>?
+          subnets: 
+            - 
+      networkLoadBalancers: 
+        - 
+          subnets: 
+            - 
+    subnets: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+    targetGroups: 
+      - 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+    transitGatewayAttachments: 
+      - 
+        subnets: 
+          - 
+    vpcRoute53Resolver: 
+      endpoints: 
+        - 
+          rules: 
+            - 
+              shareTargets: 
+                accounts: 
+                  - 
+                organizationalUnits: 
+                  - <organizationalUnit>?
+          subnets: 
+            - 
+          vpc: 
+      firewallRuleGroups: 
+        - 
+          shareTargets: 
+            accounts: 
+              - 
+            organizationalUnits: 
+              - <organizationalUnit>?
+      queryLogs: 
+        shareTargets: 
+          accounts: 
+            - 
+          organizationalUnits: 
+            - <organizationalUnit>?
+      rules: 
+        - 
+          shareTargets: 
+            accounts: 
+              - 
+            organizationalUnits: 
+              - <organizationalUnit>?
 '
 ]
 
 { #category : #private }
 GtLZAConfigCompletionStrategy class >> organizationConfig [
 	^ '
-enable: true,false
-organizationalUnits:
-  - name: <organizationalUnit>
-serviceControlPolicies:
-  - name: 
-    description: 
-    policy: 
-    type: 
-    deploymentTargets:
-      organizationalUnits:
+backupPolicies: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        -  <organizationalUnit>?
+chatbotPolicies: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        -  <organizationalUnit>?
+serviceControlPolicies: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
+        - <organizationalUnit>?
+taggingPolicies: 
+  - 
+    deploymentTargets: 
+      accounts: 
+        - 
+      excludedAccounts: 
+        - 
+      excludedRegions: 
+        - 
+      organizationalUnits: 
         - <organizationalUnit>?
 '
 ]

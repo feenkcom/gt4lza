@@ -110,7 +110,8 @@ GtLZACoder >> createFilesTree [
 
 { #category : #private }
 GtLZACoder >> editorChangedTo: aString [
-	file currentSource: aString
+	file currentSource: aString.
+	model updateFile: file asFileReference with: aString
 ]
 
 { #category : #accessing }
@@ -123,7 +124,7 @@ GtLZACoder >> file: anObject [
 	self updateContentsTo: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZACoder >> initialize [
 	super initialize.
 	configurationFiles := Dictionary new.
@@ -134,14 +135,14 @@ GtLZACoder >> initialize [
 	self addChild: contentElement as: #content
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZACoder >> initializeContent [
 	contentElement := BrHorizontalPane new
 			margin: (BlInsets all: 5);
 			matchParent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZACoder >> initializeSidebar [
 	sidebarElement := GtPhlowHorizontalSidebarElement new
 			beLeft;
@@ -229,8 +230,8 @@ GtLZACoder >> updateContentsTo: aFile [
 	textEditor := GtLZAConfigEditor new.
 	(GtCompletionController
 		on: textEditor
-		strategy: (GtLZAConfigCompletionStrategy forFileType: file fileReference basename))
-		install.
+		strategy: ((GtLZAConfigCompletionStrategy forFileType: file fileReference basename)
+				model: model)) install.
 	textEditor
 		addShortcut: (BlShortcutWithAction new
 				combination: BlKeyCombination primaryS;
@@ -286,7 +287,10 @@ GtLZACoder >> updateFileTreeItems: tree [
 		items: {model directory absolutePath asFileReference}
 			lazy: [ :each | 
 				each isDirectory
-					ifTrue: [ (OrderedCollection withAll: each directories)
+					ifTrue: [ | dirs |
+						dirs := each directories
+								select: [ :dir | (dir allChildrenMatching: '*.yaml') notEmpty ].
+						(OrderedCollection withAll: dirs)
 							addAll: ((each childrenMatching: '*.yaml')
 									collect: [ :fileRef | self configurationFileFor: fileRef ]);
 							sort: [ :a :b | a basename < b basename ];

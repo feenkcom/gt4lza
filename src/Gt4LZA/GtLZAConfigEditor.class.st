@@ -37,7 +37,7 @@ GtLZAConfigEditor class >> onOrganizationalFile: aFilename [
 	^ editor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 GtLZAConfigEditor >> initialize [
 	super initialize.
 	self aptitude: BrGlamorousCodeEditorAptitude.

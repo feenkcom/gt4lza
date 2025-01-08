@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'entities',
-		'directory'
+		'directory',
+		'updates'
 	],
 	#category : #'Gt4LZA-Editor-Model'
 }
@@ -22,8 +23,9 @@ GtLZAEditorModel >> addEntity: anObject [
 		ifAbsentPut: [ OrderedCollection new: 1 ]) add: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEditorModel >> allOrganizationalUnitNames [
+	self ensureOrganizationConfigLoaded.
 	^ (entities at: GtLZAEditorOrganizationalUnit ifAbsent: [ Dictionary new ])
 		keys
 ]
@@ -36,6 +38,12 @@ GtLZAEditorModel >> directory [
 { #category : #accessing }
 GtLZAEditorModel >> directory: anObject [
 	directory := anObject
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> ensureOrganizationConfigLoaded [
+	(self entityNamed: 'organization-config.yaml' ofType: GtLZAEditorFile)
+		ifNil: [ self loadOrganizationConfig ]
 ]
 
 { #category : #accessing }
@@ -265,6 +273,12 @@ GtLZAEditorModel >> importOrganizationFrom: ast into: file [
 														to: (self entityNamed: unit ofType: GtLZAEditorOrganizationalUnit)) ] ] ] ] ]
 ]
 
+{ #category : #initalization }
+GtLZAEditorModel >> initialize [
+	super initialize.
+	updates := Dictionary new
+]
+
 { #category : #importing }
 GtLZAEditorModel >> loadAccountsConfig [
 	self loadFile: directory / 'accounts-config.yaml'
@@ -272,9 +286,27 @@ GtLZAEditorModel >> loadAccountsConfig [
 
 { #category : #importing }
 GtLZAEditorModel >> loadFile: aFileReference [
-	^ self
-		updateFile: aFileReference
-		with: aFileReference asFileReference contents
+	| name source |
+	name := aFileReference basename.
+	source := updates
+			at: name
+			ifAbsent: [ aFileReference asFileReference contents ].
+	updates removeKey: name ifAbsent: [  ].
+	self loadFileNamed: name source: source
+]
+
+{ #category : #importing }
+GtLZAEditorModel >> loadFileNamed: name source: aString [
+	| ast file |
+	ast := YAMLParser parseWithErrors: aString.
+	file := GtLZAEditorFile name: name node: ast.
+	self addEntity: file.
+	file name = 'organization-config.yaml'
+		ifTrue: [ self importOrganizationFrom: ast into: file ].
+	file name = 'accounts-config.yaml'
+		ifTrue: [ self importAccountsFrom: ast into: file ].
+	file name = 'network-config.yaml'
+		ifTrue: [ self importNetworkFrom: ast into: file ]
 ]
 
 { #category : #importing }
@@ -289,30 +321,28 @@ GtLZAEditorModel >> loadOrganizationConfig [
 
 { #category : #importing }
 GtLZAEditorModel >> removeEntitiesFor: filename [
-	^ (self entityNamed: filename ofType: GtLZAEditorFile)
-		ifNotNil: [ :file | file entities do: [ :each | self removeEntity: each ] ]
+	(self entityNamed: filename ofType: GtLZAEditorFile)
+		ifNotNil: [ :file | 
+			file entities do: [ :each | self removeEntity: each ].
+			self removeEntity: file ]
 ]
 
 { #category : #importing }
 GtLZAEditorModel >> removeEntity: anObject [
 	self entities
 		at: anObject class
-		ifPresent: [ :dict | dict at: anObject name ifPresent: [ :col | col remove: anObject ifAbsent: [  ] ] ]
+		ifPresent: [ :dict | 
+			dict
+				at: anObject name
+				ifPresent: [ :col | 
+					col remove: anObject ifAbsent: [  ].
+					col isEmpty ifTrue: [ dict removeKey: anObject name ifAbsent: [  ] ] ] ]
 ]
 
 { #category : #importing }
 GtLZAEditorModel >> updateFile: filename with: aString [
-	| ast file name |
+	| name |
 	name := filename asFileReference basename.
 	self removeEntitiesFor: name.
-	ast := YAMLParser parseWithErrors: aString.
-	file := GtLZAEditorFile name: name node: ast.
-	self addEntity: file.
-	file name = 'organization-config.yaml'
-		ifTrue: [ self importOrganizationFrom: ast into: file ].
-	file name = 'accounts-config.yaml'
-		ifTrue: [ self importAccountsFrom: ast into: file ].
-	file name = 'network-config.yaml'
-		ifTrue: [ self importNetworkFrom: ast into: file ].
-	^ file
+	updates at: name put: aString
 ]

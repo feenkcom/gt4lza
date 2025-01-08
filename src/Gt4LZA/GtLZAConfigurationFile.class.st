@@ -17,7 +17,7 @@ GtLZAConfigurationFile >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 GtLZAConfigurationFile >> asFileReference [
 	^ self fileReference
 ]
