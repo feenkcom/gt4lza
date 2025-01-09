@@ -4,10 +4,21 @@ Class {
 	#instVars : [
 		'from',
 		'to',
-		'node'
+		'node',
+		'file'
 	],
 	#category : #'Gt4LZA-Editor-Model'
 }
+
+{ #category : #accessing }
+GtLZAEditorAssociation >> file [
+	^ file
+]
+
+{ #category : #accessing }
+GtLZAEditorAssociation >> file: anObject [
+	file := anObject
+]
 
 { #category : #accessing }
 GtLZAEditorAssociation >> from [
@@ -38,11 +49,13 @@ GtLZAEditorAssociation >> gtFromFor: aView [
 { #category : #'as yet unclassified' }
 GtLZAEditorAssociation >> gtSourceFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView explicit
 		title: 'Source';
-		priority: 10;
-		object: [ node ];
-		view: #gtSourceFor:
+		stencil: [ GtLZACoder new
+				model: self model;
+				file: self fromEntity file;
+				highlight: self node;
+				yourself ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -54,6 +67,11 @@ GtLZAEditorAssociation >> gtToFor: aView [
 		priority: 15;
 		object: [ self toEntity ];
 		view: #gtSourceFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAEditorAssociation >> model [
+	^ self file model
 ]
 
 { #category : #accessing }

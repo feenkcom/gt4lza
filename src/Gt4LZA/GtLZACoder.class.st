@@ -12,6 +12,35 @@ Class {
 	#category : #'Gt4LZA-Editor'
 }
 
+{ #category : #styling }
+GtLZACoder >> addExpanderFor: association in: text [
+	| to pos |
+	to := association toEntity.
+	pos := association node stopPosition.
+	(text from: pos to: pos)
+		attribute: (BrGlamorousTriangleExpanderTextAttribute new
+				attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+						beAppend;
+						stencil: [ | pane view |
+							pane := BrVerticalPane new
+									height: 300;
+									aptitude: BrShadowAptitude
+											+ (BrGlamorousWithVerticalResizerAptitude new
+													beBottom;
+													yourself);
+									background: Color white;
+									margin: (BlInsets all: 10);
+									constraintsDo: [ :c | 
+										c textFlow pushLine.
+										c horizontal matchParent ].
+							view := to gtSourceFor: GtPhlowView new.
+							pane
+								addChild: (view asElement
+										constraintsDo: [ :c | 
+											c horizontal matchParent.
+											c vertical matchParent ]) ] ])
+]
+
 { #category : #private }
 GtLZACoder >> buildSidebar [
 	^ BrTabGroup new
@@ -51,11 +80,7 @@ GtLZACoder >> buildToolbarFor: aFile [
 
 { #category : #private }
 GtLZACoder >> configurationFileFor: fileRef [
-	^ configurationFiles
-		at: fileRef
-		ifAbsentPut: [ GtLZAConfigurationFile new
-				fileReference: fileRef;
-				yourself ]
+	^ model fileEntityNamed: fileRef
 ]
 
 { #category : #private }
@@ -111,7 +136,7 @@ GtLZACoder >> createFilesTree [
 { #category : #private }
 GtLZACoder >> editorChangedTo: aString [
 	file currentSource: aString.
-	model updateFile: file asFileReference with: aString
+	model updateFile: file fileReference absolutePath asFileReference with: aString
 ]
 
 { #category : #accessing }
@@ -124,10 +149,27 @@ GtLZACoder >> file: anObject [
 	self updateContentsTo: anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZACoder >> highlight: aNode [
+	self
+		enqueueTask: [ self
+				inUIProcessDo: [ contentElement
+						childNamed: #editor
+						ifFound: [ :editor | 
+							| source |
+							source := editor text asString.
+							(editor editor text from: aNode startPosition to: aNode stopPosition)
+								attribute: (BlTextHighlightAttribute new
+										beNotOverwritableByStyler;
+										paint: BrGlamorousColors neutralBackgroundColor).
+							editor
+								scrollToPosition: (source lineNumberCorrespondingToIndex: aNode startPosition) ] ] ]
+				asBlTask
+]
+
 { #category : #initialization }
 GtLZACoder >> initialize [
 	super initialize.
-	configurationFiles := Dictionary new.
 	self matchParent.
 	self initializeSidebar.
 	self initializeContent.
@@ -166,6 +208,11 @@ GtLZACoder >> model: anObject [
 	self modelUpdated
 ]
 
+{ #category : #accessing }
+GtLZACoder >> modelFile: anEditorFile [
+	self file: (self configurationFileFor: anEditorFile fileReference)
+]
+
 { #category : #private }
 GtLZACoder >> modelUpdated [
 	| yamlFile |
@@ -181,6 +228,25 @@ GtLZACoder >> modificationColor [
 	^ file isModified
 		ifTrue: [ self theme status changesBackgroundColor ]
 		ifFalse: [ Color transparent ]
+]
+
+{ #category : #styling }
+GtLZACoder >> stylerFor: aFile [
+	| rules |
+	rules := {GtSmaCCNodeStylerRule
+				nodeClassName: #SmaCCParseNode
+				styleBlock: [ :styler :node :text | 
+					node parent
+						ifNil: [ (model fileEntityNamed: aFile asFileReference) associations
+								do: [ :each | 
+									each toEntity
+										ifNil: [ (text from: each node startPosition to: each node stopPosition)
+												highlight: BrGlamorousColors errorBackgroundColor ]
+										ifNotNil: [ :entity | self addExpanderFor: each in: text ] ] ] ]}.
+	rules do: [ :each | each continueOnMatch: true ].
+	^ (GtCompositeSmaCCASTStyler forParser: YAMLParser)
+		stylers: {YAMLParser gtStyler.
+				(GtSmaCCParserStyler forParser: YAMLParser) stylerRules: rules}
 ]
 
 { #category : #private }
@@ -228,6 +294,7 @@ GtLZACoder >> updateContentsTo: aFile [
 				yourself)
 		as: #modificationBar.
 	textEditor := GtLZAConfigEditor new.
+	textEditor editor styler: (self stylerFor: file).
 	(GtCompletionController
 		on: textEditor
 		strategy: ((GtLZAConfigCompletionStrategy forFileType: file fileReference basename)

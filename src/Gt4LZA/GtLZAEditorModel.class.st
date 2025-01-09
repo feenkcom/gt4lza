@@ -80,8 +80,9 @@ GtLZAEditorModel >> entities: anObject [
 	entities := anObject
 ]
 
-{ #category : #importing }
+{ #category : #accessing }
 GtLZAEditorModel >> entityNamed: aString ofType: aClass [
+	self loadUpdates.
 	^ self entities
 		at: aClass
 		ifPresent: [ :dict | 
@@ -90,6 +91,12 @@ GtLZAEditorModel >> entityNamed: aString ofType: aClass [
 				ifPresent: [ :col | col at: 1 ifAbsent: [  ] ]
 				ifAbsent: [  ] ]
 		ifAbsent: [  ]
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> fileEntityNamed: aFileReference [
+	^ (self entityNamed: aFileReference basename ofType: GtLZAEditorFile)
+		ifNil: [ self loadFile: aFileReference ]
 ]
 
 { #category : #views }
@@ -106,6 +113,15 @@ GtLZAEditorModel >> gtAccountsFor: aView [
 ]
 
 { #category : #views }
+GtLZAEditorModel >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtPhlowExplicitTool new
+				name: self gtDisplayString;
+				stencil: [ GtLZACoder new model: self ]);
+		addTool: super gtDefaultInspectorTool
+]
+
+{ #category : #views }
 GtLZAEditorModel >> gtFilesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -116,6 +132,15 @@ GtLZAEditorModel >> gtFilesFor: aView [
 			text: [ :each :index | index asRopedText foreground: Color gray ]
 			width: 45;
 		column: 'Name' text: [ :each | each name ]
+]
+
+{ #category : #views }
+GtLZAEditorModel >> gtLiveFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Live';
+		priority: 1;
+		stencil: [ GtLZACoder new model: self ]
 ]
 
 { #category : #views }
@@ -204,7 +229,6 @@ GtLZAEditorModel >> importAccountsFrom: ast into: file [
 										node: (ast nodeForObject: name);
 										from: account;
 										to: name;
-										model: self;
 										type: GtLZAEditorOrganizationalUnit;
 										yourself) ] ] ]
 ]
@@ -311,26 +335,38 @@ GtLZAEditorModel >> loadAccountsConfig [
 { #category : #importing }
 GtLZAEditorModel >> loadFile: aFileReference [
 	| name source |
-	name := aFileReference basename.
+	name := aFileReference absolutePath asFileReference.
 	source := updates
 			at: name
-			ifAbsent: [ aFileReference asFileReference contents ].
+			ifAbsent: [ name contents ].
 	updates removeKey: name ifAbsent: [  ].
-	self loadFileNamed: name source: source
+	^ self loadFileNamed: aFileReference source: source
 ]
 
 { #category : #importing }
-GtLZAEditorModel >> loadFileNamed: name source: aString [
-	| ast file |
+GtLZAEditorModel >> loadFileNamed: aFileReference source: aString [
+	| ast file name files fileRef |
 	ast := YAMLParser parseWithErrors: aString.
-	file := GtLZAEditorFile name: name node: ast.
-	self addEntity: file.
+	name := aFileReference basename.
+	files := (entities at: GtLZAEditorFile ifAbsentPut: [ Dictionary new ])
+			at: name
+			ifAbsentPut: [ OrderedCollection new ].
+	fileRef := aFileReference absolutePath asFileReference.
+	file := files
+			detect: [ :each | each fileReference = fileRef ]
+			ifNone: [ files
+					add: ((GtLZAEditorFile name: name node: ast)
+							model: self;
+							fileReference: fileRef;
+							yourself) ].
+	file resetModel.
 	file name = 'organization-config.yaml'
 		ifTrue: [ self importOrganizationFrom: ast into: file ].
 	file name = 'accounts-config.yaml'
 		ifTrue: [ self importAccountsFrom: ast into: file ].
 	file name = 'network-config.yaml'
-		ifTrue: [ self importNetworkFrom: ast into: file ]
+		ifTrue: [ self importNetworkFrom: ast into: file ].
+	^ file
 ]
 
 { #category : #importing }
@@ -344,11 +380,20 @@ GtLZAEditorModel >> loadOrganizationConfig [
 ]
 
 { #category : #importing }
+GtLZAEditorModel >> loadUpdates [
+	| oldUpdates |
+	updates isEmpty ifTrue: [ ^ self ].
+	oldUpdates := updates.
+	updates := Dictionary new.
+	oldUpdates
+		keysAndValuesDo: [ :key :value | self loadFileNamed: key source: value ]
+]
+
+{ #category : #importing }
 GtLZAEditorModel >> removeEntitiesFor: filename [
 	(self entityNamed: filename ofType: GtLZAEditorFile)
 		ifNotNil: [ :file | 
-			file entities do: [ :each | self removeEntity: each ].
-			self removeEntity: file ]
+			file entities do: [ :each | self removeEntity: each ] ]
 ]
 
 { #category : #importing }
@@ -364,9 +409,9 @@ GtLZAEditorModel >> removeEntity: anObject [
 ]
 
 { #category : #importing }
-GtLZAEditorModel >> updateFile: filename with: aString [
+GtLZAEditorModel >> updateFile: aFileReference with: aString [
 	| name |
-	name := filename asFileReference basename.
+	name := aFileReference basename.
 	self removeEntitiesFor: name.
-	updates at: name put: aString
+	updates at: aFileReference put: aString
 ]

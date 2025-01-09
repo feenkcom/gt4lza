@@ -5,7 +5,7 @@ Class {
 		'file',
 		'oldSource'
 	],
-	#category : #'Gt4LZA-Editor'
+	#category : #'Gt4LZA-Editor-Model'
 }
 
 { #category : #accessing }

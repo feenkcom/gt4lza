@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'node',
-		'name'
+		'name',
+		'file'
 	],
 	#category : #'Gt4LZA-Editor-Model'
 }
@@ -16,13 +17,31 @@ GtLZAEditorEntity class >> name: aString node: ast [
 		yourself
 ]
 
+{ #category : #accessing }
+GtLZAEditorEntity >> file [
+	^ file
+]
+
+{ #category : #accessing }
+GtLZAEditorEntity >> file: anObject [
+	file := anObject
+]
+
 { #category : #views }
 GtLZAEditorEntity >> gtSourceFor: aView [
 	<gtView>
-	^ aView forward
+	^ aView explicit
 		title: 'Source';
-		object: [ node ];
-		view: #gtSourceFor:
+		stencil: [ GtLZACoder new
+				model: self model;
+				modelFile: self file;
+				highlight: self node;
+				yourself ]
+]
+
+{ #category : #accessing }
+GtLZAEditorEntity >> model [
+	^ self file model
 ]
 
 { #category : #accessing }
