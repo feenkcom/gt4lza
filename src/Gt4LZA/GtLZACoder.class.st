@@ -385,9 +385,11 @@ GtLZACoder >> updateFileTreeItems: tree [
 				each isDirectory
 					ifTrue: [ | dirs |
 						dirs := each directories
-								select: [ :dir | (dir allChildrenMatching: '*.yaml') notEmpty ].
+								select: [ :dir | 
+									(dir allChildrenMatching: '*.yaml') notEmpty
+										or: [ (dir allChildrenMatching: '*.json') notEmpty ] ].
 						(OrderedCollection withAll: dirs)
-							addAll: ((each childrenMatching: '*.yaml')
+							addAll: ((each childrenMatching: '*.yaml;*.json')
 									collect: [ :fileRef | self configurationFileFor: fileRef ]);
 							sort: [ :a :b | a basename < b basename ];
 							yourself ]
