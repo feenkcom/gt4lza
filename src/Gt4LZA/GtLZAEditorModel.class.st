@@ -235,54 +235,8 @@ GtLZAEditorModel >> importAccountsFrom: ast into: file [
 
 { #category : #importing }
 GtLZAEditorModel >> importNetworkFrom: ast into: file [
-	(ast object at: 'transitGateways' ifAbsent: [ #() ])
-		do: [ :tg | 
-			| transitGateway |
-			tg
-				at: 'name'
-				ifPresent: [ :name | 
-					transitGateway := GtLZAEditorTransitGateway
-							name: name
-							node: (ast nodeForObject: tg).
-					file addEntity: transitGateway.
-					self addEntity: transitGateway ].
-			tg
-				at: 'routeTables'
-				ifPresent: [ :rtbls | 
-					rtbls
-						do: [ :rtbl | 
-							rtbl
-								at: 'name'
-								ifPresent: [ :name | 
-									| routeTable |
-									routeTable := GtLZAEditorRouteTable
-											name: name
-											node: (ast nodeForObject: rtbl).
-									file addEntity: routeTable.
-									self addEntity: routeTable ] ] ] ].
-	(ast object at: 'vpcs' ifAbsent: [ #() ])
-		do: [ :each | 
-			| vpc |
-			each
-				at: 'name'
-				ifPresent: [ :name | 
-					vpc := GtLZAEditorVPC name: name node: (ast nodeForObject: each).
-					file addEntity: vpc.
-					self addEntity: vpc ].
-			each
-				at: 'routeTables'
-				ifPresent: [ :rtbls | 
-					rtbls
-						do: [ :rtbl | 
-							rtbl
-								at: 'name'
-								ifPresent: [ :name | 
-									| routeTable |
-									routeTable := GtLZAEditorRouteTable
-											name: name
-											node: (ast nodeForObject: rtbl).
-									file addEntity: routeTable.
-									self addEntity: routeTable ] ] ] ]
+	self importTransitGatewaysFrom: ast into: file.
+	self importVPCsFrom: ast into: file
 ]
 
 { #category : #importing }
@@ -319,6 +273,238 @@ GtLZAEditorModel >> importOrganizationFrom: ast into: file [
 														node: (ast nodeForObject: unit);
 														from: policy;
 														to: (self entityNamed: unit ofType: GtLZAEditorOrganizationalUnit)) ] ] ] ] ]
+]
+
+{ #category : #importing }
+GtLZAEditorModel >> importTransitGatewaysFrom: ast into: file [
+	(ast object at: 'transitGateways' ifAbsent: [ #() ])
+		do: [ :tg | 
+			| transitGateway |
+			tg
+				at: 'name'
+				ifPresent: [ :name | 
+					transitGateway := GtLZAEditorTransitGateway
+							name: name
+							node: (ast nodeForObject: tg).
+					file addEntity: transitGateway.
+					self addEntity: transitGateway ].
+			tg
+				at: 'account'
+				ifPresent: [ :acct | 
+					file
+						addAssociation: (GtLZAEditorIndirectAssociation new
+								node: (ast nodeForObject: acct);
+								from: transitGateway;
+								to: acct;
+								type: GtLZAEditorAccount;
+								yourself) ].
+			tg
+				at: 'shareTargets'
+				ifPresent: [ :st | 
+					| shareTarget |
+					shareTarget := GtLZAEditorShareTarget new node: (ast nodeForObject: st).
+					file addEntity: shareTarget.
+					self addEntity: shareTarget.
+					st
+						at: 'organizationalUnits'
+						ifPresent: [ :orgs | 
+							orgs
+								do: [ :org | 
+									file
+										addAssociation: (GtLZAEditorIndirectAssociation new
+												node: (ast nodeForObject: org);
+												from: shareTarget;
+												to: org;
+												type: GtLZAEditorOrganizationalUnit;
+												yourself) ] ].
+					st
+						at: 'accounts'
+						ifPresent: [ :accts | 
+							accts
+								do: [ :acct | 
+									file
+										addAssociation: (GtLZAEditorIndirectAssociation new
+												node: (ast nodeForObject: acct);
+												from: shareTarget;
+												to: acct;
+												type: GtLZAEditorAccount;
+												yourself) ] ] ].
+			tg
+				at: 'routeTables'
+				ifPresent: [ :rtbls | 
+					rtbls
+						do: [ :rtbl | 
+							| routeTable |
+							rtbl
+								at: 'name'
+								ifPresent: [ :name | 
+									routeTable := GtLZAEditorRouteTable name: name node: (ast nodeForObject: rtbl).
+									file addEntity: routeTable.
+									self addEntity: routeTable ].
+							rtbl
+								at: 'routes'
+								ifPresent: [ :rts | 
+									| route |
+									route := GtLZAEditorGatewayRoute new node: (ast nodeForObject: rts).
+									file addEntity: route.
+									self addEntity: route.
+
+									rts
+										do: [ :rte | 
+											rte
+												at: 'attachment'
+												ifPresent: [ :att | 
+													att
+														at: 'account'
+														ifPresent: [ :acct | 
+															file
+																addAssociation: (GtLZAEditorIndirectAssociation new
+																		node: (ast nodeForObject: acct);
+																		from: route;
+																		to: acct;
+																		type: GtLZAEditorAccount;
+																		yourself) ].
+													att
+														at: 'vpcName'
+														ifPresent: [ :vpcName | 
+															file
+																addAssociation: (GtLZAEditorIndirectAssociation new
+																		node: (ast nodeForObject: vpcName);
+																		from: route;
+																		to: vpcName;
+																		type: GtLZAEditorVPC;
+																		yourself) ] ] ] ] ] ] ]
+]
+
+{ #category : #importing }
+GtLZAEditorModel >> importVPCsFrom: ast into: file [
+	(ast object at: 'vpcs' ifAbsent: [ #() ])
+		do: [ :each | 
+			| vpc |
+			vpc := GtLZAEditorVPC new node: (ast nodeForObject: each).
+			each at: 'name' ifPresent: [ :name | vpc name: name ].
+			file addEntity: vpc.
+			self addEntity: vpc.
+			each
+				at: 'routeTables'
+				ifPresent: [ :rtbls | 
+					rtbls
+						do: [ :rtbl | 
+							| routeTable |
+							rtbl
+								at: 'name'
+								ifPresent: [ :name | 
+									routeTable := GtLZAEditorRouteTable name: name node: (ast nodeForObject: rtbl).
+									file addEntity: routeTable.
+									self addEntity: routeTable ].
+							rtbl
+								at: 'routes'
+								ifPresent: [ :rtes | 
+									rtes
+										do: [ :rte | 
+											| route |
+											route := GtLZAEditorRoute new node: (ast nodeForObject: rte).
+											rte at: 'name' ifPresent: [ :name | route name: name ].
+											file addEntity: route.
+											self addEntity: route ] ] ] ].
+			each
+				at: 'natGateways'
+				ifPresent: [ :gws | 
+					gws
+						do: [ :gw | 
+							| natGateway |
+							natGateway := GtLZAEditorNatGateway new node: (ast nodeForObject: gw).
+							gw at: 'name' ifPresent: [ :name | natGateway name: name ].
+							file addEntity: natGateway.
+							self addEntity: natGateway.
+							gw
+								at: 'subnet'
+								ifPresent: [ :sub | 
+									file
+										addAssociation: (GtLZAEditorIndirectAssociation new
+												node: (ast nodeForObject: sub);
+												from: natGateway;
+												to: sub;
+												type: GtLZAEditorSubnet;
+												yourself) ] ] ].
+			each
+				at: 'account'
+				ifPresent: [ :acct | 
+					file
+						addAssociation: (GtLZAEditorIndirectAssociation new
+								node: (ast nodeForObject: acct);
+								from: vpc;
+								to: acct;
+								type: GtLZAEditorAccount;
+								yourself) ].
+			each
+				at: 'subnets'
+				ifPresent: [ :subs | 
+					subs
+						do: [ :sub | 
+							| subnet |
+							subnet := GtLZAEditorSubnet new node: (ast nodeForObject: sub).
+							sub at: 'name' ifPresent: [ :name | subnet name: name ].
+							file addEntity: subnet.
+							self addEntity: subnet.
+							sub
+								at: 'routeTable'
+								ifPresent: [ :rt | 
+									file
+										addAssociation: (GtLZAEditorIndirectAssociation new
+												node: (ast nodeForObject: rt);
+												from: subnet;
+												to: rt;
+												type: GtLZAEditorRouteTable;
+												yourself) ] ] ].
+			each
+				at: 'transitGatewayAttachments'
+				ifPresent: [ :tgas | 
+					tgas
+						do: [ :tga | 
+							| transitGatewayAttachment |
+							transitGatewayAttachment := GtLZAEditorTransitGatewayAttachment new
+									node: (ast nodeForObject: tga).
+							tga at: 'name' ifPresent: [ :name | transitGatewayAttachment name: name ].
+							file addEntity: transitGatewayAttachment.
+							self addEntity: transitGatewayAttachment.
+							tga
+								at: 'transitGateway'
+								ifPresent: [ :tg | 
+									tg
+										at: 'name'
+										ifPresent: [ :tgName | 
+											file
+												addAssociation: (GtLZAEditorIndirectAssociation new
+														node: (ast nodeForObject: tgName);
+														from: transitGatewayAttachment;
+														to: tgName;
+														type: GtLZAEditorTransitGateway;
+														yourself) ].
+									tg
+										at: 'account'
+										ifPresent: [ :acct | 
+											file
+												addAssociation: (GtLZAEditorIndirectAssociation new
+														node: (ast nodeForObject: acct);
+														from: transitGatewayAttachment;
+														to: acct;
+														type: GtLZAEditorAccount;
+														yourself) ] ].
+							#('routeTableAssociations' 'routeTablePropagations')
+								do: [ :key | 
+									tga
+										at: key
+										ifPresent: [ :rta | 
+											rta
+												do: [ :rt | 
+													file
+														addAssociation: (GtLZAEditorIndirectAssociation new
+																node: (ast nodeForObject: rt);
+																from: transitGatewayAttachment;
+																to: rt;
+																type: GtLZAEditorRouteTable;
+																yourself) ] ] ] ] ] ]
 ]
 
 { #category : #initalization }

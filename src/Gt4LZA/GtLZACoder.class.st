@@ -42,6 +42,28 @@ GtLZACoder >> addExpanderFor: association in: text [
 ]
 
 { #category : #private }
+GtLZACoder >> buildModelToolbar [
+	| toolbar |
+	toolbar := BrToolbar new
+			aptitude: (BrGlamorousToolbarAptitude new spacing: 5);
+			fitContent;
+			margin: (BlInsets bottom: 5).
+	toolbar
+		addChild: (BrButton new
+				aptitude: BrGlamorousButtonWithIconAptitude;
+				beSmallSize;
+				icon: BrGlamorousVectorIcons inspect;
+				label: 'Inspect';
+				action: [ :button | 
+					button phlow
+						spawnObject: (GtLZAImporter new
+								directory: model directory;
+								import) ])
+		as: #inspectAction.
+	^ toolbar
+]
+
+{ #category : #private }
 GtLZACoder >> buildSidebar [
 	^ BrTabGroup new
 		aptitude: BrGlamorousTabGroupAptitude;
@@ -332,6 +354,13 @@ GtLZACoder >> updateContentsTo: aFile [
 									fontSize: 18);
 							text: aFile fileReference basename)
 					as: #filename;
+				yourself);
+		addChild: (self buildModelToolbar
+				padding: (BlInsets top: 5 right: 5);
+				constraintsDo: [ :c | 
+					c ignoreByLayout.
+					c ignored horizontal alignRight.
+					c ignored vertical alignTop ];
 				yourself).
 	content addChild: titleContent.
 	content addChild: textEditor as: #editor.

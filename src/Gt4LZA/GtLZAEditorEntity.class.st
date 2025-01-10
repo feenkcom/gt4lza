@@ -46,7 +46,7 @@ GtLZAEditorEntity >> model [
 
 { #category : #accessing }
 GtLZAEditorEntity >> name [
-	^ name
+	^ name ifNil: [ self class name , self identityHash printString ]
 ]
 
 { #category : #accessing }
