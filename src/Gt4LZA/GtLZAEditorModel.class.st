@@ -116,7 +116,9 @@ GtLZAEditorModel >> gtAccountsFor: aView [
 GtLZAEditorModel >> gtDefaultInspectorTool [
 	^ GtPhlowCompositeTool new
 		addTool: (GtPhlowExplicitTool new
-				name: self gtDisplayString;
+				withLabelAndIconAptitude;
+				name: 'LZA';
+				icon: BrGlamorousVectorIcons browse;
 				stencil: [ GtLZACoder new model: self ]);
 		addTool: super gtDefaultInspectorTool
 ]
