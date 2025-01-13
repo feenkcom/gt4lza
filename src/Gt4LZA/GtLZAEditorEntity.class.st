@@ -61,5 +61,6 @@ GtLZAEditorEntity >> node [
 
 { #category : #accessing }
 GtLZAEditorEntity >> node: anObject [
-	node := anObject
+	node := anObject.
+	node ifNotNil: [ node attributeNamed: #entity put: self ]
 ]

@@ -5,7 +5,8 @@ Class {
 		'from',
 		'to',
 		'node',
-		'file'
+		'file',
+		'type'
 	],
 	#category : #'Gt4LZA-Editor-Model'
 }
@@ -96,5 +97,15 @@ GtLZAEditorAssociation >> to: anObject [
 
 { #category : #'as yet unclassified' }
 GtLZAEditorAssociation >> toEntity [
-	self subclassResponsibility
+	^ self model entityNamed: to ofType: type
+]
+
+{ #category : #accessing }
+GtLZAEditorAssociation >> type [
+	^ type
+]
+
+{ #category : #accessing }
+GtLZAEditorAssociation >> type: anObject [
+	type := anObject
 ]
