@@ -39,6 +39,11 @@ GtLZAEditorEntity >> gtSourceFor: aView [
 				yourself ]
 ]
 
+{ #category : #testing }
+GtLZAEditorEntity >> hasName [
+	^ name notNil
+]
+
 { #category : #accessing }
 GtLZAEditorEntity >> model [
 	^ self file model

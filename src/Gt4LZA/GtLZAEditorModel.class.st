@@ -123,6 +123,31 @@ GtLZAEditorModel >> gtDefaultInspectorTool [
 		addTool: super gtDefaultInspectorTool
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAEditorModel >> gtEntitySearch: aSearch [
+	<gtSearch>
+	^ aSearch list
+		priority: 10;
+		title: 'Entities';
+		items: [ (self entities keys asArray asAsyncStream
+				collect: [ :each | 
+					(self entities at: each ifAbsent: [ #() ]) values flattened asAsyncStream
+						select: #hasName ]) flatten ];
+		itemName: [ :each | each name asString ];
+		filterBySubstring
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAEditorModel >> gtFileSearch: aSearch [
+	<gtSearch>
+	^ aSearch list
+		priority: 10;
+		title: 'Files';
+		items: [ (self entities at: GtLZAEditorFile ifAbsent: [ #() ]) flattened ];
+		itemName: [ :each | each name asString ];
+		filterBySubstring
+]
+
 { #category : #views }
 GtLZAEditorModel >> gtFilesFor: aView [
 	<gtView>
@@ -182,6 +207,31 @@ GtLZAEditorModel >> gtRouteTablesFor: aView [
 			text: [ :each :index | index asRopedText foreground: Color gray ]
 			width: 45;
 		column: 'Name' text: [ :each | each name ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAEditorModel >> gtStringSearch: aSearch [
+	<gtSearch>
+	^ aSearch explicit
+		priority: 10;
+		title: 'String search';
+		search: [ :aContext | 
+			| string |
+			string := aContext searchQuery asUppercase.
+			((((self entities at: GtLZAEditorFile ifAbsent: [ #() ]) flattened
+				asAsyncStream
+				collect: [ :each | 
+					each
+						-> (each node completeSource asString asUppercase allRangesOfSubstring: string) ])
+				select: [ :each | each value notEmpty ])
+				collect: [ :each | 
+					each value asAsyncStream
+						collect: [ :interval | 
+							(each key node nodeForInterval: interval)
+								ifNil: [ each key ]
+								ifNotNil: [ :node | self lookupEntityForNode: node ] ] ]) flatten
+				withoutDuplicates ];
+		itemName: #name
 ]
 
 { #category : #views }
@@ -258,6 +308,14 @@ GtLZAEditorModel >> loadUpdates [
 	updates := Dictionary new.
 	oldUpdates
 		keysAndValuesDo: [ :key :value | self loadFileNamed: key source: value ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAEditorModel >> lookupEntityForNode: node [
+	| current |
+	current := node.
+	[ (current attributeNamed: #entity) ifNotNil: [ :entity | ^ entity ].
+	current := current parent ] repeat
 ]
 
 { #category : #importing }
