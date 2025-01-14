@@ -73,7 +73,7 @@ GtLZAEditorFile >> currentSource: anObject [
 	currentSource = anObject ifTrue: [ ^ self ].
 	original := currentSource.
 	currentSource := anObject.
-	self model updateFile: self asFileReference with: self originalSource.
+	self model updateFile: self asFileReference with: currentSource.
 	self
 		announce: (GtLZAFileSourceChanged new
 				file: self;
