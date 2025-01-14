@@ -61,7 +61,7 @@ GtLZAEditorModel >> directory [
 
 { #category : #accessing }
 GtLZAEditorModel >> directory: anObject [
-	directory := anObject
+	directory := anObject absolutePath asFileReference
 ]
 
 { #category : #accessing }
@@ -100,7 +100,7 @@ GtLZAEditorModel >> entityNamed: aString ofType: aClass [
 
 { #category : #accessing }
 GtLZAEditorModel >> fileEntityNamed: aFileReference [
-	^ (self entityNamed: aFileReference basename ofType: GtLZAEditorFile)
+	^ (self entityNamed: (self nameForFileReference: aFileReference) ofType: GtLZAEditorFile)
 		ifNil: [ self loadFile: aFileReference ]
 ]
 
@@ -320,6 +320,11 @@ GtLZAEditorModel >> lookupEntityForNode: node [
 	current := current parent ] repeat
 ]
 
+{ #category : #importing }
+GtLZAEditorModel >> nameForFileReference: aFileReference [
+	^ (aFileReference relativeTo: self directory) pathString
+]
+
 { #category : #accessing }
 GtLZAEditorModel >> privateEntityNamed: aString ofType: aClass [
 	^ self entities
@@ -347,7 +352,7 @@ GtLZAEditorModel >> removeEntity: anObject [
 { #category : #importing }
 GtLZAEditorModel >> updateFile: aFileReference with: aString [
 	| name |
-	name := aFileReference basename.
+	name := self nameForFileReference: aFileReference.
 	(self privateEntityNamed: name ofType: GtLZAEditorFile)
 		ifNotNil: [ :file | file entities do: [ :each | self removeEntity: each ] ].
 	updates at: aFileReference put: aString

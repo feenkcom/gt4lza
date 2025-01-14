@@ -138,7 +138,7 @@ GtLZAEditorImporter >> importAccounts [
 GtLZAEditorImporter >> importFileNamed: aFileReference source: aString [
 	| name files fileRef |
 	ast := YAMLParser parseWithErrors: aString.
-	name := aFileReference basename.
+	name := model nameForFileReference: aFileReference.
 	files := (model entities at: GtLZAEditorFile ifAbsentPut: [ Dictionary new ])
 			at: name
 			ifAbsentPut: [ OrderedCollection new ].
@@ -160,6 +160,9 @@ GtLZAEditorImporter >> importFileNamed: aFileReference source: aString [
 	self
 		addLinksForAttribute: 'organizationalUnits'
 		as: GtLZAEditorOrganizationalUnit.
+	self addLinksForAttribute: 'policy' as: GtLZAEditorFile.
+	self addLinksForAttribute: 'template' as: GtLZAEditorFile.
+	self addLinksForAttribute: 'document' as: GtLZAEditorFile.
 	^ file
 ]
 
