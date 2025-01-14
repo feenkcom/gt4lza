@@ -18,6 +18,13 @@ GtLZAEditorEntity class >> name: aString node: ast [
 ]
 
 { #category : #accessing }
+GtLZAEditorEntity >> asyncReferences [
+	^ (self model asyncFiles
+		collect: [ :each | each associations asAsyncStream select: [ :ref | ref toEntity == self ] ])
+		flatten
+]
+
+{ #category : #accessing }
 GtLZAEditorEntity >> file [
 	^ file
 ]
@@ -68,4 +75,9 @@ GtLZAEditorEntity >> node [
 GtLZAEditorEntity >> node: anObject [
 	node := anObject.
 	node ifNotNil: [ node attributeNamed: #entity put: self ]
+]
+
+{ #category : #'as yet unclassified' }
+GtLZAEditorEntity >> references [
+	^ GtLZAReferences new references: self asyncReferences
 ]

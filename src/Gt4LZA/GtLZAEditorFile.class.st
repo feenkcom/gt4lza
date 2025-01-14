@@ -92,6 +92,19 @@ GtLZAEditorFile >> entities: anObject [
 ]
 
 { #category : #accessing }
+GtLZAEditorFile >> entityAtIndex: anInteger [
+	entities
+		do: [ :each | 
+			each hasName
+				ifTrue: [ (each node nodeForObject: each name)
+						ifNotNil: [ :n | 
+							| interval |
+							interval := n sourceInterval.
+							(anInteger between: interval first and: interval last) ifTrue: [ ^ each ] ] ] ].
+	^ nil
+]
+
+{ #category : #accessing }
 GtLZAEditorFile >> file [
 	^ self
 ]

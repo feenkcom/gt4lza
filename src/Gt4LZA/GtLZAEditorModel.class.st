@@ -43,6 +43,18 @@ GtLZAEditorModel >> allVPCNames [
 ]
 
 { #category : #accessing }
+GtLZAEditorModel >> asyncEntities [
+	^ (self entities keys asArray asAsyncStream
+		collect: [ :each | (self entities at: each ifAbsent: [ #() ]) values flattened asAsyncStream ])
+		flatten
+]
+
+{ #category : #accessing }
+GtLZAEditorModel >> asyncFiles [
+	^ (self entities at: GtLZAEditorFile ifAbsent: [ #() ]) flattened asAsyncStream
+]
+
+{ #category : #accessing }
 GtLZAEditorModel >> directory [
 	^ directory
 ]
@@ -83,14 +95,7 @@ GtLZAEditorModel >> entities: anObject [
 { #category : #accessing }
 GtLZAEditorModel >> entityNamed: aString ofType: aClass [
 	self loadUpdates.
-	^ self entities
-		at: aClass
-		ifPresent: [ :dict | 
-			dict
-				at: aString
-				ifPresent: [ :col | col at: 1 ifAbsent: [  ] ]
-				ifAbsent: [  ] ]
-		ifAbsent: [  ]
+	^ self privateEntityNamed: aString ofType: aClass
 ]
 
 { #category : #accessing }
@@ -123,21 +128,18 @@ GtLZAEditorModel >> gtDefaultInspectorTool [
 		addTool: super gtDefaultInspectorTool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #search }
 GtLZAEditorModel >> gtEntitySearch: aSearch [
 	<gtSearch>
 	^ aSearch list
 		priority: 20;
 		title: 'Entities';
-		items: [ (self entities keys asArray asAsyncStream
-				collect: [ :each | 
-					(self entities at: each ifAbsent: [ #() ]) values flattened asAsyncStream
-						select: #hasName ]) flatten ];
+		items: [ self asyncEntities select: #hasName ];
 		itemName: [ :each | each name asString ];
 		filterBySubstring
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #search }
 GtLZAEditorModel >> gtFileSearch: aSearch [
 	<gtSearch>
 	^ aSearch list
@@ -209,7 +211,7 @@ GtLZAEditorModel >> gtRouteTablesFor: aView [
 		column: 'Name' text: [ :each | each name ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #search }
 GtLZAEditorModel >> gtStringSearch: aSearch [
 	<gtSearch>
 	^ aSearch explicit
@@ -310,7 +312,7 @@ GtLZAEditorModel >> loadUpdates [
 		keysAndValuesDo: [ :key :value | self loadFileNamed: key source: value ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtLZAEditorModel >> lookupEntityForNode: node [
 	| current |
 	current := node.
@@ -318,11 +320,16 @@ GtLZAEditorModel >> lookupEntityForNode: node [
 	current := current parent ] repeat
 ]
 
-{ #category : #importing }
-GtLZAEditorModel >> removeEntitiesFromFile: filename [
-	(self entityNamed: filename ofType: GtLZAEditorFile)
-		ifNotNil: [ :file | 
-			file entities do: [ :each | self removeEntity: each ] ]
+{ #category : #accessing }
+GtLZAEditorModel >> privateEntityNamed: aString ofType: aClass [
+	^ self entities
+		at: aClass
+		ifPresent: [ :dict | 
+			dict
+				at: aString
+				ifPresent: [ :col | col at: 1 ifAbsent: [  ] ]
+				ifAbsent: [  ] ]
+		ifAbsent: [  ]
 ]
 
 { #category : #importing }
@@ -341,6 +348,7 @@ GtLZAEditorModel >> removeEntity: anObject [
 GtLZAEditorModel >> updateFile: aFileReference with: aString [
 	| name |
 	name := aFileReference basename.
-	self removeEntitiesFromFile: name.
+	(self privateEntityNamed: name ofType: GtLZAEditorFile)
+		ifNotNil: [ :file | file entities do: [ :each | self removeEntity: each ] ].
 	updates at: aFileReference put: aString
 ]

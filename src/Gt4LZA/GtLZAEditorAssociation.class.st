@@ -75,6 +75,13 @@ GtLZAEditorAssociation >> model [
 	^ self file model
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAEditorAssociation >> name [
+	^ (self fromEntity
+		ifNotNil: [ :entity | entity hasName ifTrue: [ entity name ] ])
+		ifNil: [ self to ]
+]
+
 { #category : #accessing }
 GtLZAEditorAssociation >> node [
 	^ node

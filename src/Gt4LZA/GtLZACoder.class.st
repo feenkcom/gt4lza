@@ -161,8 +161,7 @@ GtLZACoder >> createFilesTree [
 
 { #category : #private }
 GtLZACoder >> editorChangedTo: aString [
-	file currentSource: aString.
-	model updateFile: file fileReference absolutePath asFileReference with: aString
+	file currentSource: aString
 ]
 
 { #category : #accessing }
@@ -175,7 +174,36 @@ GtLZACoder >> file: anObject [
 	self updateContentsTo: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
+GtLZACoder >> findImplementerIn: textEditor [
+	| index |
+	file ifNil: [ ^ self ].
+	textEditor editor cursors do: [ :each | index := each position ].
+	index ifNil: [ ^ self ].
+	file associations
+		detect: [ :each | 
+			| interval |
+			interval := each node sourceInterval.
+			index between: interval first and: interval last ]
+		ifFound: [ :each | 
+			each toEntity
+				ifNotNil: [ :to | textEditor inUIProcessDo: [ textEditor phlow spawnObject: to ] ] ]
+		ifNone: [  ]
+]
+
+{ #category : #private }
+GtLZACoder >> findReferencesIn: textEditor [
+	| index references |
+	file ifNil: [ ^ self ].
+	textEditor editor cursors do: [ :each | index := each position ].
+	index ifNil: [ ^ self ].
+	(file entityAtIndex: index)
+		ifNotNil: [ :entity | 
+			references := entity references.
+			textEditor inUIProcessDo: [ textEditor phlow spawnObject: references ] ]
+]
+
+{ #category : #accessing }
 GtLZACoder >> highlight: aNode [
 	self
 		enqueueTask: [ self
@@ -338,7 +366,13 @@ GtLZACoder >> updateContentsTo: aFile [
 	textEditor
 		addShortcut: (BlShortcutWithAction new
 				combination: BlKeyCombination primaryS;
-				action: [ aFile save ]).
+				action: [ aFile save ]);
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination primaryN;
+				action: [ self findReferencesIn: textEditor ]);
+		addShortcut: (BlShortcutWithAction new
+				combination: BlKeyCombination primaryM;
+				action: [ self findImplementerIn: textEditor ]).
 	textEditor editor
 		when: BrTextEditorInsertedEvent
 			do: [ :event | self editorChangedTo: event source text asString ];
