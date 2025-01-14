@@ -34,7 +34,7 @@ GtLZAEditorEntity >> gtSourceFor: aView [
 		title: 'Source';
 		stencil: [ GtLZACoder new
 				model: self model;
-				modelFile: self file;
+				file: self file;
 				highlight: self node;
 				yourself ]
 ]

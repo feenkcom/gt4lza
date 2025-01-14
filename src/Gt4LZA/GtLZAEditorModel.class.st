@@ -127,7 +127,7 @@ GtLZAEditorModel >> gtDefaultInspectorTool [
 GtLZAEditorModel >> gtEntitySearch: aSearch [
 	<gtSearch>
 	^ aSearch list
-		priority: 10;
+		priority: 20;
 		title: 'Entities';
 		items: [ (self entities keys asArray asAsyncStream
 				collect: [ :each | 
@@ -213,7 +213,7 @@ GtLZAEditorModel >> gtRouteTablesFor: aView [
 GtLZAEditorModel >> gtStringSearch: aSearch [
 	<gtSearch>
 	^ aSearch explicit
-		priority: 10;
+		priority: 30;
 		title: 'String search';
 		search: [ :aContext | 
 			| string |

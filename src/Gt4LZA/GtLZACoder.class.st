@@ -71,7 +71,11 @@ GtLZACoder >> buildSidebar [
 		addTab: (BrTab new
 				aptitude: BrGlamorousTabAptitude new;
 				label: 'Files';
-				stencil: [ self createFilesTree ])
+				stencil: [ self createFilesTree ]);
+		actionbarStencil: [ BrToolbar new
+				aptitude: BrGlamorousToolbarAptitude new;
+				addItem: self searchButton;
+				yourself ]
 ]
 
 { #category : #private }
@@ -180,6 +184,8 @@ GtLZACoder >> highlight: aNode [
 						ifFound: [ :editor | 
 							| source |
 							source := editor text asString.
+							editor editor text
+								clearAttributes: [ :each | each class = BlTextHighlightAttribute ].
 							(editor editor text from: aNode startPosition to: aNode stopPosition)
 								attribute: (BlTextHighlightAttribute new
 										beNotOverwritableByStyler;
@@ -230,11 +236,6 @@ GtLZACoder >> model: anObject [
 	self modelUpdated
 ]
 
-{ #category : #accessing }
-GtLZACoder >> modelFile: anEditorFile [
-	self file: (self configurationFileFor: anEditorFile fileReference)
-]
-
 { #category : #private }
 GtLZACoder >> modelUpdated [
 	| yamlFile |
@@ -250,6 +251,19 @@ GtLZACoder >> modificationColor [
 	^ file isModified
 		ifTrue: [ self theme status changesBackgroundColor ]
 		ifFalse: [ Color transparent ]
+]
+
+{ #category : #private }
+GtLZACoder >> searchButton [
+	^ (GtSpotterDropdownButtonStencil new
+		valuable: [ model ];
+		tooltip: 'Search';
+		icon: BrGlamorousVectorIcons search;
+		objectActOn: [ :anActOnEvent :anItem | 
+			anActOnEvent beActed.
+			self file: anItem file.
+			self updateFiles.
+			self highlight: anItem node ]) asElement
 ]
 
 { #category : #styling }
