@@ -5,20 +5,20 @@
 		"__type" : "snippets",
 		"items" : [
 			{
-				"__type" : "pharoSnippet",
+				"__type" : "textSnippet",
 				"children" : {
 					"__type" : "snippets",
 					"items" : [ ]
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:28:52.131329+01:00"
+						"dateAndTimeString" : "2025-01-14T19:54:44.626346+01:00"
 					}
 				},
 				"editEmail" : {
@@ -29,48 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-11T19:10:39.031026+01:00"
+						"dateAndTimeString" : "2025-01-14T19:55:06.803995+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "MSbJhUrlDQCGcd0wB2MtZA=="
+					"uidString" : "j/DN1BDoDQCilMfhBr0e4g=="
 				},
-				"code" : "lzaDirectory := 'lza' asFileReference.\rlzaDirectory ensureDeleteAll.\rIceRepositoryCreator\r\t\tfromUrl: 'git@github.com:awslabs/landing-zone-accelerator-on-aws.git'\r\t\tto: lzaDirectory."
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
+				"paragraphStyle" : {
+					"__type" : "textStyle"
 				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:30:21.626188+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:38:32.12006+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "f7cei0rlDQCHHf5UB2MtZA=="
-				},
-				"code" : "healthcareConfig := lzaDirectory / 'reference/sample-configurations/lza-sample-config-healthcare'"
+				"string" : "First, [[Download or update the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the cong:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -97,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-18T09:40:45.089975+01:00"
+						"dateAndTimeString" : "2025-01-14T19:54:33.052474+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "R+cFkErlDQCIB6QvB2MtZA=="
 				},
-				"code" : "GtLZAImporter new\r\tdirectory: healthcareConfig;\r\timport"
+				"code" : "lzaDirectory := '.' asFileReference\r\t\t/ 'landing-zone-accelerator-on-aws-for-healthcare'.\rGtLZAImporter new\r\tdirectory: lzaDirectory / 'config';\r\timport"
 			}
 		]
 	},
@@ -127,12 +96,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-10T15:57:04.849449+01:00"
+			"dateAndTimeString" : "2025-01-14T19:47:29.78488+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "LZA exploration"
+		"title" : "Building a LZA model for analysis purposes"
 	},
 	"uid" : {
 		"__type" : "uuid",

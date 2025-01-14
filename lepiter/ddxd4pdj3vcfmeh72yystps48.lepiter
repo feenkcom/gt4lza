@@ -18,7 +18,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:54:44.626346+01:00"
+						"dateAndTimeString" : "2025-01-14T19:43:32.776201+01:00"
 					}
 				},
 				"editEmail" : {
@@ -29,17 +29,17 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:55:09.499996+01:00"
+						"dateAndTimeString" : "2025-01-14T19:46:47.319705+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "j/DN1BDoDQCilMfhBr0e4g=="
+					"uidString" : "4rjWohDoDQCUT8nlBr0e4g=="
 				},
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First, [[Download or update the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the configuration:"
+				"string" : "To exemplify the use of the LZA editor and model, we use the sample from  [landing-zone-accelerator-on-aws-for-healthcare](https://github.com/aws-samples/landing-zone-accelerator-on-aws-for-healthcare). This snippet updates the code from the repository locally:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -49,13 +49,13 @@
 				},
 				"createEmail" : {
 					"__type" : "email",
-					"emailString" : "veit.heller@feenk.com"
+					"emailString" : "<unknown>"
 				},
 				"createTime" : {
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2024-12-10T12:31:43.885578+01:00"
+						"dateAndTimeString" : "2025-01-14T19:41:04.362284+01:00"
 					}
 				},
 				"editEmail" : {
@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:54:33.052474+01:00"
+						"dateAndTimeString" : "2025-01-14T19:51:19.165416+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
-					"uidString" : "R+cFkErlDQCIB6QvB2MtZA=="
+					"uidString" : "4LTpoxDoDQCUUcYjBr0e4g=="
 				},
-				"code" : "lzaDirectory := '.' asFileReference\r\t\t/ 'landing-zone-accelerator-on-aws-for-healthcare'.\rGtLZAImporter new\r\tdirectory: lzaDirectory / 'config';\r\timport"
+				"code" : "lzaDirectory := '.' asFileReference / 'landing-zone-accelerator-on-aws-for-healthcare'.\rlzaDirectory ensureDeleteAll.\rrepository := PureGitRepository on: lzaDirectory.\rrepository operations clone: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'.\rrepository"
 			}
 		]
 	},
@@ -85,7 +85,7 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2024-12-10T15:56:33.190664+01:00"
+			"dateAndTimeString" : "2025-01-14T19:41:01.287822+01:00"
 		}
 	},
 	"editEmail" : {
@@ -96,15 +96,15 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:47:29.78488+01:00"
+			"dateAndTimeString" : "2025-01-14T19:48:15.486427+01:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Building a LZA model for analysis purposes"
+		"title" : "Download or update the healthcare case study "
 	},
 	"uid" : {
 		"__type" : "uuid",
-		"uuid" : "d124c985-4ae5-0d00-8670-d13c07632d64"
+		"uuid" : "9827d6a2-10e8-0d00-944e-8a1206bd1ee2"
 	}
 }
