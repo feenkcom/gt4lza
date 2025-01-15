@@ -21,7 +21,7 @@ GtLZACoder >> addExpanderFor: association in: text [
 		attribute: (BrGlamorousTriangleExpanderTextAttribute new
 				attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 						beAppend;
-						stencil: [ | pane view |
+						stencil: [ | pane view element |
 							pane := BrVerticalPane new
 									height: 300;
 									aptitude: BrShadowAptitude
@@ -34,8 +34,10 @@ GtLZACoder >> addExpanderFor: association in: text [
 										c textFlow pushLine.
 										c horizontal matchParent ].
 							view := to gtSourceFor: GtPhlowView new.
+							element := view asElement.
+							element states addState: GtPhlowToolDetailState normal.
 							pane
-								addChild: (view asElement
+								addChild: (element
 										constraintsDo: [ :c | 
 											c horizontal matchParent.
 											c vertical matchParent ]) ] ])

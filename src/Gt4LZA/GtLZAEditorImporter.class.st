@@ -163,6 +163,8 @@ GtLZAEditorImporter >> importFileNamed: aFileReference source: aString [
 	self addLinksForAttribute: 'policy' as: GtLZAEditorFile.
 	self addLinksForAttribute: 'template' as: GtLZAEditorFile.
 	self addLinksForAttribute: 'document' as: GtLZAEditorFile.
+	self addLinksForAttribute: 'rolePolicyFile' as: GtLZAEditorFile.
+	self addLinksForAttribute: 'dynamicPartitioning' as: GtLZAEditorFile.
 	^ file
 ]
 
