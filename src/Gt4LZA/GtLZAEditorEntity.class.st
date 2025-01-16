@@ -77,7 +77,7 @@ GtLZAEditorEntity >> node: anObject [
 	node ifNotNil: [ node attributeNamed: #entity put: self ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEditorEntity >> references [
 	^ GtLZAReferences new references: self asyncReferences
 ]

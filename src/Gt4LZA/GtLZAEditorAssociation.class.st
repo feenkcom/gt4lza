@@ -11,6 +11,15 @@ Class {
 	#category : #'Gt4LZA-Editor-Model'
 }
 
+{ #category : #views }
+GtLZAEditorAssociation >> coder [
+	^ GtLZACoder new
+		model: self model;
+		file: self fromEntity file;
+		highlight: self node;
+		yourself
+]
+
 { #category : #accessing }
 GtLZAEditorAssociation >> file [
 	^ file
@@ -31,12 +40,23 @@ GtLZAEditorAssociation >> from: anObject [
 	from := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 GtLZAEditorAssociation >> fromEntity [
 	^ self from
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'gt - inspector' }
+GtLZAEditorAssociation >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtPhlowExplicitTool new
+				withLabelAndIconAptitude;
+				name: 'LZA';
+				icon: BrGlamorousVectorIcons browse;
+				stencil: [ self coder ]);
+		addTool: super gtDefaultInspectorTool
+]
+
+{ #category : #views }
 GtLZAEditorAssociation >> gtFromFor: aView [
 	<gtView>
 	self fromEntity ifNil: [ ^ aView empty ].
@@ -47,19 +67,15 @@ GtLZAEditorAssociation >> gtFromFor: aView [
 		view: #gtSourceFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAEditorAssociation >> gtSourceFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Source';
-		stencil: [ GtLZACoder new
-				model: self model;
-				file: self fromEntity file;
-				highlight: self node;
-				yourself ]
+		stencil: [ self coder ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAEditorAssociation >> gtToFor: aView [
 	<gtView>
 	self toEntity ifNil: [ ^ aView empty ].
@@ -70,12 +86,12 @@ GtLZAEditorAssociation >> gtToFor: aView [
 		view: #gtSourceFor:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEditorAssociation >> model [
 	^ self file model
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEditorAssociation >> name [
 	^ (self fromEntity
 		ifNotNil: [ :entity | entity hasName ifTrue: [ entity name ] ])
@@ -102,7 +118,7 @@ GtLZAEditorAssociation >> to: anObject [
 	to := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtLZAEditorAssociation >> toEntity [
 	^ self model entityNamed: to ofType: type
 ]
