@@ -30,6 +30,11 @@ GtLZAEditorModel >> allAccountNames [
 ]
 
 { #category : #accessing }
+GtLZAEditorModel >> allFileNames [
+	^ (entities at: GtLZAEditorFile ifAbsent: [ Dictionary new ]) keys
+]
+
+{ #category : #accessing }
 GtLZAEditorModel >> allOrganizationalUnitNames [
 	self ensureOrganizationConfigLoaded.
 	^ (entities at: GtLZAEditorOrganizationalUnit ifAbsent: [ Dictionary new ])

@@ -31,7 +31,7 @@ GtLZAConfigCompletionStrategy class >> forAccountsConfig [
 
 { #category : #'instance creation' }
 GtLZAConfigCompletionStrategy class >> forFileType: aString [
-	| completer strategy |
+	| completer strategy fileCompleter |
 	strategy := aString = 'accounts-config.yaml'
 			ifTrue: [ self forAccountsConfig ]
 			ifFalse: [ aString = 'organization-config.yaml'
@@ -42,7 +42,31 @@ GtLZAConfigCompletionStrategy class >> forFileType: aString [
 	completer := (fileCompleters ifNil: [ fileCompleters := Dictionary new ])
 			at: aString
 			ifAbsentPut: [ self loadCompleterForFileType: aString ].
-	strategy completer: (strategy completer merge: completer).
+	completer := strategy completer merge: completer.
+	fileCompleter := GtYAMLKeyMatchCompleter new defaultCompleter: completer.
+	#('policy' 'document' 'rolePolicyFile' 'dynamicPartitioning')
+		do: [ :each | 
+			fileCompleter
+				add: (GtYAMLBlockCompleter new
+						name: '<jsonFiles>';
+						block: [ :string :pos | 
+							strategy
+								findCompletionsOf: string
+								at: pos
+								withValuesFrom: '<jsonFiles>' ])
+				forKey: each ].
+	#('template')
+		do: [ :each | 
+			fileCompleter
+				add: (GtYAMLBlockCompleter new
+						name: '<yamlFiles>';
+						block: [ :string :pos | 
+							strategy
+								findCompletionsOf: string
+								at: pos
+								withValuesFrom: '<yamlFiles>' ])
+				forKey: each ].
+	strategy completer: fileCompleter.
 	^ strategy
 ]
 
@@ -388,6 +412,14 @@ GtLZAConfigCompletionStrategy >> potentialValuesOf: aString forLookup: nameStrin
 			nameString = '<vpc>'
 				ifTrue: [ ^ ((model allVPCNames asSortedCollection asAsyncStream
 						select: [ :each | each beginsWith: aString ]) merge: stream)
-						withoutDuplicates ] ].
+						withoutDuplicates ].
+			nameString = '<jsonFiles>'
+				ifTrue: [ ^ ((model allFileNames asSortedCollection asAsyncStream
+						select: [ :each | (each beginsWith: aString) and: [ each endsWith: '.json' ] ])
+						merge: stream) withoutDuplicates ].
+			nameString = '<yamlFiles>'
+				ifTrue: [ ^ ((model allFileNames asSortedCollection asAsyncStream
+						select: [ :each | (each beginsWith: aString) and: [ each endsWith: '.yaml' ] ])
+						merge: stream) withoutDuplicates ] ].
 	^ stream
 ]
