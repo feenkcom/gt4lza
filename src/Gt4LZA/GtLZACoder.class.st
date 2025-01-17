@@ -43,6 +43,37 @@ GtLZACoder >> addExpanderFor: association in: text [
 											c vertical matchParent ]) ] ])
 ]
 
+{ #category : #styling }
+GtLZACoder >> addReferencesExpanderFor: anEntity in: text [
+	anEntity hasName ifFalse: [ ^ self ].
+	(anEntity node nodeForObject: anEntity name)
+		ifNotNil: [ :n | 
+			(text from: n stopPosition to: n stopPosition)
+				attribute: (BrGlamorousTriangleExpanderTextAttribute new
+						attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
+								beAppend;
+								stencil: [ | pane view element |
+									pane := BrVerticalPane new
+											height: 200;
+											aptitude: BrShadowAptitude
+													+ (BrGlamorousWithVerticalResizerAptitude new
+															beBottom;
+															yourself);
+											background: Color white;
+											margin: (BlInsets all: 10);
+											constraintsDo: [ :c | 
+												c textFlow pushLine.
+												c horizontal matchParent ].
+									view := anEntity references gtReferencesView: GtPhlowView new.
+									element := view asElement.
+									element states addState: GtPhlowToolDetailState normal.
+									pane
+										addChild: (element
+												constraintsDo: [ :c | 
+													c horizontal matchParent.
+													c vertical matchParent ]) ] ]) ]
+]
+
 { #category : #private }
 GtLZACoder >> buildModelToolbar [
 	| toolbar |
@@ -303,7 +334,11 @@ GtLZACoder >> stylerFor: aFile [
 				nodeClassName: #SmaCCParseNode
 				styleBlock: [ :styler :node :text | 
 					node parent
-						ifNil: [ (model fileEntityNamed: aFile asFileReference) associations
+						ifNil: [ | modelFile |
+							modelFile := model fileEntityNamed: aFile asFileReference.
+							modelFile entities
+								do: [ :each | self addReferencesExpanderFor: each in: text ].
+							modelFile associations
 								do: [ :each | 
 									each toEntity
 										ifNil: [ (text from: each node startPosition to: each node stopPosition)
