@@ -79,5 +79,8 @@ GtLZAEditorEntity >> node: anObject [
 
 { #category : #accessing }
 GtLZAEditorEntity >> references [
-	^ GtLZAReferences new references: self asyncReferences
+	^ GtLZAReferences new
+		references: self asyncReferences;
+		name: self name;
+		yourself
 ]
