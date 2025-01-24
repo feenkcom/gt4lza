@@ -1,5 +1,5 @@
 Class {
-	#name : #GtLZAEditorAssociation,
+	#name : #GtLZAEditorReference,
 	#superclass : #Object,
 	#instVars : [
 		'from',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #views }
-GtLZAEditorAssociation >> coder [
+GtLZAEditorReference >> coder [
 	^ GtLZACoder new
 		model: self model;
 		file: self fromEntity file;
@@ -21,32 +21,32 @@ GtLZAEditorAssociation >> coder [
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> file [
+GtLZAEditorReference >> file [
 	^ file
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> file: anObject [
+GtLZAEditorReference >> file: anObject [
 	file := anObject
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> from [
+GtLZAEditorReference >> from [
 	^ from
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> from: anObject [
+GtLZAEditorReference >> from: anObject [
 	from := anObject
 ]
 
 { #category : #'instance creation' }
-GtLZAEditorAssociation >> fromEntity [
+GtLZAEditorReference >> fromEntity [
 	^ self from
 ]
 
 { #category : #'gt - inspector' }
-GtLZAEditorAssociation >> gtDefaultInspectorTool [
+GtLZAEditorReference >> gtDefaultInspectorTool [
 	^ GtPhlowCompositeTool new
 		addTool: (GtPhlowExplicitTool new
 				withLabelAndIconAptitude;
@@ -57,7 +57,7 @@ GtLZAEditorAssociation >> gtDefaultInspectorTool [
 ]
 
 { #category : #views }
-GtLZAEditorAssociation >> gtFromFor: aView [
+GtLZAEditorReference >> gtFromFor: aView [
 	<gtView>
 	self fromEntity ifNil: [ ^ aView empty ].
 	^ aView forward
@@ -68,7 +68,7 @@ GtLZAEditorAssociation >> gtFromFor: aView [
 ]
 
 { #category : #views }
-GtLZAEditorAssociation >> gtSourceFor: aView [
+GtLZAEditorReference >> gtSourceFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Source';
@@ -76,7 +76,7 @@ GtLZAEditorAssociation >> gtSourceFor: aView [
 ]
 
 { #category : #views }
-GtLZAEditorAssociation >> gtToFor: aView [
+GtLZAEditorReference >> gtToFor: aView [
 	<gtView>
 	self toEntity ifNil: [ ^ aView empty ].
 	^ aView forward
@@ -87,48 +87,48 @@ GtLZAEditorAssociation >> gtToFor: aView [
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> model [
+GtLZAEditorReference >> model [
 	^ self file model
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> name [
+GtLZAEditorReference >> name [
 	^ (self fromEntity
 		ifNotNil: [ :entity | entity hasName ifTrue: [ entity name ] ])
 		ifNil: [ self to ]
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> node [
+GtLZAEditorReference >> node [
 	^ node
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> node: anObject [
+GtLZAEditorReference >> node: anObject [
 	node := anObject
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> to [
+GtLZAEditorReference >> to [
 	^ to
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> to: anObject [
+GtLZAEditorReference >> to: anObject [
 	to := anObject
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> toEntity [
+GtLZAEditorReference >> toEntity [
 	^ self model entityNamed: to ofType: type
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> type [
+GtLZAEditorReference >> type [
 	^ type
 ]
 
 { #category : #accessing }
-GtLZAEditorAssociation >> type: anObject [
+GtLZAEditorReference >> type: anObject [
 	type := anObject
 ]

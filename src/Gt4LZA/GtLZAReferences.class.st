@@ -8,7 +8,7 @@ Class {
 	#category : #'Gt4LZA-Editor-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAReferences >> asElement [
 	^ BrVerticalPane new
 		matchParent;
@@ -19,70 +19,74 @@ GtLZAReferences >> asElement [
 				text: name , ' References');
 		addChild: (BrSimpleList new
 				matchParent;
-				addEventHandler: GtPhlowListToSelectHandler new;
 				itemStencil: [ :each | 
 					BrVerticalPane new
-						aptitude: BrGlamorousListItemAptitude;
 						vFitContent;
 						hMatchParent;
-						padding: (BlInsets all: 5);
-						addChild: (BrHorizontalPane new
-									fitContent;
-									addChild: (BrLabel new
-												fitContent;
-												aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0)))
-										as: #file;
-									addChild: (BrLabel new
-												aptitude: (BrGlamorousLabelAptitude new thin
-														padding: (BlInsets all: 0);
-														foreground: BrTheme default button defaultTextColor);
-												text: '>')
-										as: #gt;
-									addChild: (BrLabel new
-												fitContent;
-												aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0)))
-										as: #entityName;
-									yourself)
-							as: #header;
-						addChild: (BrLabel new
-									hMatchParent;
-									vFitContent;
-									aptitude: BrGlamorousLabelAptitude;
-									text: '' asRopedText)
-							as: #content;
 						yourself ];
 				itemDataBinder: [ :pane :each | 
-					| fromEntity visibility |
-					fromEntity := each fromEntity.
-					pane
-						childNamed: #file
-						ifFound: [ :label | label text: fromEntity file name ].
-					visibility := (fromEntity file ~~ fromEntity and: [ fromEntity hasName ])
-							ifTrue: [ BlVisibility visible ]
-							ifFalse: [ BlVisibility gone ].
-					pane childNamed: #gt ifFound: [ :label | label visibility: visibility ].
-					pane
-						childNamed: #entityName
-						ifFound: [ :label | 
-							label visibility: visibility.
-							label text: fromEntity name ].
-					pane
-						childNamed: #content
-						ifFound: [ :label | 
-							| text |
-							text := fromEntity file currentSource asRopedText.
-							YAMLParser gtStyler style: text.
-							(text from: each node startPosition to: each node stopPosition)
-								attribute: (BlTextDecorationAttribute new
-										underline;
-										color: BrGlamorousColors textHighlightColor;
-										thickness: 3).
-							label text: (text clipForPreviewAround: each node startPosition) ].
-					pane ];
+					| expander |
+					pane removeChildren.
+					expander := BrExpander new
+							hMatchParent;
+							vFitContent;
+							margin: (BlInsets all: 4);
+							aptitude: (GtCoderExpanderAptitude new padding: BlInsets empty);
+							beInSingleCompositionLayer;
+							header: [ self collapsedElementFor: each ];
+							content: [ self expandedElementFor: each ].
+					expander
+						when: BlClickEvent
+						do: [ :anEvent | 
+							expander isCollapsed
+								ifTrue: [ anEvent consumed: true.
+									expander expand ] ].
+					pane addChild: expander ];
 				stream: self references)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
+GtLZAReferences >> collapsedElementFor: aReference [
+	| fromEntity text clippedText |
+	fromEntity := aReference fromEntity.
+	text := fromEntity file currentSource asRopedText.
+	YAMLParser gtStyler style: text.
+	(text from: aReference node startPosition to: aReference node stopPosition)
+		attribute: (BlTextDecorationAttribute new
+				underline;
+				color: BrGlamorousColors textHighlightColor;
+				thickness: 3).
+	clippedText := text clipForPreviewAround: aReference node startPosition.
+	^ BrVerticalPane new
+		vFitContent;
+		hMatchParent;
+		padding: (BlInsets all: 5);
+		addChild: (self headerForEntity: fromEntity);
+		addChild: (BrLabel new
+				hMatchParent;
+				vFitContent;
+				aptitude: BrGlamorousLabelAptitude;
+				text: clippedText);
+		yourself
+]
+
+{ #category : #views }
+GtLZAReferences >> expandedElementFor: aReference [
+	| fromEntity |
+	fromEntity := aReference fromEntity.
+	^ BrVerticalPane new
+		aptitude: BrGlamorousWithVerticalResizerAptitude;
+		height: 300;
+		hMatchParent;
+		padding: (BlInsets all: 5);
+		addChild: (self headerForEntity: fromEntity);
+		addChild: (aReference coder
+				vMatchParent;
+				yourself);
+		yourself
+]
+
+{ #category : #'gt - inspector' }
 GtLZAReferences >> gtDefaultInspectorTool [
 	^ GtPhlowCompositeTool new
 		addTool: (GtPhlowExplicitTool new
@@ -93,7 +97,7 @@ GtLZAReferences >> gtDefaultInspectorTool [
 		addTool: super gtDefaultInspectorTool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #views }
 GtLZAReferences >> gtReferencesView: aView [
 	<gtView>
 	^ aView explicit
@@ -107,6 +111,29 @@ GtLZAReferences >> hasMultiple [
 	refs := self references.
 	^ (refs next await then: [ :a | refs hasNext wait ] otherwise: [ :a | false ])
 		wait
+]
+
+{ #category : #views }
+GtLZAReferences >> headerForEntity: fromEntity [
+	| header |
+	header := BrHorizontalPane new fitContent.
+	header
+		addChild: (BrLabel new
+				fitContent;
+				aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0));
+				text: fromEntity file name).
+	(fromEntity file ~~ fromEntity and: [ fromEntity hasName ])
+		ifTrue: [ header
+				addChild: (BrLabel new
+						aptitude: (BrGlamorousLabelAptitude new thin
+								padding: (BlInsets all: 0);
+								foreground: BrTheme default button defaultTextColor);
+						text: '>');
+				addChild: (BrLabel new
+						fitContent;
+						aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0));
+						text: fromEntity name) ].
+	^ header
 ]
 
 { #category : #testing }

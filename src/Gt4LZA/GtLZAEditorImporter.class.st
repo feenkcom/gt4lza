@@ -36,7 +36,7 @@ GtLZAEditorImporter >> addLinksFor: anArray at: anInteger from: anObject as: aCl
 		ifTrue: [ | node |
 			node := ast nodeForObject: anObject.
 			^ file
-				addAssociation: (GtLZAEditorAssociation new
+				addAssociation: (GtLZAEditorReference new
 						node: node;
 						from: (self parentEntityOf: node);
 						to: anObject;
@@ -89,7 +89,7 @@ GtLZAEditorImporter >> addLinksForAttribute: aString from: anObject as: aClass [
 						ifTrue: [ | node |
 							node := ast nodeForObject: obj.
 							file
-								addAssociation: (GtLZAEditorAssociation new
+								addAssociation: (GtLZAEditorReference new
 										node: node;
 										from: (self parentEntityOf: node);
 										to: obj;
@@ -102,7 +102,7 @@ GtLZAEditorImporter >> addLinksForAttribute: aString from: anObject as: aClass [
 												ifTrue: [ | node |
 													node := ast nodeForObject: each.
 													file
-														addAssociation: (GtLZAEditorAssociation new
+														addAssociation: (GtLZAEditorReference new
 																node: node;
 																from: (self parentEntityOf: node);
 																to: each;
