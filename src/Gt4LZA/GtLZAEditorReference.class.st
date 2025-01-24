@@ -13,11 +13,15 @@ Class {
 
 { #category : #views }
 GtLZAEditorReference >> coder [
-	^ GtLZACoder new
-		model: self model;
-		file: self fromEntity file;
-		highlight: self node;
-		yourself
+	| coder |
+	coder := GtLZACoder new.
+	coder model: self model.
+	coder file: self fromEntity file.
+	coder highlight: self node.
+	coder
+		childNamed: #title
+		ifFound: [ :each | each visibility: BlVisibility gone ].
+	^ coder
 ]
 
 { #category : #accessing }

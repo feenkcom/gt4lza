@@ -120,18 +120,22 @@ GtLZAReferences >> headerForEntity: fromEntity [
 	header
 		addChild: (BrLabel new
 				fitContent;
-				aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0));
+				aptitude: (BrGlamorousLabelAptitude new
+						foreground: BrGlamorousColors defaultButtonTextColor;
+						padding: (BlInsets all: 0));
 				text: fromEntity file name).
 	(fromEntity file ~~ fromEntity and: [ fromEntity hasName ])
 		ifTrue: [ header
 				addChild: (BrLabel new
-						aptitude: (BrGlamorousLabelAptitude new thin
-								padding: (BlInsets all: 0);
-								foreground: BrTheme default button defaultTextColor);
+						aptitude: (BrGlamorousLabelAptitude new
+								foreground: BrGlamorousColors defaultButtonTextColor;
+								padding: (BlInsets all: 0));
 						text: '>');
 				addChild: (BrLabel new
 						fitContent;
-						aptitude: (BrGlamorousLabelAptitude new thin padding: (BlInsets all: 0));
+						aptitude: (BrGlamorousLabelAptitude new
+								foreground: BrGlamorousColors defaultButtonTextColor;
+								padding: (BlInsets all: 0));
 						text: fromEntity name) ].
 	^ header
 ]

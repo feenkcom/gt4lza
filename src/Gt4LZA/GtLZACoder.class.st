@@ -447,7 +447,7 @@ GtLZACoder >> updateContentsTo: aFile [
 					c ignored horizontal alignRight.
 					c ignored vertical alignTop ];
 				yourself).
-	content addChild: titleContent.
+	content addChild: titleContent as: #title.
 	content addChild: textEditor as: #editor.
 	content
 		addAptitude: (BrGlamorousWithVerticalScrollbarAptitude new scrollableName: #editor).
