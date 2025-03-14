@@ -270,16 +270,21 @@ GtLZAImporter >> gtNetworkGraphFor: aView [
 					childrenContainer graph beChildrenContainer: #default.
 					BrVerticalPane new
 						fitContent;
-						border: (BlBorder paint: Color black width: 1);
+						zIndex: -1;
+						margin: (BlInsets all: 10);
+						padding: (BlInsets all: 5);
+						aptitude: BrShadowAptitude new;
+						background: Color white;
 						addChild: (BrLabel new
 								aptitude: BrGlamorousLabelAptitude;
-								text: anAccount name);
+								text: ('Account' asRopedText foreground: Color gray; glamorousRegularSmallSize));
+						addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: anAccount name asRopedText);
 						addChild: childrenContainer ];
 				with: (accounts
 						select: [ :anAccount | (anAccount managedEntitiesOfType: GtLZAVPC) isNotEmpty ]);
-				forEach: [ :anAccount | 
-					anAccount paintOn: m ].
-
+				forEach: [ :anAccount | anAccount paintOn: m ].
 			m edges
 				connect: (transitGateways
 						flatCollect: [ :aTransitGateway | 
@@ -288,7 +293,9 @@ GtLZAImporter >> gtNetworkGraphFor: aView [
 									anAttachment routeTableAssociations
 										collect: [ :anAssociation | anAssociation -> anAttachment subnets ] ] ])
 				from: #key
-				toAll: #value ]
+				toAll: #value.
+				
+			m layout vertical ]
 ]
 
 { #category : #views }

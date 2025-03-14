@@ -115,7 +115,12 @@ GtLZAAccount >> paintOn: m [
 			BrVerticalPane new
 				fitContent;
 				margin: (BlInsets all: 5);
-				border: (BlBorder paint: Color green darker width: 1);
+				padding: (BlInsets all: 5);
+				aptitude: BrShadowAptitude new;
+						background: Color white;
+				addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: ('VPCs' asRopedText foreground: Color gray; glamorousRegularSmallSize));
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude;
 						text: anAccount name);
@@ -133,14 +138,19 @@ GtLZAAccount >> paintOn: m [
 			BrVerticalPane new
 				fitContent;
 				margin: (BlInsets all: 5);
-				border: (BlBorder paint: Color purple lighter darker width: 1);
+				padding: (BlInsets all: 5);
+				aptitude: BrShadowAptitude new;
+						background: Color white;
+				addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: ('Gateways' asRopedText foreground: Color gray; glamorousRegularSmallSize));
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude;
 						text: anAccount name);
 				addChild: childrenContainer ];
 		with: (self managedEntitiesOfType: GtLZATransitGateway)
 			forEach: [ :aTransitGateway | aTransitGateway paintOn: m ].
-	m layout vertical
+	m layout horizontal
 ]
 
 { #category : #accessing }
