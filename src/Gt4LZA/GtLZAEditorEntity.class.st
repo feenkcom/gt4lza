@@ -17,6 +17,15 @@ GtLZAEditorEntity class >> name: aString node: ast [
 		yourself
 ]
 
+{ #category : #views }
+GtLZAEditorEntity >> asCoder [
+	^ GtLZACoder new
+		model: self model;
+		file: self file;
+		highlight: self node;
+		yourself
+]
+
 { #category : #accessing }
 GtLZAEditorEntity >> asyncReferences [
 	^ (self model asyncFiles
@@ -34,16 +43,23 @@ GtLZAEditorEntity >> file: anObject [
 	file := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+GtLZAEditorEntity >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtPhlowExplicitTool new
+				withLabelAndIconAptitude;
+				name: 'LZA';
+				icon: BrGlamorousVectorIcons browse;
+				stencil: [ self asCoder ]);
+		addTool: super gtDefaultInspectorTool
+]
+
 { #category : #views }
 GtLZAEditorEntity >> gtSourceFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Source';
-		stencil: [ GtLZACoder new
-				model: self model;
-				file: self file;
-				highlight: self node;
-				yourself ]
+		stencil: [ self asCoder ]
 ]
 
 { #category : #testing }

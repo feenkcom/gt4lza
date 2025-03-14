@@ -286,6 +286,51 @@ GtLZACoder >> initializeSidebar [
 	sidebarElement hide
 ]
 
+{ #category : #private }
+GtLZACoder >> menuItems [
+	| index menuItems textEditor |
+	file ifNil: [ ^ nil ].
+	menuItems := BrMenuItems new beGroupedElementType.
+	file isModified
+		ifTrue: [ menuItems
+				addItem: (BrMenuActionItem new
+						label: 'Save';
+						action: [ file save ]);
+				addItem: (BrMenuActionItem new
+						label: 'Cancel';
+						action: [ file cancel ]) ].
+	textEditor := self childNamed: #editor.
+	textEditor editor cursors do: [ :each | index := each position ].
+	index
+		ifNotNil: [ (file entityAtIndex: index)
+				ifNotNil: [ :entity | 
+					menuItems
+						addItem: (BrMenuActionItem new
+								group: BrMenuItemGroupConfiguration navigation;
+								label: 'Browse references';
+								action: [ textEditor phlow spawnObject: entity references ]) ].
+			file associations
+				detect: [ :each | 
+					| interval |
+					interval := each node sourceInterval.
+					index between: interval first and: interval last ]
+				ifFound: [ :each | 
+					each toEntity
+						ifNotNil: [ :to | 
+							menuItems
+								addItem: (BrMenuActionItem new
+										group: BrMenuItemGroupConfiguration navigation;
+										label: 'Browse references';
+										action: [ textEditor phlow spawnObject: to references ]);
+								addItem: (BrMenuActionItem new
+										group: BrMenuItemGroupConfiguration navigation;
+										label: 'Browse definition';
+										action: [ textEditor phlow spawnObject: to ]) ] ]
+				ifNone: [  ] ].
+	menuItems itemsCount = 0 ifTrue: [ ^ nil ].
+	^ menuItems
+]
+
 { #category : #accessing }
 GtLZACoder >> model [
 	^ model
@@ -395,6 +440,8 @@ GtLZACoder >> updateContentsTo: aFile [
 				yourself)
 		as: #modificationBar.
 	textEditor := GtLZAConfigEditor new.
+	textEditor
+		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ self menuItems ]).
 	textEditor editor styler: (self stylerFor: file).
 	(GtCompletionController
 		on: textEditor
