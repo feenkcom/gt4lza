@@ -123,13 +123,14 @@ GtLZATransitGateway >> paintOn: m [
 			| childrenContainer |
 			childrenContainer := BrHorizontalPane new
 					fitContent;
-					alignCenter;
-					padding: (BlInsets all: 5).
+					alignCenter.
 			childrenContainer graph beChildrenContainer: #default.
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets all: 5);
-				border: (BlBorder paint: Color purple lighter width: 1);
+				padding: (BlInsets all: 5);
+				margin: (BlInsets all: 10);
+				aptitude: BrShadowAptitude new;
+				background: (Color purple veryMuchLighter);
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude;
 						text: anAccount name);

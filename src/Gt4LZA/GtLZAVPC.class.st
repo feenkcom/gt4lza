@@ -172,24 +172,45 @@ GtLZAVPC >> natGateways: anObject [
 GtLZAVPC >> paintOn: m [
 	m nodes
 		stencil: [ :anAccount | 
-					| childrenContainer |
-					childrenContainer := BrHorizontalPane new
-							fitContent;
-							alignCenter;
-							padding: (BlInsets all: 5).
-					childrenContainer graph beChildrenContainer: #default.
-					BrVerticalPane new
-						fitContent;
-						margin: (BlInsets all: 5);
-						border: (BlBorder paint: Color lightBlue width: 2);
-						addChild: (BrLabel new
-								aptitude: BrGlamorousLabelAptitude;
-								text: 'Availability Zone ', anAccount name);
-						addChild: childrenContainer ];
+			| childrenContainer |
+			childrenContainer := BrHorizontalPane new
+					fitContent;
+					alignCenter.
+			childrenContainer graph beChildrenContainer: #default.
+			BrVerticalPane new
+				fitContent;
+				padding: (BlInsets all: 5);
+				margin: (BlInsets all: 10);
+				aptitude: BrShadowAptitude new;
+				background: Color white;
+				addChild: (BrLabel new
+						aptitude: BrGlamorousLabelAptitude;
+						text: anAccount name asRopedText
+								, (' Availability Zone' asRopedText
+										foreground: Color gray;
+										glamorousRegularSmallSize));
+				addChild: childrenContainer ];
 		with: self subnetsByAvailabilityZone associations;
 		forEach: [ :anAssociation | 
 			m nodes
-				labelled: #name;
+				stencil: [ :anObject | 
+					| childrenContainer |
+					childrenContainer := BrHorizontalPane new
+							fitContent;
+							alignCenter.
+					childrenContainer graph beChildrenContainer: #default.
+					BrVerticalPane new
+						fitContent;
+						alignCenter;
+						background: Color cyan darker veryMuchLighter;
+						"margin: (BlInsets all: 10);"
+						margin: (BlInsets all: 10);
+						padding: (BlInsets all: 5);
+						aptitude: BrShadowAptitude new;
+						addChild: (BrLabel new
+								aptitude: BrGlamorousLabelAptitude;
+								text: anObject name);
+						addChild: childrenContainer ];
 				with: anAssociation value.
 			m layout vertical ].
 	m layout vertical

@@ -109,21 +109,20 @@ GtLZAAccount >> paintOn: m [
 			| childrenContainer |
 			childrenContainer := BrHorizontalPane new
 					fitContent;
-					alignCenter;
-					padding: (BlInsets all: 5).
+					alignCenter";
+					padding: (BlInsets all: 5)".
 			childrenContainer graph beChildrenContainer: #default.
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets all: 5);
+				margin: (BlInsets all: 10);
 				padding: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
-						background: Color white;
-				addChild: (BrLabel new
-								aptitude: BrGlamorousLabelAptitude;
-								text: ('VPCs' asRopedText foreground: Color gray; glamorousRegularSmallSize));
+				background: Color white;
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude;
-						text: anAccount name);
+						text: (anAccount name asRopedText), (' VPCs' asRopedText
+								foreground: Color gray;
+								glamorousRegularSmallSize));
 				addChild: childrenContainer ];
 		with: (self managedEntitiesOfType: GtLZAVPC);
 		forEach: [ :aVpc | aVpc paintOn: m ].
@@ -137,16 +136,15 @@ GtLZAAccount >> paintOn: m [
 			childrenContainer graph beChildrenContainer: #default.
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets all: 5);
+				margin: (BlInsets all: 10);
 				padding: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
-						background: Color white;
-				addChild: (BrLabel new
-								aptitude: BrGlamorousLabelAptitude;
-								text: ('Gateways' asRopedText foreground: Color gray; glamorousRegularSmallSize));
+				background: Color white;
 				addChild: (BrLabel new
 						aptitude: BrGlamorousLabelAptitude;
-						text: anAccount name);
+						text: (anAccount name asRopedText), (' Gateways' asRopedText
+								foreground: Color gray;
+								glamorousRegularSmallSize));
 				addChild: childrenContainer ];
 		with: (self managedEntitiesOfType: GtLZATransitGateway)
 			forEach: [ :aTransitGateway | aTransitGateway paintOn: m ].
