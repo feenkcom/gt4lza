@@ -7,72 +7,11 @@ Class {
 		'contentElement',
 		'file',
 		'configurationFiles',
-		'modified'
+		'modified',
+		'highlightedEntity'
 	],
 	#category : #'Gt4LZA-Editor'
 }
-
-{ #category : #styling }
-GtLZACoder >> addExpanderFor: association in: text [
-	| to pos |
-	to := association toEntity.
-	pos := association node stopPosition.
-	(text from: pos to: pos)
-		attribute: (BrGlamorousTriangleExpanderTextAttribute new
-				attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-						beAppend;
-						stencil: [ | pane view element |
-							pane := BrVerticalPane new
-									height: 300;
-									aptitude: BrShadowAptitude
-											+ (BrGlamorousWithVerticalResizerAptitude new
-													beBottom;
-													yourself);
-									background: Color white;
-									margin: (BlInsets all: 10);
-									constraintsDo: [ :c | 
-										c textFlow pushLine.
-										c horizontal matchParent ].
-							view := to gtSourceFor: GtPhlowView new.
-							element := view asElement.
-							element states addState: GtPhlowToolDetailState normal.
-							pane
-								addChild: (element
-										constraintsDo: [ :c | 
-											c horizontal matchParent.
-											c vertical matchParent ]) ] ])
-]
-
-{ #category : #styling }
-GtLZACoder >> addReferencesExpanderFor: anEntity in: text [
-	anEntity hasName ifFalse: [ ^ self ].
-	(anEntity node nodeForObject: anEntity name)
-		ifNotNil: [ :n | 
-			(text from: n stopPosition to: n stopPosition)
-				attribute: (BrGlamorousTriangleExpanderTextAttribute new
-						attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-								beAppend;
-								stencil: [ | pane view element |
-									pane := BrVerticalPane new
-											height: 200;
-											aptitude: BrShadowAptitude
-													+ (BrGlamorousWithVerticalResizerAptitude new
-															beBottom;
-															yourself);
-											background: Color white;
-											margin: (BlInsets all: 10);
-											constraintsDo: [ :c | 
-												c textFlow pushLine.
-												c horizontal matchParent ].
-									view := anEntity references gtReferencesView: GtPhlowView new.
-									element := view asElement.
-									element states addState: GtPhlowToolDetailState normal.
-									pane
-										addChild: (element
-												constraintsDo: [ :c | 
-													c horizontal matchParent.
-													c vertical matchParent ]) ] ]) ]
-]
 
 { #category : #private }
 GtLZACoder >> buildModelToolbar [
@@ -109,6 +48,32 @@ GtLZACoder >> buildSidebar [
 				aptitude: BrGlamorousToolbarAptitude new;
 				addItem: self searchButton;
 				yourself ]
+]
+
+{ #category : #private }
+GtLZACoder >> buildTabs [
+	| context contentTabs aListener |
+	context := GtPhlowContext new.
+	context optionAt: #lzaModel put: model.
+	context optionAt: #lzaFile put: file.
+	contentTabs := GtPhlowCompositeView new
+			object: file
+				arguments: {GtPhlowView empty.
+						context};
+			collectorDo: [ :aCollector | 
+				aCollector
+					context: context;
+					fromObject: file;
+					from: file class;
+					to: Behavior;
+					pragmaName: #gtLzaView ];
+			asElementDo: [ :each | each ].
+
+	aListener := GtPhlowChangeMethodSystemAnnouncerListener
+			installOnCompositeElement: contentTabs.
+	aListener interestingPragmas: {#gtLzaView} andObject: file.
+
+	^ contentTabs
 ]
 
 { #category : #private }
@@ -207,53 +172,14 @@ GtLZACoder >> file: anObject [
 	self updateContentsTo: anObject
 ]
 
-{ #category : #private }
-GtLZACoder >> findImplementerIn: textEditor [
-	| index |
-	file ifNil: [ ^ self ].
-	textEditor editor cursors do: [ :each | index := each position ].
-	index ifNil: [ ^ self ].
-	file associations
-		detect: [ :each | 
-			| interval |
-			interval := each node sourceInterval.
-			index between: interval first and: interval last ]
-		ifFound: [ :each | 
-			each toEntity
-				ifNotNil: [ :to | textEditor inUIProcessDo: [ textEditor phlow spawnObject: to ] ] ]
-		ifNone: [  ]
-]
-
-{ #category : #private }
-GtLZACoder >> findReferencesIn: textEditor [
-	| index references |
-	file ifNil: [ ^ self ].
-	textEditor editor cursors do: [ :each | index := each position ].
-	index ifNil: [ ^ self ].
-	(file entityAtIndex: index)
-		ifNotNil: [ :entity | 
-			references := entity references.
-			textEditor inUIProcessDo: [ textEditor phlow spawnObject: references ] ]
+{ #category : #accessing }
+GtLZACoder >> highlightedEntity [
+	^ highlightedEntity
 ]
 
 { #category : #accessing }
-GtLZACoder >> highlight: aNode [
-	self
-		enqueueTask: [ self
-				inUIProcessDo: [ contentElement
-						childNamed: #editor
-						ifFound: [ :editor | 
-							| source |
-							source := editor text asString.
-							editor editor text
-								clearAttributes: [ :each | each class = BlTextHighlightAttribute ].
-							(editor editor text from: aNode startPosition to: aNode stopPosition)
-								attribute: (BlTextHighlightAttribute new
-										beNotOverwritableByStyler;
-										paint: BrGlamorousColors neutralBackgroundColor).
-							editor
-								scrollToPosition: (source lineNumberCorrespondingToIndex: aNode startPosition) ] ] ]
-				asBlTask
+GtLZACoder >> highlightedEntity: anEntity [
+	highlightedEntity := anEntity
 ]
 
 { #category : #initialization }
@@ -284,51 +210,6 @@ GtLZACoder >> initializeSidebar [
 				normal: [ :aStyle | aStyle do: [ sidebarElement hide ] ];
 				detailed: [ :aStyle | aStyle do: [ sidebarElement show ] ]).
 	sidebarElement hide
-]
-
-{ #category : #private }
-GtLZACoder >> menuItems [
-	| index menuItems textEditor |
-	file ifNil: [ ^ nil ].
-	menuItems := BrMenuItems new beGroupedElementType.
-	file isModified
-		ifTrue: [ menuItems
-				addItem: (BrMenuActionItem new
-						label: 'Save';
-						action: [ file save ]);
-				addItem: (BrMenuActionItem new
-						label: 'Cancel';
-						action: [ file cancel ]) ].
-	textEditor := self childNamed: #editor.
-	textEditor editor cursors do: [ :each | index := each position ].
-	index
-		ifNotNil: [ (file entityAtIndex: index)
-				ifNotNil: [ :entity | 
-					menuItems
-						addItem: (BrMenuActionItem new
-								group: BrMenuItemGroupConfiguration navigation;
-								label: 'Browse references';
-								action: [ textEditor phlow spawnObject: entity references ]) ].
-			file associations
-				detect: [ :each | 
-					| interval |
-					interval := each node sourceInterval.
-					index between: interval first and: interval last ]
-				ifFound: [ :each | 
-					each toEntity
-						ifNotNil: [ :to | 
-							menuItems
-								addItem: (BrMenuActionItem new
-										group: BrMenuItemGroupConfiguration navigation;
-										label: 'Browse references';
-										action: [ textEditor phlow spawnObject: to references ]);
-								addItem: (BrMenuActionItem new
-										group: BrMenuItemGroupConfiguration navigation;
-										label: 'Browse definition';
-										action: [ textEditor phlow spawnObject: to ]) ] ]
-				ifNone: [  ] ].
-	menuItems itemsCount = 0 ifTrue: [ ^ nil ].
-	^ menuItems
 ]
 
 { #category : #accessing }
@@ -369,30 +250,7 @@ GtLZACoder >> searchButton [
 			anActOnEvent beActed.
 			self file: anItem file.
 			self updateFiles.
-			self highlight: anItem node ]) asElement
-]
-
-{ #category : #styling }
-GtLZACoder >> stylerFor: aFile [
-	| rules |
-	rules := {GtSmaCCNodeStylerRule
-				nodeClassName: #SmaCCParseNode
-				styleBlock: [ :styler :node :text | 
-					node parent
-						ifNil: [ | modelFile |
-							modelFile := model fileEntityNamed: aFile asFileReference.
-							modelFile entities
-								do: [ :each | self addReferencesExpanderFor: each in: text ].
-							modelFile associations
-								do: [ :each | 
-									each toEntity
-										ifNil: [ (text from: each node startPosition to: each node stopPosition)
-												highlight: BrGlamorousColors errorBackgroundColor ]
-										ifNotNil: [ :entity | self addExpanderFor: each in: text ] ] ] ]}.
-	rules do: [ :each | each continueOnMatch: true ].
-	^ (GtCompositeSmaCCASTStyler forParser: YAMLParser)
-		stylers: {YAMLParser gtStyler.
-				(GtSmaCCParserStyler forParser: YAMLParser) stylerRules: rules}
+			self highlightedEntity: anItem ]) asElement
 ]
 
 { #category : #private }
@@ -413,20 +271,15 @@ GtLZACoder >> updateChangeStatus: anEvent [
 		ifFound: [ :files | 
 			files
 				allChildrenBreadthFirstDetect: [ :each | (each userData at: #file ifAbsent: [  ]) = anEvent file ]
-				ifFound: [ :elmt | self updateModifiedIn: elmt ] ].
-	anEvent file = file
-		ifTrue: [ contentElement
-				childNamed: #editor
-				ifFound: [ :elmt | 
-					elmt editor text asString = file currentSource
-						ifFalse: [ self updateEditorText: elmt ] ] ]
+				ifFound: [ :elmt | self updateModifiedIn: elmt ] ]
 ]
 
 { #category : #private }
 GtLZACoder >> updateContentsTo: aFile [
-	| textEditor content titleContent fileToolbar |
+	| tabs content titleContent fileToolbar |
 	(aFile notNil and: [ aFile = file or: [ aFile isDirectory ] ])
 		ifTrue: [ ^ self ].
+	file ifNotNil: [ file announcer unsubscribe: self ].
 	file := aFile.
 	file announcer weak
 		when: GtLZAFileSourceChanged
@@ -439,32 +292,6 @@ GtLZACoder >> updateContentsTo: aFile [
 				constraintsDo: [ :c | c vertical matchParent ];
 				yourself)
 		as: #modificationBar.
-	textEditor := GtLZAConfigEditor new.
-	textEditor
-		addAptitude: (BrGlamorousWithExplicitContextMenuAptitude menu: [ self menuItems ]).
-	textEditor editor styler: (self stylerFor: file).
-	(GtCompletionController
-		on: textEditor
-		strategy: ((GtLZAConfigCompletionStrategy forFileType: file fileReference basename)
-				model: model)) install.
-	textEditor
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination primaryS;
-				action: [ aFile save ]);
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination primaryN;
-				action: [ self findReferencesIn: textEditor ]);
-		addShortcut: (BlShortcutWithAction new
-				combination: BlKeyCombination primaryM;
-				action: [ self findImplementerIn: textEditor ]).
-	textEditor editor
-		when: BrTextEditorInsertedEvent
-			do: [ :event | self editorChangedTo: event source text asString ];
-		when: BrTextEditorDeletedEvent
-			do: [ :event | self editorChangedTo: event source text asString ];
-		when: BlInfiniteDataSourceChanged
-			do: [ :event | self editorChangedTo: event source text asString ].
-	self updateEditorText: textEditor.
 	content := BrVerticalPane new.
 	content matchParent.
 	titleContent := BrHorizontalPane new.
@@ -495,18 +322,12 @@ GtLZACoder >> updateContentsTo: aFile [
 					c ignored vertical alignTop ];
 				yourself).
 	content addChild: titleContent as: #title.
-	content addChild: textEditor as: #editor.
-	content
-		addAptitude: (BrGlamorousWithVerticalScrollbarAptitude new scrollableName: #editor).
+	tabs := self buildTabs.
+	content addChild: tabs.
 	fileToolbar := self buildToolbarFor: file.
 	content addChild: fileToolbar as: #toolbar.
 	contentElement addChild: content.
 	self updateChangeStatus: (GtLZAFileSourceChanged new file: file)
-]
-
-{ #category : #private }
-GtLZACoder >> updateEditorText: textEditor [
-	textEditor editor text: file currentSource asRopedText
 ]
 
 { #category : #private }

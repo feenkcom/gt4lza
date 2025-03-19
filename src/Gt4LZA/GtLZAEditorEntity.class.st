@@ -22,7 +22,7 @@ GtLZAEditorEntity >> asCoder [
 	^ GtLZACoder new
 		model: self model;
 		file: self file;
-		highlight: self node;
+		highlightedEntity: self;
 		yourself
 ]
 
