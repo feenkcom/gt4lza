@@ -180,7 +180,7 @@ GtLZAVPC >> paintOn: m [
 			BrVerticalPane new
 				fitContent;
 				padding: (BlInsets all: 5);
-				margin: (BlInsets all: 10);
+				margin: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
 				background: Color white;
 				addChild: (BrLabel new
@@ -204,7 +204,7 @@ GtLZAVPC >> paintOn: m [
 						alignCenter;
 						background: Color cyan darker veryMuchLighter;
 						"margin: (BlInsets all: 10);"
-						margin: (BlInsets all: 10);
+						margin: (BlInsets all: 5);
 						padding: (BlInsets all: 5);
 						aptitude: BrShadowAptitude new;
 						addChild: (BrLabel new

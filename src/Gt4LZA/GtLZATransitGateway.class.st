@@ -128,7 +128,7 @@ GtLZATransitGateway >> paintOn: m [
 			BrVerticalPane new
 				fitContent;
 				padding: (BlInsets all: 5);
-				margin: (BlInsets all: 10);
+				margin: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
 				background: (Color purple veryMuchLighter);
 				addChild: (BrLabel new

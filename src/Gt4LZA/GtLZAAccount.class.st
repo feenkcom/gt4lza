@@ -114,7 +114,7 @@ GtLZAAccount >> paintOn: m [
 			childrenContainer graph beChildrenContainer: #default.
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets all: 10);
+				margin: (BlInsets all: 5);
 				padding: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
 				background: Color white;
@@ -136,7 +136,7 @@ GtLZAAccount >> paintOn: m [
 			childrenContainer graph beChildrenContainer: #default.
 			BrVerticalPane new
 				fitContent;
-				margin: (BlInsets all: 10);
+				margin: (BlInsets all: 5);
 				padding: (BlInsets all: 5);
 				aptitude: BrShadowAptitude new;
 				background: Color white;
