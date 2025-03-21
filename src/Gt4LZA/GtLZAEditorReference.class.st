@@ -17,7 +17,7 @@ GtLZAEditorReference >> coder [
 	coder := GtLZACoder new.
 	coder model: self model.
 	coder file: self fromEntity file.
-	coder highlight: self node.
+	coder highlightedEntity: self.
 	coder
 		childNamed: #title
 		ifFound: [ :each | each visibility: BlVisibility gone ].
