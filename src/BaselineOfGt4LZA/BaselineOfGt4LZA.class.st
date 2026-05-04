@@ -13,7 +13,7 @@ BaselineOfGt4LZA class >> loadLepiter [
 			LeDatabasesRegistry defaultLogicalDatabase
 				addKnowledgebaseFromDirectory: 
 				aRepository repositoryDirectory / 'lepiter' ]
-		ifNone: [ self inform: 'Repository not found.' ]
+		ifNone: [ self inform: 'Repository not found' ]
 ]
 
 { #category : 'baseline' }
