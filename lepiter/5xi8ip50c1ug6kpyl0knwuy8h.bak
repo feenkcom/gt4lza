@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:55:09.499996+01:00"
+						"dateAndTimeString" : "2026-05-04T08:03:52.808607+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First, [[Download or update the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the configuration:"
+				"string" : "First, [[Download the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the configuration:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -96,12 +96,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:47:29.78488+01:00"
+			"dateAndTimeString" : "2026-05-04T14:22:26.509304+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Building a LZA model for analysis purposes"
+		"title" : "Analyzing the LZA healthcare configuration"
 	},
 	"uid" : {
 		"__type" : "uuid",

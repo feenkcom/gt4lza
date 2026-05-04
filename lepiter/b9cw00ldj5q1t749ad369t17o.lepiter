@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:47:51.611299+01:00"
+						"dateAndTimeString" : "2026-05-04T14:22:33.569768+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Editing a LZA configuration]]"
+				"string" : "[[Editing the LZA healthcare configuration ]]"
 			},
 			{
 				"__type" : "textSnippet",
@@ -66,7 +66,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:47:29.791542+01:00"
+						"dateAndTimeString" : "2026-05-04T14:22:26.524892+02:00"
 					}
 				},
 				"uid" : {
@@ -76,7 +76,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Building a LZA model for analysis purposes]]"
+				"string" : "[[Analyzing the LZA healthcare configuration]]"
 			},
 			{
 				"__type" : "textSnippet",

@@ -112,43 +112,6 @@
 					"__type" : "textStyle"
 				},
 				"string" : "Then, simply inspect the model on the configuration to get a live editor:"
-			},
-			{
-				"__type" : "textSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2026-05-04T08:07:04.648758+02:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2026-05-04T08:07:08.007269+02:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "f6GMNeXkQQqsqrM5O0Xu8A=="
-				},
-				"paragraphStyle" : {
-					"__type" : "textStyle"
-				},
-				"string" : "This shows an editor that"
 			}
 		]
 	},
@@ -171,12 +134,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:47:53.340716+01:00"
+			"dateAndTimeString" : "2026-05-04T14:21:51.228453+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Editing a LZA configuration"
+		"title" : "Editing the LZA configuration for healthcare "
 	},
 	"uid" : {
 		"__type" : "uuid",

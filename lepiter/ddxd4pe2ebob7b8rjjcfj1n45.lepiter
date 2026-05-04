@@ -134,12 +134,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:47:53.340716+01:00"
+			"dateAndTimeString" : "2026-05-04T14:22:33.555823+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Editing a LZA configuration"
+		"title" : "Editing the LZA healthcare configuration "
 	},
 	"uid" : {
 		"__type" : "uuid",
