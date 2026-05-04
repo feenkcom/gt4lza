@@ -1,6 +1,6 @@
 # Glamorous Toolkit for LZA
 
-An extension  Glamorous Toolkit for editing and visualizing AWS LZA (Landing Zone Accelerator) configurations.
+An extension  [Glamorous Toolkit](https://gtoolkit.com) for editing and visualizing [AWS LZA](https://docs.aws.amazon.com/solutions/landing-zone-accelerator-on-aws/) (Landing Zone Accelerator) configurations.
 
 ## Installation
 
@@ -12,3 +12,8 @@ Metacello new
 	load.
 #BaselineOfGt4LZA asClass loadLepiter
 ```
+
+## What you get
+
+Dedicated editing YAML files, including completion and exploration of references.
+A model for analysis purposes, including a generated network graph.
