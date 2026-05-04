@@ -1,17 +1,14 @@
-# gt4lza
+# Glamorous Toolkit for LZA
 
-is a repository for working with AWS LZA files.
+An extension  Glamorous Toolkit for editing and visualizing AWS LZA (Landing Zone Accelerator) configurations.
+
 ## Installation
 
+In a Glamorous Toolkit image, load the code and associated documentation by executing the following snippet:
 ```st
 Metacello new
 	repository: 'github://feenkcom/gt4lza:main/src';
 	baseline: 'Gt4LZA';
-	load
-```
-
-Optionally you can also load the Lepiter database:
-
-```
+	load.
 #BaselineOfGt4LZA asClass loadLepiter
 ```
