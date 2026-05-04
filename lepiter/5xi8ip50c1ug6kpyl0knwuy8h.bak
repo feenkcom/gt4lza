@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:55:06.803995+01:00"
+						"dateAndTimeString" : "2025-01-14T19:55:09.499996+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "First, [[Download or update the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the cong:"
+				"string" : "First, [[Download or update the healthcare case study ]]. Then, inspect the model on the configuration to get a graph model of the configuration:"
 			},
 			{
 				"__type" : "pharoSnippet",

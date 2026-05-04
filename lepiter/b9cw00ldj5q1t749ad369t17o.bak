@@ -177,7 +177,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:47:06.186485+01:00"
+						"dateAndTimeString" : "2025-01-14T19:48:15.495002+01:00"
 					}
 				},
 				"uid" : {
@@ -187,7 +187,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "[[Updating the healthcare case study ]]"
+				"string" : "[[Download or update the healthcare case study ]]"
 			}
 		]
 	},

@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:46:47.319705+01:00"
+						"dateAndTimeString" : "2026-05-04T08:06:34.762855+02:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To exemplify the use of the LZA editor and model, we use the sample from  [landing-zone-accelerator-on-aws-for-healthcare](https://github.com/aws-samples/landing-zone-accelerator-on-aws-for-healthcare). This snippet updates the code from the repository locally:"
+				"string" : "To exemplify the use of the LZA editor and model, we use the sample from  [landing-zone-accelerator-on-aws-for-healthcare](https://github.com/aws-samples/landing-zone-accelerator-on-aws-for-healthcare). This snippet clones the code from the repository locally:"
 			},
 			{
 				"__type" : "pharoSnippet",
@@ -66,14 +66,14 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:51:02.727026+01:00"
+						"dateAndTimeString" : "2025-01-14T19:51:19.165416+01:00"
 					}
 				},
 				"uid" : {
 					"__type" : "uid",
 					"uidString" : "4LTpoxDoDQCUUcYjBr0e4g=="
 				},
-				"code" : "lzaDirectory := lzaDirectory / 'landing-zone-accelerator-on-aws-for-healthcare'.\rlzaDirectory ensureDeleteAll.\rrepository := PureGitRepository on: lzaDirectory.\rrepository operations clone: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'.\rrepository"
+				"code" : "lzaDirectory := '.' asFileReference / 'landing-zone-accelerator-on-aws-for-healthcare'.\rlzaDirectory ensureDeleteAll.\rrepository := PureGitRepository on: lzaDirectory.\rrepository operations clone: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'.\rrepository"
 			}
 		]
 	},
@@ -96,12 +96,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:48:15.486427+01:00"
+			"dateAndTimeString" : "2026-05-04T08:03:52.79806+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Download or update the healthcare case study "
+		"title" : "Download the healthcare case study "
 	},
 	"uid" : {
 		"__type" : "uuid",

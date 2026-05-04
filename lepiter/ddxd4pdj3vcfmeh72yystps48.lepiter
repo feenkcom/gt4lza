@@ -18,6 +18,78 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2026-05-04T08:06:44.017479+02:00"
+					}
+				},
+				"editEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"editTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
+						"dateAndTimeString" : "2026-05-04T08:06:44.017479+02:00"
+					}
+				},
+				"uid" : {
+					"__type" : "uid",
+					"uidString" : "4kI4ihKTTQSFmjmJ4TyhKA=="
+				},
+				"paragraphStyle" : {
+					"__type" : "textStyle"
+				},
+				"string" : "To exemplify the use of the LZA editor and model, we use the sample from  [landing-zone-accelerator-on-aws-for-healthcare](https://github.com/aws-samples/landing-zone-accelerator-on-aws-for-healthcare)."
+			},
+			{
+				"__type" : "textSnippet",
+				"children" : {
+					"__type" : "snippets",
+					"items" : [
+						{
+							"__type" : "pharoSnippet",
+							"children" : {
+								"__type" : "snippets",
+								"items" : [ ]
+							},
+							"createEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"createTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-01-14T19:41:04.362284+01:00"
+								}
+							},
+							"editEmail" : {
+								"__type" : "email",
+								"emailString" : "<unknown>"
+							},
+							"editTime" : {
+								"__type" : "time",
+								"time" : {
+									"__type" : "dateAndTime",
+									"dateAndTimeString" : "2025-01-14T19:51:19.165416+01:00"
+								}
+							},
+							"uid" : {
+								"__type" : "uid",
+								"uidString" : "4LTpoxDoDQCUUcYjBr0e4g=="
+							},
+							"code" : "lzaDirectory := '.' asFileReference / 'landing-zone-accelerator-on-aws-for-healthcare'.\rlzaDirectory ensureDeleteAll.\rrepository := PureGitRepository on: lzaDirectory.\rrepository operations clone: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'.\rrepository"
+						}
+					]
+				},
+				"createEmail" : {
+					"__type" : "email",
+					"emailString" : "<unknown>"
+				},
+				"createTime" : {
+					"__type" : "time",
+					"time" : {
+						"__type" : "dateAndTime",
 						"dateAndTimeString" : "2025-01-14T19:43:32.776201+01:00"
 					}
 				},
@@ -29,7 +101,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:46:47.319705+01:00"
+						"dateAndTimeString" : "2026-05-04T08:06:44.019029+02:00"
 					}
 				},
 				"uid" : {
@@ -39,41 +111,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "To exemplify the use of the LZA editor and model, we use the sample from  [landing-zone-accelerator-on-aws-for-healthcare](https://github.com/aws-samples/landing-zone-accelerator-on-aws-for-healthcare). This snippet updates the code from the repository locally:"
-			},
-			{
-				"__type" : "pharoSnippet",
-				"children" : {
-					"__type" : "snippets",
-					"items" : [ ]
-				},
-				"createEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"createTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:41:04.362284+01:00"
-					}
-				},
-				"editEmail" : {
-					"__type" : "email",
-					"emailString" : "<unknown>"
-				},
-				"editTime" : {
-					"__type" : "time",
-					"time" : {
-						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-01-14T19:51:19.165416+01:00"
-					}
-				},
-				"uid" : {
-					"__type" : "uid",
-					"uidString" : "4LTpoxDoDQCUUcYjBr0e4g=="
-				},
-				"code" : "lzaDirectory := '.' asFileReference / 'landing-zone-accelerator-on-aws-for-healthcare'.\rlzaDirectory ensureDeleteAll.\rrepository := PureGitRepository on: lzaDirectory.\rrepository operations clone: 'git@github.com:aws-samples/landing-zone-accelerator-on-aws-for-healthcare.git'.\rrepository"
+				"string" : "This snippet clones the code from the repository locally:"
 			}
 		]
 	},
@@ -96,12 +134,12 @@
 		"__type" : "time",
 		"time" : {
 			"__type" : "dateAndTime",
-			"dateAndTimeString" : "2025-01-14T19:48:15.486427+01:00"
+			"dateAndTimeString" : "2026-05-04T08:03:52.79806+02:00"
 		}
 	},
 	"pageType" : {
 		"__type" : "namedPage",
-		"title" : "Download or update the healthcare case study "
+		"title" : "Download the healthcare case study "
 	},
 	"uid" : {
 		"__type" : "uuid",
